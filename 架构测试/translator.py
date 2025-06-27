@@ -71,9 +71,16 @@ class DoubaoTranslator:
         ) 
     def classify_risk_level(self, text: str) -> Optional[str]:
         return self._call_api(
-            f"""你是海外风险评估专家，请判断以下新闻内容对中国差旅人士、中资在地企业、中国在地投资行为的风险等级（红色/橙色/绿色）\n输出只返回风险等级，不要有多余的内容\n新闻内容：{text}"""
+            f"""你是海外风险评估专家，专门帮中国商务差旅人士、中资在地企业、中国在地投资行为评估海外国家风险。请判断以下新闻内容对中国商务差旅人士、中资在地企业、中国在地投资行为的风险等级（红色/橙色/绿色）\n输出只返回风险等级，不要有多余的内容\n新闻内容：{text}"""
         )
     def classify_risk_country(self, text: str) -> Optional[str]:
         return self._call_api(
-            f"""你是海外风险评估专家，请判断以下新闻事件涉及中国差旅人士、中资在地企业、中国在地投资行为在哪个国家的风险\n输出只返回风险国家名字，不要有多余的内容\n新闻内容：{text}"""
+            f"""你是海外风险评估专家，专门帮中国商务差旅人士、中资在地企业、中国在地投资行为评估海外国家风险。请判断以下新闻内容里的事件属于哪个国家的风险\n输出只返回风险国家名字，不要有多余的内容\n新闻内容：{text}"""
         )
+    def generate_weekly_report(self, news_list) -> Optional[str]:
+        if not news_list:
+            return "本周无新闻数据。"
+        prompt = "请根据以下新闻内容，撰写一份结构清晰、重点突出的周报，内容包括本周主要风险事件、趋势分析和建议，字数控制在800字以内：\n"
+        for idx, (title, summary, content, published) in enumerate(news_list, 1):
+            prompt += f"\n{idx}. [{published}] {title}\n摘要：{summary}\n内容：{content[:200]}...\n"
+        return self._call_api(prompt)
