@@ -132,7 +132,14 @@ export default {
         });
         prism.properties = overlay.properties;
         prism.setZIndex(-1);
-        // prism.addEventListener("onclick", popup);
+        // 监听点击事件
+        prism.addEventListener("click", function (e) {
+          // 这里可以自定义后续逻辑，比如弹窗、状态更新等
+          // 示例：弹窗显示国家名
+          const countryName = prism.properties.Name || "缅甸";
+          alert(`点击了国家：${countryName}`);
+          // TODO: 可以在这里派发事件或调用父组件方法
+        });
         map.addOverlay(prism);
       });
       const view = new mapvgl.View({
