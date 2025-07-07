@@ -1,11 +1,12 @@
 import sqlite3
 from typing import Dict
+from config import DB_TABLE
 
 def init_db(db_path: str):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS new_tt (
+    c.execute(f'''\
+        CREATE TABLE IF NOT EXISTS {DB_TABLE} (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT,
             summary TEXT,
@@ -34,8 +35,8 @@ def save_to_db(db_path: str, data: Dict):
         'title', 'summary', 'content', 'description', 'published', 'link',
         'translated_title', 'translated_summary', 'translated_content', 'translated_description',
         'risk_country', 'risk_type', 'risk_level', 'created_at']]
-    c.execute('''
-        INSERT INTO new_tt (title, summary, content, description, published, link, translated_title, translated_summary, translated_content, translated_description, risk_country, risk_type, risk_level, created_at)
+    c.execute(f'''\
+        INSERT INTO {DB_TABLE} (title, summary, content, description, published, link, translated_title, translated_summary, translated_content, translated_description, risk_country, risk_type, risk_level, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?)
     ''', values)
     conn.commit()

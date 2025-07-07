@@ -1,7 +1,7 @@
 import feedparser
 from datetime import datetime
 from db_utils import save_to_db
-from config import RSS_FEEDS, DB_PATH
+from config import RSS_FEEDS, DB_PATH, DB_TABLE
 from translator import DoubaoTranslator
 
 def process_news(entry, translator: DoubaoTranslator):

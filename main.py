@@ -1,5 +1,5 @@
 import time
-from config import API_KEY, DB_PATH
+from config import API_KEY, DB_PATH, DB_TABLE
 from db_utils import init_db
 from translator import DoubaoTranslator
 from news_processor import monitor_rss
