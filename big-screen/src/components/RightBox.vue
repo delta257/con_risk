@@ -88,7 +88,7 @@
         <div class="profitInnerBox">
           <div class="titleBox">
             <dv-decoration-7 style="width: 150px; height: 30px">
-              <div class="text">东道国概况</div>
+              <div class="text">国家概况</div>
             </dv-decoration-7>
             <div class="line"></div>
           </div>
@@ -173,14 +173,19 @@ import iconSvg5 from "../assets/svg/icon5.svg";
 import iconSvg6 from "../assets/svg/icon6.svg";
 
 import TextDialog from "./TextDialog.vue";
-import projects from "../json/project.json";
-import orgs from "../json/orgs.json";
-console.log("[ orgs :]", orgs);
+import riskMyanmar from "../json/risk_myanmar.json";
+import riskLaos from "../json/risk_laos.json";
 
 let timer = null;
 let timer2 = null;
 export default {
   name: "RightBox",
+  props: {
+    country: {
+      type: String,
+      required: true,
+    },
+  },
   components: { TextDialog },
   data() {
     return {
@@ -211,7 +216,8 @@ export default {
         { id: 5, name: "文化", ngoInfo: [] },
         { id: 6, name: "其他", ngoInfo: [] },
       ],
-      projects,
+      orgs: [],
+      projects: [],
       currentIndustryIndex: 0,
       hostInfoList: [
         { id: 1, name: "国家概况", src: iconSvg1 },
@@ -229,7 +235,24 @@ export default {
       ],
       rowData: {},
       currentOrgs: [],
+      riskData: {},
     };
+  },
+  watch: {
+    country: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal === "myanmar") {
+          this.riskData = riskMyanmar;
+          import("../json/orgs.json").then(m => { this.orgs = m.default; });
+          import("../json/project.json").then(m => { this.projects = m.default; });
+        } else if (newVal === "laos") {
+          this.riskData = riskLaos;
+          import("../json/orgs_laos.json").then(m => { this.orgs = m.default; });
+          import("../json/project_laos.json").then(m => { this.projects = m.default; });
+        }
+      },
+    },
   },
   created() {
     this.initTime();
@@ -245,13 +268,12 @@ export default {
       }, 1000);
     },
     showDialog(id, e) {
-      const row = projects.find((i) => i.id == id);
+      const row = this.projects.find((i) => i.id == id);
       this.rowData = { ...row };
       this.$refs.textDialogRef && this.$refs.textDialogRef.showDialog();
     },
     showOrgTable(row) {
-      this.currentOrgs = orgs.filter((i) => i.type == row.name);
-      console.log("[  this.currentOrgs :]", this.currentOrgs);
+      this.currentOrgs = this.orgs.filter((i) => i.type == row.name);
       this.$refs.textDialogRef2 && this.$refs.textDialogRef2.showDialog();
     },
   },
@@ -266,7 +288,7 @@ export default {
 .rightBox {
   color: rgb(145, 167, 184);
   & > div {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
   }
   & > div:last-child {
     margin-bottom: 0;
@@ -301,6 +323,8 @@ export default {
     box-sizing: border-box;
     .text {
       padding: 0 10px;
+      font-size: 18px;
+      color: rgb(255, 255, 255);
     }
     .line {
       height: 1px;
@@ -324,7 +348,7 @@ export default {
         width: @ngoWidth;
         img {
           width: @ngoWidth;
-          height: @ngoWidth;
+          height: 80px;
           object-fit: cover;
         }
         .ngoName {
@@ -364,10 +388,14 @@ export default {
   .profitBox {
     width: 100%;
     height: 350px;
+    margin-top: 0px;
     .profitInnerBox {
       height: 100%;
-      padding: 10px;
+      padding: 0px 8px;
       box-sizing: border-box;
+    }
+    .titleBox{
+      margin-top: 0px;
     }
     .innerBox {
       height: 280px;
@@ -402,7 +430,7 @@ export default {
 
         .item {
           cursor: pointer;
-          width: 120px;
+          width: 140px;
           height: 30px;
           line-height: 30px;
           padding-left: 10px;
@@ -504,8 +532,8 @@ export default {
         flex-direction: column;
         align-items: center;
         img {
-          width: 100px;
-          height: 100px;
+          width: 70px;
+          height: 75px;
         }
       }
     }

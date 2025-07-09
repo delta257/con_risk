@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "type": "工商",
+    "orgName": "老挝工商会",
+    "orgPurpose": "老挝工商会是面向老挝企业和外商的主要商会。",
+    "createTime": 1990,
+    "activityArea": "Laos",
+    "activity": ""
+  },
+  {
+    "id": 2,
+    "type": "健康",
+    "orgName": "老挝医学会",
+    "orgPurpose": "老挝医学专业组织，致力于医疗健康发展。",
+    "createTime": 1985,
+    "activityArea": "Laos",
+    "activity": ""
+  },
+  {
+    "id": 3,
+    "type": "人权",
+    "orgName": "老挝妇女联合会",
+    "orgPurpose": "致力于提升老挝妇女地位和权益。",
+    "createTime": 1975,
+    "activityArea": "Laos",
+    "activity": ""
+  },
+  {
+    "id": 4,
+    "type": "生态",
+    "orgName": "老挝自然保护协会",
+    "orgPurpose": "推动老挝生态环境保护。",
+    "createTime": 2000,
+    "activityArea": "Laos",
+    "activity": ""
+  }
+] 

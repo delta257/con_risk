@@ -3,10 +3,16 @@
     <dv-border-box-10>
       <div class="title-box">
         <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
-        <div>
-          <div class="title">东道国风险评估</div>
-          <dv-decoration-3 style="width: 150px; height: 30px" />
+        <div class="title-row">
+          <div class="title">国别风险态势感知</div>
+          <div class="country-btn-wrap">
+            <button @click="showCountryList = !showCountryList" class="country-switch-btn">{{ countryLabel }}</button>
+            <div v-if="showCountryList" class="country-list" ref="countryListRef">
+              <div v-for="item in countryOptions" :key="item.value" :class="['country-list-item', {selected: item.value === country}]" @click="selectCountry(item.value)">{{ item.label }}</div>
+            </div>
+          </div>
         </div>
+        <dv-decoration-3 style="width: 150px; height: 30px" />
         <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
       </div>
       <div class="button-container">
@@ -14,6 +20,7 @@
           v-for="(button, index) in buttons"
           :key="index"
           :class="{ 'selected-button': index === selectedButton }"
+          @click="selectRiskCategory(index)"
         >
           {{ button.name }}
         </button>
@@ -71,6 +78,7 @@
             v-for="(button, index) in buttons2"
             :key="index"
             :class="{ 'selected-button': index === selectedButton2 }"
+            @click="selectOpinionCategory(index)"
           >
             {{ button.name }}
           </button>
@@ -151,8 +159,8 @@
 import * as echarts from "echarts";
 import "echarts-wordcloud";
 import TextDialog from "./TextDialog.vue";
-import safeEvents from "../json/safeEvents.json";
-import focusEvent from "../json/focusEvent.json";
+import riskMyanmar from "../json/risk_myanmar.json";
+import riskLaos from "../json/risk_laos.json";
 
 let timer1 = null;
 let timer2 = null;
@@ -186,6 +194,12 @@ const KEY_WORDS = [
 export default {
   name: "LeftBox",
   components: { TextDialog },
+  props: {
+    country: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       selectedButton: 0, // 初始选中第一个按钮
@@ -391,30 +405,104 @@ export default {
           },
         ],
       },
-      scrollBoardConfig: {
-        data: safeEvents.map((item) => [`${item.time},${item.title}`]),
-      },
-      scrollBoardConfig2: {
-        data: focusEvent.map((item) => [`${item.time},${item.title}`]),
-      },
+      safeEvents: [],
+      focusEvent: [],
+      scrollBoardConfig: { data: [] },
+      scrollBoardConfig2: { data: [] },
       buttons2: [
         { name: "事件追踪", id: 1 },
         { name: "七日热点", id: 2 },
       ],
       selectedButton2: 0,
       rowData: {},
+      showCountryList: false,
+      countryOptions: [
+        { value: "myanmar", label: "缅甸" },
+        { value: "laos", label: "老挝" },
+      ],
+      riskData: {},
     };
   },
+  computed: {
+    countryLabel() {
+      const found = this.countryOptions.find((c) => c.value === this.country);
+      return found ? found.label : this.country;
+    },
+  },
+  watch: {
+    country: {
+      immediate: true,
+      handler(newVal) {
+        this.loadCountryData(newVal);
+        // 风险评估数据
+        if (newVal === "myanmar") {
+          this.riskData = riskMyanmar;
+          import("../json/safeEvents.json").then(m => {
+            this.safeEvents = m.default;
+            this.scrollBoardConfig.data = this.safeEvents.map(item => [`${item.time},${item.title}`]);
+          });
+          import("../json/focusEvent.json").then(m => {
+            this.focusEvent = m.default;
+            this.scrollBoardConfig2.data = this.focusEvent.map(item => [`${item.time},${item.title}`]);
+          });
+        } else if (newVal === "laos") {
+          this.riskData = riskLaos;
+          import("../json/safeEvents_laos.json").then(m => {
+            this.safeEvents = m.default;
+            this.scrollBoardConfig.data = this.safeEvents.map(item => [`${item.time},${item.title}`]);
+          });
+          import("../json/focusEvent_laos.json").then(m => {
+            this.focusEvent = m.default;
+            this.scrollBoardConfig2.data = this.focusEvent.map(item => [`${item.time},${item.title}`]);
+          });
+        }
+        // 这里可以根据 riskData 更新 radarOption、barOption1/2/3、waterConfig 等
+        if (this.riskData.radar) this.radarOption.series[0].data = this.riskData.radar;
+        if (this.riskData.bar1) this.barOption1.series[0].data = this.riskData.bar1;
+        if (this.riskData.bar2) this.barOption2.series[0].data = this.riskData.bar2;
+        if (this.riskData.bar3) this.barOption3.series[0].data = this.riskData.bar3;
+        if (this.riskData.water) this.waterConfig.data = this.riskData.water;
+      },
+    },
+  },
   created() {
-    this.initTimer1();
-    this.initTimer2();
+    this.loadCountryData(this.country);
   },
   mounted() {
     this.initWordCloudChart();
   },
   methods: {
+    loadCountryData(country) {
+      if (country === "myanmar") {
+        this.riskData = riskMyanmar;
+        import("../json/safeEvents.json").then(m => {
+          this.safeEvents = m.default;
+          this.scrollBoardConfig = { data: this.safeEvents.map(item => [`${item.time},${item.title}`]) };
+        });
+        import("../json/focusEvent.json").then(m => {
+          this.focusEvent = m.default;
+          this.scrollBoardConfig2 = { data: this.focusEvent.map(item => [`${item.time},${item.title}`]) };
+        });
+      } else if (country === "laos") {
+        this.riskData = riskLaos;
+        import("../json/safeEvents_laos.json").then(m => {
+          this.safeEvents = m.default;
+          this.scrollBoardConfig = { data: this.safeEvents.map(item => [`${item.time},${item.title}`]) };
+        });
+        import("../json/focusEvent_laos.json").then(m => {
+          this.focusEvent = m.default;
+          this.scrollBoardConfig2 = { data: this.focusEvent.map(item => [`${item.time},${item.title}`]) };
+        });
+      }
+      // 这里可以根据 riskData 更新 radarOption、barOption1/2/3、waterConfig 等
+      if (this.riskData.radar) this.radarOption.series[0].data = this.riskData.radar;
+      if (this.riskData.bar1) this.barOption1.series[0].data = this.riskData.bar1;
+      if (this.riskData.bar2) this.barOption2.series[0].data = this.riskData.bar2;
+      if (this.riskData.bar3) this.barOption3.series[0].data = this.riskData.bar3;
+      if (this.riskData.water) this.waterConfig.data = this.riskData.water;
+    },
     handleScrollBoardClick(row, type = "1") {
-      this.rowData = type == "1" ? safeEvents[row.rowIndex] : focusEvent[row.rowIndex];
+      this.rowData = type == "1" ? this.safeEvents[row.rowIndex] : this.focusEvent[row.rowIndex];
       if (type == "1") {
         this.$refs.textDialogRef1.showDialog();
       } else {
@@ -451,26 +539,40 @@ export default {
         ],
       });
     },
-    initTimer1() {
-      timer1 = setInterval(() => {
-        this.selectedButton++;
-        if (this.selectedButton > this.buttons.length - 1) {
-          this.selectedButton = 0;
-        }
-      }, 3000);
+    // 删除 initTimer1 和 initTimer2
+    // initTimer1() {
+    //   timer1 = setInterval(() => {
+    //     this.selectedButton++;
+    //     if (this.selectedButton > this.buttons.length - 1) {
+    //       this.selectedButton = 0;
+    //     }
+    //   }, 3000);
+    // },
+    // initTimer2() {
+    //   timer2 = setInterval(() => {
+    //     this.selectedButton2++;
+    //     if (this.selectedButton2 > this.buttons2.length - 1) {
+    //       this.selectedButton2 = 0;
+    //     }
+    //   }, 5 * 1000);
+    // },
+    selectCountry(val) {
+      this.$emit('country-changed', val);
+      this.showCountryList = false;
     },
-    initTimer2() {
-      timer2 = setInterval(() => {
-        this.selectedButton2++;
-        if (this.selectedButton2 > this.buttons2.length - 1) {
-          this.selectedButton2 = 0;
-        }
-      }, 5 * 1000);
+    // 新增：按钮点击切换风险类别
+    selectRiskCategory(idx) {
+      this.selectedButton = idx;
+    },
+    // 新增：按钮点击切换舆情类别
+    selectOpinionCategory(idx) {
+      this.selectedButton2 = idx;
     },
   },
   beforeDestroy() {
-    timer1 && clearInterval(timer1);
-    timer2 && clearInterval(timer2);
+    // 删除定时器清理
+    // timer1 && clearInterval(timer1);
+    // timer2 && clearInterval(timer2);
   },
 };
 </script>
@@ -479,7 +581,7 @@ export default {
 .left-wrap {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 0px;
   color: rgb(145, 167, 184);
 }
 .button-container {
@@ -501,6 +603,50 @@ export default {
       rgba(56, 126, 152, 0.8)
     ); /* 渐变的淡蓝色背景 */
   }
+}
+.country-switch-btn {
+  margin-left: 10px;
+  padding: 12px 33px;
+  border: 1px solid #3fa7ff;
+  border-radius: 0px;
+  background: rgba(30, 60, 120, 0.7);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  outline: none;
+}
+.country-switch-btn:hover,
+.country-switch-btn:focus {
+  background:rgba(30, 60, 120, 0.7);
+  color: #fff;
+  border: 1.5px solid #fff;
+}
+.country-list {
+  position: absolute;
+  z-index: 100;
+  background: #1a233a;
+  color: #fff;
+  border-radius: 0px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  margin-top: 6px;
+  min-width: 90px;
+  overflow: hidden;
+}
+.country-list-item {
+  padding: 8px 18px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s, color 0.2s;
+}
+.country-list-item:hover {
+  background: #3fa7ff;
+  color: #fff;
+}
+.country-list-item.selected {
+  background: #174a7a;
+  color: #fff;
+  font-weight: bold;
 }
 .button-content {
   height: 300px;
@@ -534,9 +680,33 @@ export default {
     align-items: center;
   }
   .title {
-    margin: 8px 0;
+    margin: 10px 0;
     padding-left: 10px;
-    color: rgb(145, 167, 184);
+    font-size: 16px;
+    color: rgb(246, 248, 250);
+  }
+  .title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+  }
+  .country-btn-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 120px;
+  }
+  .country-list {
+    position: absolute;
+    right: 0;
+    top: 110%;
+    // 保证弹窗紧贴按钮下方并右对齐
+    min-width: 100px;
+    max-width: 180px;
+    width: max-content;
   }
 }
 .wordCloudBox {
@@ -545,7 +715,7 @@ export default {
   display: flex;
   justify-content: center;
   .wordCloud {
-    height: 150px;
+    height: 130px;
     width: 500px;
   }
 }
@@ -553,7 +723,7 @@ export default {
 .text-dialog {
   width: 1200px;
   max-height: 500px;
-  overflow: hidden;
+  overflow: auto;
   padding: 10px;
   border: 1px solid;
   border-radius: 20px;

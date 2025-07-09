@@ -19,7 +19,7 @@
 
 <script>
 import * as echarts from "echarts";
-// import worldJson from "../lib/world.json";
+import worldJson from "../lib/world.json";
 // import myanmarJson from "../lib/sss.json";
 // import myanmarJson from "../lib/MM.json";
 import myanmarJson from "../lib/myanmar.json";
@@ -118,30 +118,31 @@ export default {
         zoom: 7,
         style: darkStyle,
       });
-      const colorBand = ["rgb(43,59,76)", "cadetblue", "orange", "red", "tan"];
+      const colorBand = ["rgba(90, 90, 102, 0.27)", "cadetblue", "orange", "red", "tan"];
       const gParse = new BMapGL.GeoJSONParse({
         reference: "GCJ02",
       });
-      gParse.readFeaturesFromObject(myanmarJson, { isPoints: true }, function (overlay) {
-        const index = overlay.properties.join || 0;
-        const prism = new BMapGL.Prism(overlay.points, 3000, {
-          topFillColor: colorBand[index],
-          topFillOpacity: 0.9,
-          sideFillColor: colorBand[index],
-          sideFillOpacity: 0.9,
-        });
-        prism.properties = overlay.properties;
-        prism.setZIndex(-1);
-        // 监听点击事件
-        prism.addEventListener("click", function (e) {
-          // 这里可以自定义后续逻辑，比如弹窗、状态更新等
-          // 示例：弹窗显示国家名
-          const countryName = prism.properties.Name || "缅甸";
-          alert(`点击了国家：${countryName}`);
-          // TODO: 可以在这里派发事件或调用父组件方法
-        });
-        map.addOverlay(prism);
-      });
+      // 去除缅甸区域颜色填充，不再添加Prism覆盖物
+      // gParse.readFeaturesFromObject(myanmarJson, { isPoints: true }, function (overlay) {
+      //   const index = overlay.properties.join || 0;
+      //   const prism = new BMapGL.Prism(overlay.points, 3000, {
+      //     topFillColor: colorBand[index],
+      //     topFillOpacity: 0.9,
+      //     sideFillColor: colorBand[index],
+      //     sideFillOpacity: 0.9,
+      //   });
+      //   prism.properties = overlay.properties;
+      //   prism.setZIndex(-1);
+      //   // 监听点击事件
+      //   prism.addEventListener("click", function (e) {
+      //     // 这里可以自定义后续逻辑，比如弹窗、状态更新等
+      //     // 示例：弹窗显示国家名
+      //     const countryName = prism.properties.Name || "缅甸";
+      //     alert(`点击了国家：${countryName}`);
+      //     // TODO: 可以在这里派发事件或调用父组件方法
+      //   });
+      //   map.addOverlay(prism);
+      // });
       const view = new mapvgl.View({
         map: map,
       });
@@ -171,26 +172,113 @@ export default {
       view.addLayer(textLayer);
       textLayer.setData([]);
 
+      // 缅甸首都Marker
       const point = new BMapGL.Point(96.2067, 19.7361);
       map.centerAndZoom(point, 7);
       const marker = new BMapGL.Marker(point);
+      marker.setZIndex(10);
       map.addOverlay(marker);
-
       const opts = {
-        width: 200, // 信息窗口宽度
-        height: 100, // 信息窗口高度
-        title: "内比都", // 信息窗口标题
+        width: 200,
+        height: 100,
+        title: "内比都",
         message: "这里是内比都",
       };
-
       const infoWindow = new BMapGL.InfoWindow(
         "2024年5月14日，缅甸克钦独立军司令康伦中将去世",
         opts
       );
-
       marker.addEventListener("click", function (e) {
         map.openInfoWindow(infoWindow, point);
       });
+
+      // 老挝首都Marker
+      const laosPoint = new BMapGL.Point(102.6341, 17.9757);
+      const laosMarker = new BMapGL.Marker(laosPoint);
+      laosMarker.setZIndex(10);
+      map.addOverlay(laosMarker);
+      const laosOpts = {
+        width: 200,
+        height: 100,
+        title: "万象",
+        message: "这里是老挝首都",
+      };
+      const laosInfoWindow = new BMapGL.InfoWindow(
+        "这里是老挝首都",
+        laosOpts
+      );
+      laosMarker.addEventListener("click", function (e) {
+        map.openInfoWindow(laosInfoWindow, laosPoint);
+      });
+
+      // 1. 缅甸Polygon
+      const myanmarCoords = myanmarJson.features[0].geometry.coordinates[0];
+      const myanmarPoints = myanmarCoords.map(coord => new BMapGL.Point(coord[0], coord[1]));
+      const myanmarPolygon = new BMapGL.Polygon(myanmarPoints, {
+        strokeColor: "#3fa7ff",
+        fillColor: "transparent",
+        strokeWeight: 2,
+        fillOpacity: 0
+      });
+      myanmarPolygon.setZIndex(1);
+      myanmarPolygon.addEventListener('click', function(e) {
+        const clickPoint = e.latlng || e.latLng || e.point;
+        const markerPixel = map.pointToPixel(point);
+        const clickPixel = map.pointToPixel(clickPoint);
+        const dx = markerPixel.x - clickPixel.x;
+        const dy = markerPixel.y - clickPixel.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < 20) {
+          map.openInfoWindow(infoWindow, point);
+        } else {
+          map.openInfoWindow(new BMapGL.InfoWindow("缅甸", {title: "国家"}), clickPoint);
+        }
+      });
+      map.addOverlay(myanmarPolygon);
+
+      // 2. 老挝Polygon
+      const laosFeature = worldJson.features.find(f =>
+        f.properties && (
+          f.properties.name === 'Laos' ||
+          f.properties.name === 'LAO' ||
+          f.properties.name === 'Lao PDR' ||
+          f.properties.NAME === 'Laos' ||
+          f.properties.NAME === 'LAO' ||
+          f.properties.NAME === 'Lao PDR'
+        )
+      );
+      if (laosFeature) {
+        const coordsArr = laosFeature.geometry.coordinates;
+        const polygons = (laosFeature.geometry.type === 'Polygon')
+          ? [coordsArr]
+          : coordsArr;
+        polygons.forEach(ringArr => {
+          ringArr.forEach(ring => {
+            const laosPoints = ring.map(coord => new BMapGL.Point(coord[0], coord[1]));
+            const laosPolygon = new BMapGL.Polygon(laosPoints, {
+              strokeColor: "#4caf50",
+              fillColor: "transparent",
+              strokeWeight: 2,
+              fillOpacity: 0
+            });
+            laosPolygon.setZIndex(1);
+            laosPolygon.addEventListener('click', function(e) {
+              const clickPoint = e.latlng || e.latLng || e.point;
+              const markerPixel = map.pointToPixel(laosPoint);
+              const clickPixel = map.pointToPixel(clickPoint);
+              const dx = markerPixel.x - clickPixel.x;
+              const dy = markerPixel.y - clickPixel.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              if (distance < 20) {
+                map.openInfoWindow(laosInfoWindow, laosPoint);
+              } else {
+                map.openInfoWindow(new BMapGL.InfoWindow("老挝", {title: "国家"}), clickPoint);
+              }
+            });
+            map.addOverlay(laosPolygon);
+          });
+        });
+      }
     },
   },
 };

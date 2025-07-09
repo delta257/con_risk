@@ -1,0 +1,18 @@
+[
+  {
+    "time": "2024-05-01",
+    "title": "老挝首都发生小规模抗议",
+    "description": "万象市区出现和平抗议活动，未造成伤亡。",
+    "person": "示威者",
+    "address": "万象",
+    "country": "Laos"
+  },
+  {
+    "time": "2024-05-10",
+    "title": "老挝南部洪水影响交通",
+    "description": "南部多地因暴雨发生洪水，部分道路中断。",
+    "person": "救援人员",
+    "address": "巴色",
+    "country": "Laos"
+  }
+] 

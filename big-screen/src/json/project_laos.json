@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "老挝水电站项目",
+    "location": "万象",
+    "status": "在建",
+    "country": "Laos"
+  },
+  {
+    "id": 2,
+    "name": "老挝高速公路项目",
+    "location": "琅勃拉邦",
+    "status": "已完成",
+    "country": "Laos"
+  },
+  {
+    "id": 3,
+    "name": "老挝农业现代化项目",
+    "location": "沙湾拿吉",
+    "status": "规划中",
+    "country": "Laos"
+  }
+] 

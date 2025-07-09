@@ -10,13 +10,13 @@
       >
         <div class="container">
           <div class="box left-box">
-            <LeftBox />
+            <LeftBox :country="selectedCountry" @country-changed="onCountryChanged" />
           </div>
           <div class="box center-box">
             <CenterBox />
           </div>
           <div class="box right-box">
-            <RightBox />
+            <RightBox :country="selectedCountry" />
           </div>
         </div>
       </dv-border-box-11>
@@ -31,6 +31,16 @@ import RightBox from "../components/RightBox";
 export default {
   name: "HomeView",
   components: { LeftBox, CenterBox, RightBox },
+  data() {
+    return {
+      selectedCountry: "myanmar", // 默认缅甸
+    };
+  },
+  methods: {
+    onCountryChanged(country) {
+      this.selectedCountry = country;
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
