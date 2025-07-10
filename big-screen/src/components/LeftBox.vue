@@ -1,18 +1,12 @@
 <template>
   <div class="left-wrap">
-    <dv-border-box-10>
+    <dv-border-box-7>
       <div class="title-box">
         <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
-        <div class="title-row">
-          <div class="title">国别风险态势感知</div>
-          <div class="country-btn-wrap">
-            <button @click="showCountryList = !showCountryList" class="country-switch-btn">{{ countryLabel }}</button>
-            <div v-if="showCountryList" class="country-list" ref="countryListRef">
-              <div v-for="item in countryOptions" :key="item.value" :class="['country-list-item', {selected: item.value === country}]" @click="selectCountry(item.value)">{{ item.label }}</div>
-            </div>
-          </div>
+        <div>
+          <div class="title">国别风险评估</div>
+          <dv-decoration-3 style="width: 150px; height: 30px" />
         </div>
-        <dv-decoration-3 style="width: 150px; height: 30px" />
         <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
       </div>
       <div class="button-container">
@@ -47,7 +41,7 @@
           </div>
         </div>
       </div>
-    </dv-border-box-10>
+    </dv-border-box-7>
     <dv-border-box-7>
       <div class="title-box">
         <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
@@ -415,19 +409,10 @@ export default {
       ],
       selectedButton2: 0,
       rowData: {},
-      showCountryList: false,
-      countryOptions: [
-        { value: "myanmar", label: "缅甸" },
-        { value: "laos", label: "老挝" },
-      ],
       riskData: {},
     };
   },
   computed: {
-    countryLabel() {
-      const found = this.countryOptions.find((c) => c.value === this.country);
-      return found ? found.label : this.country;
-    },
   },
   watch: {
     country: {
@@ -556,10 +541,6 @@ export default {
     //     }
     //   }, 5 * 1000);
     // },
-    selectCountry(val) {
-      this.$emit('country-changed', val);
-      this.showCountryList = false;
-    },
     // 新增：按钮点击切换风险类别
     selectRiskCategory(idx) {
       this.selectedButton = idx;
@@ -722,7 +703,7 @@ export default {
 
 .text-dialog {
   width: 1200px;
-  max-height: 500px;
+  max-height: 1000px;
   overflow: auto;
   padding: 10px;
   border: 1px solid;

@@ -124,7 +124,10 @@
             <span>{{ rowData.status }}</span>
           </div>
         </div>
-        <div v-html="rowData.detail"></div>
+        <div v-if="rowData.img" class="dialog-img">
+          <img :src="require(`@/${rowData.img}`)" alt="项目图片" />
+        </div>
+        <div v-html="rowData.detail" class="dialog-content"></div>
       </div>
     </TextDialog>
     <TextDialog ref="textDialogRef2">
@@ -552,6 +555,21 @@ export default {
   .infoBox {
     display: flex;
     justify-content: space-between;
+  }
+  .dialog-content {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  .dialog-img {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .dialog-img img {
+    width: 350px;
+    height: 250px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   }
 }
 

@@ -13,7 +13,7 @@
             <LeftBox :country="selectedCountry" @country-changed="onCountryChanged" />
           </div>
           <div class="box center-box">
-            <CenterBox />
+            <CenterBox :country="selectedCountry" @country-changed="onCountryChanged" />
           </div>
           <div class="box right-box">
             <RightBox :country="selectedCountry" />

@@ -23,13 +23,25 @@ import worldJson from "../lib/world.json";
 // import myanmarJson from "../lib/sss.json";
 // import myanmarJson from "../lib/MM.json";
 import myanmarJson from "../lib/myanmar.json";
+import mekongJson from "../lib/mekong.json";
+import mekongStations from "../lib/mekong_stations.json";
+import chinaProjects from "../lib/china_projects.json";
 // import "../lib/Myanmar.js";
 import { initMap, darkStyle } from "../utils/mapvglCommon";
+import coordtransform from 'coordtransform';
 export default {
   name: "CenterBox",
+  props: {
+    country: {
+      type: String,
+      required: false,
+      default: 'myanmar',
+    },
+  },
   data() {
     return {
       // chart: null,
+      map: null,
     };
   },
   mounted() {
@@ -118,6 +130,7 @@ export default {
         zoom: 7,
         style: darkStyle,
       });
+      this.map = map;
       const colorBand = ["rgba(90, 90, 102, 0.27)", "cadetblue", "orange", "red", "tan"];
       const gParse = new BMapGL.GeoJSONParse({
         reference: "GCJ02",
@@ -172,66 +185,22 @@ export default {
       view.addLayer(textLayer);
       textLayer.setData([]);
 
-      // 缅甸首都Marker
-      const point = new BMapGL.Point(96.2067, 19.7361);
-      map.centerAndZoom(point, 7);
-      const marker = new BMapGL.Marker(point);
-      marker.setZIndex(10);
-      map.addOverlay(marker);
-      const opts = {
-        width: 200,
-        height: 100,
-        title: "内比都",
-        message: "这里是内比都",
-      };
-      const infoWindow = new BMapGL.InfoWindow(
-        "2024年5月14日，缅甸克钦独立军司令康伦中将去世",
-        opts
-      );
-      marker.addEventListener("click", function (e) {
-        map.openInfoWindow(infoWindow, point);
-      });
-
-      // 老挝首都Marker
-      const laosPoint = new BMapGL.Point(102.6341, 17.9757);
-      const laosMarker = new BMapGL.Marker(laosPoint);
-      laosMarker.setZIndex(10);
-      map.addOverlay(laosMarker);
-      const laosOpts = {
-        width: 200,
-        height: 100,
-        title: "万象",
-        message: "这里是老挝首都",
-      };
-      const laosInfoWindow = new BMapGL.InfoWindow(
-        "这里是老挝首都",
-        laosOpts
-      );
-      laosMarker.addEventListener("click", function (e) {
-        map.openInfoWindow(laosInfoWindow, laosPoint);
-      });
+      // 删除内比都、万象的marker、label、弹窗、circle和折线
 
       // 1. 缅甸Polygon
       const myanmarCoords = myanmarJson.features[0].geometry.coordinates[0];
       const myanmarPoints = myanmarCoords.map(coord => new BMapGL.Point(coord[0], coord[1]));
       const myanmarPolygon = new BMapGL.Polygon(myanmarPoints, {
-        strokeColor: "#3fa7ff",
+        strokeColor: "transparent",
         fillColor: "transparent",
-        strokeWeight: 2,
+        strokeWeight: 0,
         fillOpacity: 0
       });
       myanmarPolygon.setZIndex(1);
-      myanmarPolygon.addEventListener('click', function(e) {
-        const clickPoint = e.latlng || e.latLng || e.point;
-        const markerPixel = map.pointToPixel(point);
-        const clickPixel = map.pointToPixel(clickPoint);
-        const dx = markerPixel.x - clickPixel.x;
-        const dy = markerPixel.y - clickPixel.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < 20) {
-          map.openInfoWindow(infoWindow, point);
-        } else {
-          map.openInfoWindow(new BMapGL.InfoWindow("缅甸", {title: "国家"}), clickPoint);
+      myanmarPolygon.addEventListener('click', (e) => {
+        this.$emit('country-changed', 'myanmar');
+        if (this.map) {
+          this.map.centerAndZoom(new BMapGL.Point(96.2067, 19.7361), 7);
         }
       });
       map.addOverlay(myanmarPolygon);
@@ -256,27 +225,96 @@ export default {
           ringArr.forEach(ring => {
             const laosPoints = ring.map(coord => new BMapGL.Point(coord[0], coord[1]));
             const laosPolygon = new BMapGL.Polygon(laosPoints, {
-              strokeColor: "#4caf50",
+              strokeColor: "transparent",
               fillColor: "transparent",
-              strokeWeight: 2,
+              strokeWeight: 0,
               fillOpacity: 0
             });
             laosPolygon.setZIndex(1);
-            laosPolygon.addEventListener('click', function(e) {
-              const clickPoint = e.latlng || e.latLng || e.point;
-              const markerPixel = map.pointToPixel(laosPoint);
-              const clickPixel = map.pointToPixel(clickPoint);
-              const dx = markerPixel.x - clickPixel.x;
-              const dy = markerPixel.y - clickPixel.y;
-              const distance = Math.sqrt(dx * dx + dy * dy);
-              if (distance < 20) {
-                map.openInfoWindow(laosInfoWindow, laosPoint);
-              } else {
-                map.openInfoWindow(new BMapGL.InfoWindow("老挝", {title: "国家"}), clickPoint);
+            laosPolygon.addEventListener('click', (e) => {
+              this.$emit('country-changed', 'laos');
+              if (this.map) {
+                this.map.centerAndZoom(new BMapGL.Point(102.6341, 17.9757), 7);
               }
             });
             map.addOverlay(laosPolygon);
           });
+        });
+      }
+      // 渲染湄公河（Mekong）
+      try {
+        const mekongFeature = mekongJson.features.find(f => f.properties && (f.properties.name === 'Mekong' || f.properties.name_zh === '湄公河'));
+        if (mekongFeature && mekongFeature.geometry && mekongFeature.geometry.type === 'LineString') {
+          const coords = mekongFeature.geometry.coordinates;
+          // WGS84 -> GCJ02 -> BD09（百度坐标）
+          const points = coords.map(coord => {
+            const gcj = coordtransform.wgs84togcj02(coord[0], coord[1]);
+            const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
+            return new BMapGL.Point(bd09[0], bd09[1]);
+          });
+          const mekongLine = new BMapGL.Polyline(points, {
+            strokeColor: 'rgba(18, 77, 241, 1)',
+            strokeWeight: 6,
+            strokeOpacity: 1,
+          });
+          map.addOverlay(mekongLine);
+        }
+      } catch (e) {
+        console.error('湄公河渲染失败', e);
+      }
+      // 湄公河站点标记
+      if (Array.isArray(mekongStations)) {
+        mekongStations.forEach(station => {
+          // 直接用WGS84转BD09，保证和河流一致
+          const gcj = coordtransform.wgs84togcj02(station.lng, station.lat);
+          const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
+          const point = new BMapGL.Point(bd09[0], bd09[1]);
+          // Marker
+          const marker = new BMapGL.Marker(point);
+          map.addOverlay(marker);
+          // Label
+          const label = new BMapGL.Label(station.name, {
+            position: point,
+            offset: new BMapGL.Size(10, -24)
+          });
+          label.setStyle({
+            color: '#fff',
+            background: 'rgba(33,150,243,0.85)',
+            border: '1px solid #2196f3',
+            borderRadius: '6px',
+            padding: '2px 8px',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+          });
+          map.addOverlay(label);
+        });
+      }
+      // 涉中项目标记
+      if (Array.isArray(chinaProjects)) {
+        chinaProjects.forEach(proj => {
+          const gcj = coordtransform.wgs84togcj02(proj.lng, proj.lat);
+          const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
+          const point = new BMapGL.Point(bd09[0], bd09[1]);
+          // Marker
+          const marker = new BMapGL.Marker(point);
+          map.addOverlay(marker);
+          // Label
+          const label = new BMapGL.Label(proj.name, {
+            position: point,
+            offset: new BMapGL.Size(10, -24)
+          });
+          label.setStyle({
+            color: '#fff',
+            background: 'rgba(255,87,34,0.9)',
+            border: '1px solid #ff5722',
+            borderRadius: '6px',
+            padding: '2px 8px',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+          });
+          map.addOverlay(label);
         });
       }
     },
