@@ -1,0 +1,68 @@
+[
+  {
+    "name": "佤邦联合军",
+    "en_name": "United Wa State Army (UWSA)",
+    "goal": "维护“佤邦”高度自治，借助缅中经济走廊扩大地方治理与经济利益",
+    "leader": "最高司令 包佤祥 (Bao Youxiang) 等",
+    "area": "掸邦 Wa 自治县 Pangkham",
+    "lat": 22.167,
+    "lng": 99.183,
+    "relations": "核心发起并主导 FPNCC，与 MNDAA、TNLA、NDAA、SSPP/SSA‑N、KIA 等联合；偶尔与 Tatmadaw 协同打击其他武装。",
+    "attitude": "高度依赖中方军贸、培训与政治斡旋，中方视其为边境稳定“重要伙伴”，并借其保护在缅中投资与基础设施"
+  },
+  {
+    "name": "南掸邦军",
+    "en_name": "Shan State Army – South (SSA‑S / RCSS)",
+    "goal": "争取掸族南部高度自治及公平资源分配",
+    "leader": "主席兼军长 洛泰冷 (Yawd Serk)",
+    "area": "掸邦 Loi Tai Leng",
+    "lat": 19.74,
+    "lng": 98.21,
+    "relations": "FPNCC 核心成员，与 UWSA、MNDAA、TNLA 协同；与 SSPP/SSA‑N 偶有边界与资源摩擦，2023年签短期停火并交换俘虏。",
+    "attitude": "支持中国斡旋的和平进程，定期参与边境事务对接，欢迎中资项目进驻控制区。"
+  },
+  {
+    "name": "北掸邦进步党武装",
+    "en_name": "Shan State Progress Party / SSA‑North (SSPP/SSA‑N)",
+    "goal": "北掸邦掸族自治与联邦改革，实现“平等、自决”政治地位",
+    "leader": "副主席 Lt. Gen. Sao Khun Hseng",
+    "area": "掸邦 Wan Hai",
+    "lat": 20.7236,
+    "lng": 98.2056,
+    "relations": "FPNCC 成员，与 UWSA、SSA‑S、MNDAA、TNLA 多次联合行动；2024年5月宣布对军政府开战，曾与 SSA‑S 探讨停火及对话。",
+    "attitude": "公开支持中国斡旋，愿通过中方渠道对话缅军，同时警惕外部（西方）干预。"
+  },
+  {
+    "name": "帕朗民族解放军",
+    "en_name": "Ta’ang National Liberation Army (TNLA)",
+    "goal": "维护帕朗族权益，推动真正确立联邦制、自决权，并主导禁种毒行动",
+    "leader": "主席 Tar Aik Bong，副主席 Tar Bone Kyaw",
+    "area": "掸邦 Namhsan",
+    "lat": 22.965,
+    "lng": 97.15,
+    "relations": "“三兄弟联盟”主力，与 MNDAA、UWSA 密切协作；与 KIA、SSPP 存在局部摩擦。",
+    "attitude": "2024年延长中国调停的临时停火，肯定中方角色，但对中方偏袒缅军保持谨慎合作立场。"
+  },
+  {
+    "name": "果敢民族民主同盟军",
+    "en_name": "Myanmar National Democratic Alliance Army (MNDAA)",
+    "goal": "代表果敢族争取高度自治，维持既有经济及治理体系",
+    "leader": "主席 彭德新 (Peng Daxun)",
+    "area": "掸邦 Laukkai",
+    "lat": 23.692,
+    "lng": 98.763,
+    "relations": "FPNCC/北部联盟核心成员，“三兄弟联盟”之一；2023年“1027行动”后与缅军激烈交火，2025年1月在昆明签署中国主持停火协议。",
+    "attitude": "承诺保护中国投资与人员安全，配合中国边境通关与电力恢复。"
+  },
+  {
+    "name": "民主联盟军",
+    "en_name": "National Democratic Alliance Army (NDAA / ESS‑4)",
+    "goal": "维护孟拉特区（Special Region 4）稳定与经济发展，保持地方自治与边贸利益",
+    "leader": "原主席 U Sai Leun（已逝），现 San Pae & Sao Hsengla",
+    "area": "掸邦 Mong La",
+    "lat": 21.6667,
+    "lng": 100.0000,
+    "relations": "FPNCC 成员，但自2023年底宣布中立，不参与北部冲突；与 UWSA、MNDAA 保持边境安全协调。",
+    "attitude": "依托中国游客与投资，配合口岸与基础设施建设，公开欢迎中方项目。"
+  }
+] 

@@ -1,0 +1,123 @@
+[
+  {
+    "name": "老挝独立与民主委员会",
+    "en_name": "Committee for Independence and Democracy in Laos",
+    "goal": "推翻老挝现政权，建立多党制民主",
+    "leader": "前陆军军官及部分傣族、苗族人士（无公开统领）",
+    "area": "琅勃拉邦 Luang Prabang",
+    "lat": 19.89,
+    "lng": 102.13,
+    "relations": "与各少数民族反政府组织偶有松散合作，曾声称对2004年多起袭击负责",
+    "attitude": "主要对老挝政府敌视，对华态度未有公开表态，一般保持中立"
+  },
+  {
+    "name": "地方自由战士",
+    "en_name": "Local Freedom Fighters",
+    "goal": "维护当地少数民族（暹罗族及苗族）权益，反对政府边境压迫",
+    "leader": "匿名民族领袖（主要活跃于万象东北边界）",
+    "area": "丰沙里 Phongsaly",
+    "lat": 20.17,
+    "lng": 102.13,
+    "relations": "与苗族、卡姆族等小规模武装保持非正式联系，行动局限边境地带",
+    "attitude": "对中方无明确敌意，偶有呼吁中国斡旋与老挝政府对话"
+  },
+  {
+    "name": "地方自由战士",
+    "en_name": "Local Freedom Fighters",
+    "goal": "维护当地少数民族（暹罗族及苗族）权益，反对政府边境压迫",
+    "leader": "匿名民族领袖（主要活跃于万象东北边界）",
+    "area": "琅南塔 Luang Namtha",
+    "lat": 20.95,
+    "lng": 101.42,
+    "relations": "与苗族、卡姆族等小规模武装保持非正式联系，行动局限边境地带",
+    "attitude": "对中方无明确敌意，偶有呼吁中国斡旋与老挝政府对话"
+  },
+  {
+    "name": "苗族解放阵线",
+    "en_name": "Hmong Liberation Front",
+    "goal": "维护苗族（Hmong）传统与利益，曾试图推翻老挝共产政权",
+    "leader": "前领导：望坡 (Gen. Vang Pao)；现无公开继任者",
+    "area": "谅山 Xiangkhouang",
+    "lat": 19.63,
+    "lng": 103.33,
+    "relations": "与“巴奥自卫队”等苗族武装有历史盟友关系，现多转向东南亚难民社区活动",
+    "attitude": "冷淡或不信任中方，历史上更依赖美方及泰国支持"
+  },
+  {
+    "name": "苗族解放阵线",
+    "en_name": "Hmong Liberation Front",
+    "goal": "维护苗族（Hmong）传统与利益，曾试图推翻老挝共产政权",
+    "leader": "前领导：望坡 (Gen. Vang Pao)；现无公开继任者",
+    "area": "万象北部 Vientiane",
+    "lat": 18.02,
+    "lng": 102.63,
+    "relations": "与“巴奥自卫队”等苗族武装有历史盟友关系，现多转向东南亚难民社区活动",
+    "attitude": "冷淡或不信任中方，历史上更依赖美方及泰国支持"
+  },
+  {
+    "name": "以撒拉族党人",
+    "en_name": "Ethnic Issara",
+    "goal": "由脱离老挝人民军的卡姆族军官发动，主张恢复卡姆族地方权力",
+    "leader": "匿名前卡姆族军官",
+    "area": "万荣 Vang Vieng",
+    "lat": 18.92,
+    "lng": 102.44,
+    "relations": "偶与“地方自由战士”联手行动，未纳入更大联邦组织",
+    "attitude": "对华保持谨慎，既不公开支持也不主动对抗"
+  },
+  {
+    "name": "以撒拉族党人",
+    "en_name": "Ethnic Issara",
+    "goal": "由脱离老挝人民军的卡姆族军官发动，主张恢复卡姆族地方权力",
+    "leader": "匿名前卡姆族军官",
+    "area": "芳士里 Phongsaly",
+    "lat": 20.17,
+    "lng": 102.13,
+    "relations": "偶与“地方自由战士”联手行动，未纳入更大联邦组织",
+    "attitude": "对华保持谨慎，既不公开支持也不主动对抗"
+  },
+  {
+    "name": "遮帕民主党／山地王",
+    "en_name": "Chao Fa Democratic Party (Hmong Messianic Insurgents)",
+    "goal": "根植苗族神秘主义，试图建立跨境苗族自治区域",
+    "leader": "老挝区：宗佐阿 (Zong Zoua Her)；泰国区：巴高 (Pa Kao Her)",
+    "area": "普亚山 Phou Bia (西昂宽省)",
+    "lat": 19.38,
+    "lng": 103.21,
+    "relations": "与苗族其他反政府团体时有合作，也曾与老挝政府及泰国军方交火",
+    "attitude": "1980年代曾获中方有限军援，现主要自我消亡，对中国无实质交互"
+  },
+  {
+    "name": "遮帕民主党／山地王",
+    "en_name": "Chao Fa Democratic Party (Hmong Messianic Insurgents)",
+    "goal": "根植苗族神秘主义，试图建立跨境苗族自治区域",
+    "leader": "老挝区：宗佐阿 (Zong Zoua Her)；泰国区：巴高 (Pa Kao Her)",
+    "area": "农黑 Nong Het",
+    "lat": 20.29,
+    "lng": 104.15,
+    "relations": "与苗族其他反政府团体时有合作，也曾与老挝政府及泰国军方交火",
+    "attitude": "1980年代曾获中方有限军援，现主要自我消亡，对中国无实质交互"
+  },
+  {
+    "name": "老挝人民解放阵线",
+    "en_name": "Lao People’s Liberation Front",
+    "goal": "合并多支小规模反政府武装，旨在恢复多党制与地方自治",
+    "leader": "队长：Captain Vinai",
+    "area": "占巴塞 Khammouane",
+    "lat": 17.48,
+    "lng": 105.22,
+    "relations": "与苗族、卡姆族武装偶有联合进攻，2000年万象–清盛突袭事件後集体隐匿",
+    "attitude": "对华态度不明，多数时间处于低调潜伏状态"
+  },
+  {
+    "name": "老挝人民解放阵线",
+    "en_name": "Lao People’s Liberation Front",
+    "goal": "合并多支小规模反政府武装，旨在恢复多党制与地方自治",
+    "leader": "队长：Captain Vinai",
+    "area": "赛蓬 Sepon",
+    "lat": 16.75,
+    "lng": 106.88,
+    "relations": "与苗族、卡姆族武装偶有联合进攻，2000年万象–清盛突袭事件後集体隐匿",
+    "attitude": "对华态度不明，多数时间处于低调潜伏状态"
+  }
+] 
