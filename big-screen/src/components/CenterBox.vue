@@ -3,12 +3,18 @@
     <dv-border-box-8>
       <div class="bg">
         <div class="map-btn-container">
-          <button :class="{ 'selected-button': showPorts }" @click="togglePorts">码头</button>
+          <button :class="{ 'selected-button': showPorts }" @click="togglePorts">主要交通节点/要道</button>
           <button :class="{ 'selected-button': showCheckpoints }" @click="toggleCheckpoints">检查站</button>
-          <button :class="{ 'selected-button': showChinaProjects }" @click="toggleChinaProjects">涉中项目</button>
-          <button :class="{ 'selected-button': showArmedGroups }" @click="toggleArmedGroups">武装组织</button>
+          <button :class="{ 'selected-button': showChinaProjects }" @click="toggleChinaProjects">中国项目</button>
+          <button :class="{ 'selected-button': showArmedGroups }" @click="toggleArmedGroups">武装组织活动区域</button>
         </div>
         <div id="worldMap" ref="worldMapRef"></div>
+        <div v-if="popupVisible" class="map-popup" :style="{ left: popupPosition.x + 'px', top: popupPosition.y + 'px' }">
+          <div class="popup-title">{{ popupData.name }}</div>
+          <img v-if="popupData.img" :src="popupData.img" class="popup-img" />
+          <div class="popup-desc" v-html="popupData.desc"></div>
+          <span class="popup-close" @click="popupVisible = false">×</span>
+        </div>
         <!-- <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6468124.418314829!2d95.19933275325296!3d19.71986596598296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x305652a7714e2907%3A0xba7b0ee41c622b11!2z57yF55S4!5e0!3m2!1szh-CN!2shk!4v1716371745872!5m2!1szh-CN!2shk"
           width="100%"
@@ -64,6 +70,9 @@ export default {
       showChinaProjects: false,
       showArmedGroups: false,
       currentCountry: 'myanmar',
+      popupVisible: false, // 新增
+      popupData: { name: '', desc: '', img: '' }, // 新增
+      popupPosition: { x: 0, y: 0 } // 新增
     };
   },
   watch: {
@@ -143,7 +152,13 @@ export default {
           fontWeight: 'bold',
           boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
         });
-        label.setTitle((port.desc || '') + '\n' + (port.status || ''));
+        // 移除label.setTitle
+        marker.addEventListener('click', (e) => {
+          this.showPopup({ name: port.name, desc: port.desc, img: port.img }, e);
+        });
+        label.addEventListener('click', (e) => {
+          this.showPopup({ name: port.name, desc: port.desc, img: port.img }, e);
+        });
         arr.push(label);
         this.map.addOverlay(label);
       });
@@ -172,7 +187,13 @@ export default {
           fontWeight: 'bold',
           boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
         });
-        label.setTitle(pointData.desc || '');
+        // 移除label.setTitle
+        marker.addEventListener('click', (e) => {
+          this.showPopup({ name: pointData.name, desc: pointData.desc, img: pointData.img }, e);
+        });
+        label.addEventListener('click', (e) => {
+          this.showPopup({ name: pointData.name, desc: pointData.desc, img: pointData.img }, e);
+        });
         arr.push(label);
         this.map.addOverlay(label);
       });
@@ -202,7 +223,13 @@ export default {
             fontWeight: 'bold',
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
           });
-          label.setTitle(proj.desc || '');
+          // 移除label.setTitle
+          marker.addEventListener('click', (e) => {
+            this.showPopup({ name: proj.name, desc: proj.desc, img: proj.img }, e);
+          });
+          label.addEventListener('click', (e) => {
+            this.showPopup({ name: proj.name, desc: proj.desc, img: proj.img }, e);
+          });
           arr.push(label);
           this.map.addOverlay(label);
         });
@@ -229,7 +256,13 @@ export default {
               fontWeight: 'bold',
               boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
             });
-            label.setTitle(proj.desc || '');
+            // 移除label.setTitle
+            marker.addEventListener('click', (e) => {
+              this.showPopup({ name: proj.name, desc: proj.desc, img: proj.img }, e);
+            });
+            label.addEventListener('click', (e) => {
+              this.showPopup({ name: proj.name, desc: proj.desc, img: proj.img }, e);
+            });
             arr.push(label);
             this.map.addOverlay(label);
           }
@@ -267,7 +300,14 @@ export default {
             fontWeight: 'bold',
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
           });
-          label.setTitle(group.en_name + '\n' + group.goal + '\n' + group.leader + '\n' + group.area + '\n' + group.relations + '\n' + group.attitude);
+          // 移除label.setTitle
+          const marker = new BMapGL.Marker(point);
+          marker.addEventListener('click', (e) => {
+            this.showPopup({ name: group.name, desc: group.goal, img: group.img }, e);
+          });
+          label.addEventListener('click', (e) => {
+            this.showPopup({ name: group.name, desc: group.goal, img: group.img }, e);
+          });
           arr.push(label);
           this.map.addOverlay(label);
         });
@@ -299,12 +339,26 @@ export default {
             fontWeight: 'bold',
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
           });
-          label.setTitle(group.en_name + '\n' + group.goal + '\n' + group.leader + '\n' + group.area + '\n' + group.relations + '\n' + group.attitude);
+          // 移除label.setTitle
+          const marker = new BMapGL.Marker(point);
+          marker.addEventListener('click', (e) => {
+            this.showPopup({ name: group.name, desc: group.goal, img: group.img }, e);
+          });
+          label.addEventListener('click', (e) => {
+            this.showPopup({ name: group.name, desc: group.goal, img: group.img }, e);
+          });
           arr.push(label);
           this.map.addOverlay(label);
         });
       }
       this.overlays.armedGroups = arr;
+    },
+    showPopup(data, e) {
+      this.popupData = data;
+      let x = e.domEvent ? e.domEvent.clientX : 0;
+      let y = e.domEvent ? e.domEvent.clientY : 0;
+      this.popupPosition = { x, y };
+      this.popupVisible = true;
     },
     initBaiduMap() {
       const map = initMap("worldMap", {
@@ -368,8 +422,6 @@ export default {
       });
       view.addLayer(textLayer);
       textLayer.setData([]);
-
-      // 删除内比都、万象的marker、label、弹窗、circle和折线
 
       // 1. 缅甸Polygon
       const myanmarCoords = myanmarJson.features[0].geometry.coordinates[0];
@@ -523,5 +575,41 @@ html, body {
   height: 100vh;
   margin: 0;
   padding: 0;
+}
+.map-popup {
+  position: absolute;
+  z-index: 9999;
+  min-width: 220px;
+  max-width: 350px;
+  background: rgba(255,255,255,0.98);
+  color: #222;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  padding: 16px 20px 12px 20px;
+  pointer-events: auto;
+}
+.popup-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.popup-img {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.popup-desc {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.popup-close {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
 }
 </style>

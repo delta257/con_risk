@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "type": "工商",
+    "type": "社会",
     "orgName": "缅甸外国记者俱乐部",
     "orgPurpose": "缅甸外国记者俱乐部是面向驻缅甸的外国媒体、商界和外交界的会员制俱乐部。",
     "createTime": 1989,
@@ -10,7 +10,7 @@
   },
   {
     "id": 2,
-    "type": "工商",
+    "type": "社会",
     "orgName": "缅甸工商联合会联合会",
     "orgPurpose": "一个代表和维护私营企业利益的国家级非政府组织",
     "createTime": 1919,
@@ -37,7 +37,7 @@
   },
   {
     "id": 5,
-    "type": "其他",
+    "type": "社会",
     "orgName": "缅甸退伍军人组织",
     "orgPurpose": "缅甸武装部队（Tatmadaw） 退役军人的官方退伍军人组织",
     "createTime": 1973,
@@ -46,7 +46,7 @@
   },
   {
     "id": 6,
-    "type": "人权",
+    "type": "社会",
     "orgName": "缅甸妇幼福利协会",
     "orgPurpose": "保护该国的母亲及其子女",
     "createTime": 1948,
@@ -55,7 +55,7 @@
   },
   {
     "id": 7,
-    "type": "生态",
+    "type": "环境",
     "orgName": "生物多样性与自然保护协会",
     "orgPurpose": "XXXXXXX",
     "createTime": "XXX",
@@ -64,7 +64,7 @@
   },
   {
     "id": 8,
-    "type": "文化",
+    "type": "社会",
     "orgName": "XXXXXXX",
     "orgPurpose": "XXXXXXX",
     "createTime": "XXXXXXX",

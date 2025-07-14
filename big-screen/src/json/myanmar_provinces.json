@@ -1,0 +1,138 @@
+[
+  {
+    "name_en": "Kachin State",
+    "name_zh": "克钦邦",
+    "location": "缅甸最北，毗邻中国云南",
+    "ethnic_groups": "克钦族、汉族、汉人、佤族等",
+    "political_forces": "缅甸联邦政府、KIO（克钦独立组织）协会议会",
+    "armed_groups": "Kachin Independence Army (KIA)",
+    "industries": "木材、玉石、金矿、农业（茶、玉米）"
+  },
+  {
+    "name_en": "Shan State",
+    "name_zh": "掸邦",
+    "location": "东北，接壤中国、老挝、泰国",
+    "ethnic_groups": "掸族（泰族）、布朗、帕敢、傣族等",
+    "political_forces": "缅甸联邦政府、SSA-N/SSA-S、RCSS",
+    "armed_groups": "Shan State Army–South (SSA‑S)、Shan State Army–North (SSA‑N)",
+    "industries": "农业（稻米、茶）、矿产（锡、宝石）、鸦片（曾）、边贸、旅游",
+    "img": "http://localhost:8080/images/ruokaiport.jpg"
+  },
+  {
+    "name_en": "Kayin State",
+    "name_zh": "克伦邦",
+    "location": "东南，靠近泰国",
+    "ethnic_groups": "克伦族（Karen）、若干少数族",
+    "political_forces": "缅甸联邦政府、KNU（克伦民族联盟）",
+    "armed_groups": "Karen National Liberation Army (KNLA)",
+    "industries": "农业（橡胶、稻米）、木材、边贸"
+  },
+  {
+    "name_en": "Kayah State",
+    "name_zh": "克耶邦",
+    "location": "东南，夹在掸邦与克伦邦之间",
+    "ethnic_groups": "卡伦尼（Kayah）、帕壮、白滇",
+    "political_forces": "缅甸联邦政府、KNPP（克耶民族进步党）",
+    "armed_groups": "Karenni Army (KA)",
+    "industries": "农业（玉米、豆类）、小规模矿业"
+  },
+  {
+    "name_en": "Chin State",
+    "name_zh": "钦邦",
+    "location": "西北山地，靠印度和孟加拉国",
+    "ethnic_groups": "钦族（Chin）多支系",
+    "political_forces": "缅甸联邦政府",
+    "armed_groups": "Chin National Front (CNF)",
+    "industries": "农业（玉米、木薯）、手工艺品"
+  },
+  {
+    "name_en": "Rakhine State",
+    "name_zh": "若开邦",
+    "location": "西部沿海，接壤孟加拉国，滨临孟加拉湾",
+    "ethnic_groups": "若开族、缅族、罗兴亚、Chakma等",
+    "political_forces": "缅甸联邦政府、ULA/AA（统色情感组织）",
+    "armed_groups": "Arakan Army (AA)",
+    "industries": "渔业、椰子、林产、少量旅游"
+  },
+  {
+    "name_en": "Mon State",
+    "name_zh": "孟邦",
+    "location": "东南沿海，南靠泰国",
+    "ethnic_groups": "孟族、拜族（Bamar）、掸族",
+    "political_forces": "缅甸联邦政府、NMSP（孟民族解放阵线）",
+    "armed_groups": "New Mon State Party (NMSP)",
+    "industries": "农业（橡胶、椰子）、渔业、天然气"
+  },
+  {
+    "name_en": "Sagaing Region",
+    "name_zh": "萨加因省",
+    "location": "西北，沿钦德温河，通往印度",
+    "ethnic_groups": "缅族（Bamar）、钦、掸等",
+    "political_forces": "缅甸联邦政府",
+    "armed_groups": "（无大型EAO，零星PDF/NUG活动）",
+    "industries": "农业（稻米、小麦、芝麻、棉花）、矿产（金、煤）、木材、纺织"
+  },
+  {
+    "name_en": "Mandalay Region",
+    "name_zh": "曼德勒省",
+    "location": "中部干区，京畿地带",
+    "ethnic_groups": "缅族（Bamar）",
+    "political_forces": "缅甸联邦政府",
+    "armed_groups": "（无大型EAO）",
+    "industries": "农业（稻米）、工商业、旅游"
+  },
+  {
+    "name_en": "Magway Region",
+    "name_zh": "马圭省",
+    "location": "中部干区，南接曼德勒",
+    "ethnic_groups": "缅族（Bamar）",
+    "political_forces": "缅甸联邦政府",
+    "armed_groups": "（无大型EAO）",
+    "industries": "石油和天然气、棉花、芝麻"
+  },
+  {
+    "name_en": "Bago Region",
+    "name_zh": "勃固省",
+    "location": "南部，连通仰光与曼德勒",
+    "ethnic_groups": "缅族（Bamar）",
+    "political_forces": "缅甸联邦政府",
+    "armed_groups": "RCSS（部分区域）",
+    "industries": "农业（稻米、橡胶）、木材"
+  },
+  {
+    "name_en": "Ayeyarwady Region",
+    "name_zh": "艾罗瓦底省",
+    "location": "最南三角洲地带",
+    "ethnic_groups": "缅族（Bamar）",
+    "political_forces": "缅甸联邦政府",
+    "armed_groups": "（无大型EAO）",
+    "industries": "渔业、稻米、椰子"
+  },
+  {
+    "name_en": "Tanintharyi Region",
+    "name_zh": "丹老省",
+    "location": "最南端，连接泰国",
+    "ethnic_groups": "缅族（Bamar）、孟族",
+    "political_forces": "缅甸联邦政府",
+    "armed_groups": "KNLA（局部）",
+    "industries": "橡胶、木材、渔业"
+  },
+  {
+    "name_en": "Yangon Region",
+    "name_zh": "仰光省",
+    "location": "南部沿海，是经济中心",
+    "ethnic_groups": "缅族（Bamar）、印度裔、华裔",
+    "political_forces": "缅甸联邦政府、联邦选举委员会（NLD/USC）",
+    "armed_groups": "（无大型EAO）",
+    "industries": "工业、贸易、金融、港口"
+  },
+  {
+    "name_en": "Naypyidaw Union Territory",
+    "name_zh": "内比都直辖区",
+    "location": "中部，首都直辖",
+    "ethnic_groups": "缅族（Bamar）",
+    "political_forces": "缅甸联邦政府",
+    "armed_groups": "（不公开武装）",
+    "industries": "行政、服务业"
+  }
+] 

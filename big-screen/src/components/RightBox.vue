@@ -14,11 +14,55 @@
         </div>
       </dv-border-box-9>
     </div>
+    <div class="hostCountryBox">
+      <dv-border-box-12>
+        <div class="profitInnerBox">
+          <div class="titleBox">
+            <dv-decoration-7 style="width: 150px; height: 30px">
+              <div class="text">国家概况</div>
+            </dv-decoration-7>
+            <div class="line"></div>
+          </div>
+          <div class="contentBox">
+            <div v-for="item in hostInfoList" :key="item.id" class="item" @click="showHostInfoDialog(item)">
+              <img :src="item.src" alt="" />
+              <div>{{ item.name }}</div>
+            </div>
+          </div>
+        </div>
+      </dv-border-box-12>
+    </div>
+    <div class="profitBox">
+      <dv-border-box-12>
+        <div class="profitInnerBox">
+          <div class="titleBox">
+            <dv-decoration-7 style="width: 150px; height: 30px">
+              <div class="text">主要地区</div>
+            </dv-decoration-7>
+            <div class="line"></div>
+          </div>
+          <div class="contentBox">
+            <div class="industryLits" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: auto; width: 100%;">
+              <div
+                v-for="(item, index) in projects"
+                :key="item.id"
+                class="item"
+                :class="[3, 2].includes(index) ? 'active2' : 'active1'"
+                @click="showDialog(item.id, $event)"
+                style="display: flex; align-items: center; justify-content: center; text-align: center;"
+              >
+                {{ item.name }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </dv-border-box-12>
+    </div>
     <div class="ngoBox">
       <dv-border-box-12>
         <div class="titleBox">
-          <dv-decoration-7 style="width: 150px; height: 30px">
-            <div class="text">社会组织</div>
+          <dv-decoration-7 style="width: 200px; height: 30px">
+            <div class="text">主要组织</div>
           </dv-decoration-7>
           <div class="line"></div>
         </div>
@@ -40,92 +84,13 @@
         </div>
       </dv-border-box-12>
     </div>
-    <div class="profitBox">
-      <dv-border-box-12>
-        <div class="profitInnerBox">
-          <div class="titleBox">
-            <dv-decoration-7 style="width: 150px; height: 30px">
-              <div class="text">中国利益</div>
-            </dv-decoration-7>
-            <div class="line"></div>
-          </div>
-          <div class="contentBox">
-            <div class="left">
-              <dv-border-box-2>
-                <div class="innerBox">
-                  <div class="industryName">具体项目</div>
-                  <div class="industryLits">
-                    <div
-                      v-for="(item, index) in projects"
-                      :key="item.id"
-                      class="item"
-                      :class="[3, 2].includes(index) ? 'active2' : 'active1'"
-                      @click="showDialog(item.id, $event)"
-                    >
-                      {{ item.name }}
-                    </div>
-                  </div>
-                </div>
-              </dv-border-box-2>
-            </div>
-            <div class="right2">
-              <!-- <div class="icon1">
-                <img src="../assets/svg/keji2.svg" alt="" />
-              </div> -->
-              <div class="eventBox">
-                <div class="title">当地华人</div>
-                <div v-for="item in localEvents" :key="item.id" class="itemName">
-                  {{ item.name }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </dv-border-box-12>
-    </div>
-    <div class="hostCountryBox">
-      <dv-border-box-12>
-        <div class="profitInnerBox">
-          <div class="titleBox">
-            <dv-decoration-7 style="width: 150px; height: 30px">
-              <div class="text">国家概况</div>
-            </dv-decoration-7>
-            <div class="line"></div>
-          </div>
-          <div class="contentBox">
-            <div v-for="item in hostInfoList" :key="item.id" class="item">
-              <img :src="item.src" alt="" />
-              <div>{{ item.name }}</div>
-            </div>
-          </div>
-        </div>
-      </dv-border-box-12>
-    </div>
+
+
     <TextDialog ref="textDialogRef">
       <div class="text-dialog" @click.stop>
         <div class="title">{{ rowData.name }}</div>
-        <div class="infoBox">
-          <div>
-            <span>签约时间：</span>
-            <span>{{ rowData.signingTime }}</span>
-          </div>
-          <div>
-            <span>承建单位/业主：</span>
-            <span>{{ rowData.constructionUnit }}</span>
-          </div>
-        </div>
-        <div class="infoBox">
-          <div>
-            <span>地址：</span>
-            <span>{{ rowData.address }}</span>
-          </div>
-          <div>
-            <span>状态：</span>
-            <span>{{ rowData.status }}</span>
-          </div>
-        </div>
         <div v-if="rowData.img" class="dialog-img">
-          <img :src="require(`@/${rowData.img}`)" alt="项目图片" />
+          <img :src="rowData.img.startsWith('http') ? rowData.img : (rowData.img.startsWith('/') ? rowData.img : '/' + rowData.img)" alt="图片" />
         </div>
         <div v-html="rowData.detail" class="dialog-content"></div>
       </div>
@@ -156,6 +121,15 @@
         </table>
       </div>
     </TextDialog>
+    <TextDialog ref="hostInfoDialogRef">
+      <div class="text-dialog" @click.stop>
+        <div class="title">{{ hostInfoRowData.name }}</div>
+        <div v-if="hostInfoRowData.img" class="dialog-img">
+          <img :src="require(`@/${hostInfoRowData.img}`)" alt="图片" />
+        </div>
+        <div v-html="hostInfoRowData.detail" class="dialog-content"></div>
+      </div>
+    </TextDialog>
   </div>
 </template>
 
@@ -178,6 +152,8 @@ import iconSvg6 from "../assets/svg/icon6.svg";
 import TextDialog from "./TextDialog.vue";
 import riskMyanmar from "../json/risk_myanmar.json";
 import riskLaos from "../json/risk_laos.json";
+import myanmarProvinces from "../json/myanmar_provinces.json";
+import laosProvinces from "../json/laos_provinces.json";
 
 let timer = null;
 let timer2 = null;
@@ -212,23 +188,23 @@ export default {
         { id: 6, name: "Myanmar Medical Association", src: ngo6 },
       ],
       blocks: [
-        { id: 1, name: "生态", ngoInfo: [] },
-        { id: 2, name: "人权", ngoInfo: [] },
-        { id: 3, name: "健康", ngoInfo: [] },
-        { id: 4, name: "工商", ngoInfo: [] },
-        { id: 5, name: "文化", ngoInfo: [] },
-        { id: 6, name: "其他", ngoInfo: [] },
+        // { id: 1, name: "生态", ngoInfo: [] },
+        // { id: 2, name: "人权", ngoInfo: [] },
+        { id: 3, name: "政党", ngoInfo: [] },
+        { id: 4, name: "武装", ngoInfo: [] },
+        { id: 5, name: "劳工", ngoInfo: [] },
+        { id: 6, name: "宗教", ngoInfo: [] },
       ],
       orgs: [],
       projects: [],
       currentIndustryIndex: 0,
       hostInfoList: [
-        { id: 1, name: "国家概况", src: iconSvg1 },
-        { id: 2, name: "对外关系", src: iconSvg2 },
-        { id: 3, name: "民族宗教", src: iconSvg3 },
-        { id: 4, name: "政党政治", src: iconSvg4 },
-        { id: 5, name: "经济环境", src: iconSvg5 },
-        { id: 6, name: "营商环境", src: iconSvg6 },
+        { id: 1, name: "国家概况", src: iconSvg1, detail: "<p>这里是国家概况的详细介绍。</p>" },
+        { id: 2, name: "对外关系", src: iconSvg2, detail: "<p>这里是对外关系的详细介绍。</p>" },
+        { id: 3, name: "民族宗教", src: iconSvg3, detail: "<p>这里是民族宗教的详细介绍。</p>" },
+        { id: 4, name: "政党政治", src: iconSvg4, detail: "<p>这里是政党政治的详细介绍。</p>" },
+        { id: 5, name: "经济环境", src: iconSvg5, detail: "<p>这里是经济环境的详细介绍。</p>" },
+        { id: 6, name: "营商环境", src: iconSvg6, detail: "<p>这里是营商环境的详细介绍。</p>" },
       ],
       localEvents: [
         { id: 1, name: "电诈" },
@@ -239,6 +215,7 @@ export default {
       rowData: {},
       currentOrgs: [],
       riskData: {},
+      hostInfoRowData: {}, // 新增
     };
   },
   watch: {
@@ -248,11 +225,11 @@ export default {
         if (newVal === "myanmar") {
           this.riskData = riskMyanmar;
           import("../json/orgs.json").then(m => { this.orgs = m.default; });
-          import("../json/project.json").then(m => { this.projects = m.default; });
+          this.projects = myanmarProvinces.map((item, idx) => ({ ...item, id: idx + 1, name: item.name_zh }));
         } else if (newVal === "laos") {
           this.riskData = riskLaos;
           import("../json/orgs_laos.json").then(m => { this.orgs = m.default; });
-          import("../json/project_laos.json").then(m => { this.projects = m.default; });
+          this.projects = laosProvinces.map((item, idx) => ({ ...item, id: idx + 1, name: item.name_zh }));
         }
       },
     },
@@ -272,12 +249,26 @@ export default {
     },
     showDialog(id, e) {
       const row = this.projects.find((i) => i.id == id);
-      this.rowData = { ...row };
+      // 组装省/邦详细信息内容
+      this.rowData = {
+        name: row.name_zh + (row.name_en ? ` (${row.name_en})` : ""),
+        detail: `
+          <div><b>地理位置：</b>${row.location}</div>
+          <div><b>主要民族：</b>${row.ethnic_groups}</div>
+          <div><b>主要政治势力：</b>${row.political_forces}</div>
+          <div><b>主要武装组织：</b>${row.armed_groups}</div>
+          <div><b>主要产业：</b>${row.industries}</div>
+        `
+      };
       this.$refs.textDialogRef && this.$refs.textDialogRef.showDialog();
     },
     showOrgTable(row) {
       this.currentOrgs = this.orgs.filter((i) => i.type == row.name);
       this.$refs.textDialogRef2 && this.$refs.textDialogRef2.showDialog();
+    },
+    showHostInfoDialog(item) { // 新增
+      this.hostInfoRowData = { ...item };
+      this.$refs.hostInfoDialogRef && this.$refs.hostInfoDialogRef.showDialog();
     },
   },
   beforeDestroy() {

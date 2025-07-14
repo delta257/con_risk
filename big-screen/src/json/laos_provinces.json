@@ -1,0 +1,155 @@
+[
+  {
+    "name_en": "Vientiane Prefecture",
+    "name_zh": "万象市直辖区",
+    "location": "西北部湄公河沿岸",
+    "ethnic_groups": "老挝族（Lao Loum）",
+    "political_forces": "老挝人民革命党（LPRP）",
+    "armed_groups": "无正式武装",
+    "industries": "行政、服务、轻工业"
+  },
+  {
+    "name_en": "Vientiane Province",
+    "name_zh": "万象省",
+    "location": "环绕直辖区，西北部高原",
+    "ethnic_groups": "老挝族（Lao Loum）、Khmu",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业（稻米、蔗糖）、工业园区"
+  },
+  {
+    "name_en": "Luang Prabang",
+    "name_zh": "琅勃拉邦省",
+    "location": "北部，湄公河谷地",
+    "ethnic_groups": "老挝族、Hmong、Khmu等",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "旅游（世界遗产）、手工艺品、农业"
+  },
+  {
+    "name_en": "Houaphanh",
+    "name_zh": "华潘省",
+    "location": "东北接越南",
+    "ethnic_groups": "Hmong、Khmu、Lao Loum",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业、森林产品、边贸"
+  },
+  {
+    "name_en": "Xieng Khouang",
+    "name_zh": "宣光省",
+    "location": "东北高原",
+    "ethnic_groups": "Hmong、Khmu、Phu Tai等",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业（玉米、茶）、旅游（草帽山陵园）"
+  },
+  {
+    "name_en": "Oudomxay",
+    "name_zh": "乌多姆赛省",
+    "location": "西北山地",
+    "ethnic_groups": "Khmu、Hmong、Lao Loum",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业（茶、玉米）、木材"
+  },
+  {
+    "name_en": "Luang Namtha",
+    "name_zh": "琅南塔省",
+    "location": "最北，与中国云南接壤",
+    "ethnic_groups": "Khmu、Akha、Hmong、Yao",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "橡胶、糖蔗、铜矿、边贸"
+  },
+  {
+    "name_en": "Bokeo",
+    "name_zh": "博科省",
+    "location": "西北，金三角地带，接缅甸和泰国",
+    "ethnic_groups": "Lanten、Hmong、Lao Loum",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "矿业（金银、铜）、林业、河港贸易、旅游"
+  },
+  {
+    "name_en": "Phongsali",
+    "name_zh": "丰沙里省",
+    "location": "极北，山地",
+    "ethnic_groups": "Akha、Lahu、Khmu、Lao Loum",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "林业、咖啡、旅游"
+  },
+  {
+    "name_en": "Salavan",
+    "name_zh": "沙拉湾省",
+    "location": "中南部，与柬埔寨接壤",
+    "ethnic_groups": "Lao Loum、Tahoy、Mokong",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业、咖啡、能源"
+  },
+  {
+    "name_en": "Sekong",
+    "name_zh": "色贡省",
+    "location": "南部，流经缅甸至柬埔寨",
+    "ethnic_groups": "多达14个少数民族（Alak、Katu、Tarieng等）",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "咖啡、蜂蜜、拟建煤电厂"
+  },
+  {
+    "name_en": "Champasak",
+    "name_zh": "占巴塞省",
+    "location": "西南湄公河三角洲",
+    "ethnic_groups": "Lao Loum、Khmer、Bru",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业（稻米、橡胶）、木材、旅游"
+  },
+  {
+    "name_en": "Attapeu",
+    "name_zh": "阿速坡省",
+    "location": "东南，与越南接壤",
+    "ethnic_groups": "Lao Loum、Phu Tai、Katang",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业、木材、能源"
+  },
+  {
+    "name_en": "Savannakhet",
+    "name_zh": "沙湾那吉省",
+    "location": "中南部湄公河沿线",
+    "ethnic_groups": "Lao Loum、Vietnamese、Thai",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业、边贸、火力发电"
+  },
+  {
+    "name_en": "Khammouane",
+    "name_zh": "占孟省",
+    "location": "中部湄公河谷",
+    "ethnic_groups": "Lao Loum、Phu Thai、Mokong",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业（稻米、玉米）、矿产（石灰石）"
+  },
+  {
+    "name_en": "Bolikhamxai",
+    "name_zh": "波里坎赛省",
+    "location": "中部高原",
+    "ethnic_groups": "Lao Loum、Khmu、Phu Tai",
+    "political_forces": "LPRP",
+    "armed_groups": "无正式武装",
+    "industries": "农业、木材、矿产"
+  },
+  {
+    "name_en": "Xaisomboun",
+    "name_zh": "赛宋本省",
+    "location": "中部山地",
+    "ethnic_groups": "Hmong、Lao Loum",
+    "political_forces": "LPRP",
+    "armed_groups": "曾有武装对抗，现已平息",
+    "industries": "铜金矿（Phu Bia）、水电、旅游"
+  }
+] 
