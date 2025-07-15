@@ -24,7 +24,8 @@
     "location": "萨瓦纳凯省 Kaysone Phomvihane区",
     "lat": 16.5703,
     "lng": 104.7622,
-    "status": "干港、仓储设施完备，东–西经济走廊货运量稳步上升。"
+    "status": "干港、仓储设施完备，东–西经济走廊货运量稳步上升。",
+    "img": "https://www.laos.gov.la/wp-content/uploads/2024/03/1-1.jpg"
   },
   {
     "name": "磨丁港",
@@ -79,5 +80,140 @@
     "lat": 20.4580,
     "lng": 100.0890,
     "status": "正式口岸，通关畅通，船舶与货物通行量稳定"
+  },
+  {
+    "name": "万象瓦岱国际机场",
+    "en_name": "Wattay International Airport",
+    "desc": "老挝首都万象的主要国际民用机场，1999年建成启用，毗邻军方基地。",
+    "location": "老挝 万象省 西格塔邦区",
+    "lat": 17.9722,
+    "lng": 102.5767,
+    "status": "运营中（国际/军用）"
+  },
+  {
+    "name": "琅勃拉邦国际机场",
+    "en_name": "Luang Prabang International Airport",
+    "desc": "服务琅勃拉邦及周边地区的国际民用机场，是老挝第二繁忙的机场。",
+    "location": "老挝 琅勃拉邦省 琅勃拉邦市",
+    "lat": 19.8917,
+    "lng": 102.1565,
+    "status": "运营中（国际）"
+  },
+  {
+    "name": "巴色国际机场",
+    "en_name": "Pakse International Airport",
+    "desc": "服务占巴塞省巴色市的国际民用机场，兼作军事机场。",
+    "location": "老挝 占巴塞省 巴色市",
+    "lat": 15.1321,
+    "lng": 105.7810,
+    "status": "运营中（国际/军用）"
+  },
+  {
+    "name": "博革国际机场",
+    "en_name": "Bokeo International Airport",
+    "desc": "2024年2月启用，位于博革省陶平区，面向缅老跨境旅客和散货运输。",
+    "location": "老挝 博革省 陶平区",
+    "lat": 20.3239,
+    "lng": 100.1656,
+    "status": "运营中（国际）"
+  },
+  {
+    "name": "万象—孟沙机场",
+    "en_name": "Ban Huoeisay Airport",
+    "desc": "博革省霍艾赛区的小型民用机场，暂无定期航班。",
+    "location": "老挝 博革省 霍艾赛区",
+    "lat": 20.2573,
+    "lng": 100.4375,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "琅南塔机场",
+    "en_name": "Luang Namtha Airport",
+    "desc": "服务琅南塔省首府琅南塔的国内民用机场。",
+    "location": "老挝 琅南塔省 琅南塔市",
+    "lat": 20.9528,
+    "lng": 101.4142,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "乌多姆赛机场",
+    "en_name": "Oudomsay (Muang Xay) Airport",
+    "desc": "服务乌多姆赛省首府乌多姆赛（磨丁）的国内民用机场。",
+    "location": "老挝 乌多姆赛省 乌多姆赛市",
+    "lat": 20.4097,
+    "lng": 101.4217,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "琅南塔—贡岛机场",
+    "en_name": "Khong Island Airport",
+    "desc": "位于南欧江上的贡岛简易机场，服务边境小型航班。",
+    "location": "老挝 崇左省 贡岛",
+    "lat": 13.7100,
+    "lng": 105.9300,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "信贡机场",
+    "en_name": "Xieng Khouang Airport",
+    "desc": "服务丰沙万（信贡）的国内民用机场。",
+    "location": "老挝 省 丰沙万市",
+    "lat": 19.2750,
+    "lng": 103.1442,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "沙拉万机场",
+    "en_name": "Saravane Airport",
+    "desc": "服务沙拉万省沙拉万市的国内民用机场。",
+    "location": "老挝 沙拉万省 沙拉万市",
+    "lat": 15.7083,
+    "lng": 106.4167,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "上寮机场",
+    "en_name": "Nong Khang (Sam Neua) Airport",
+    "desc": "服务丰沙里省上寮市的国内民用机场。",
+    "location": "老挝 丰沙里省 上寮市",
+    "lat": 20.4167,
+    "lng": 104.1144,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "沙勉机场",
+    "en_name": "Savannakhet Airport",
+    "desc": "服务沙耶武里省沙耶武里市的国内民用机场。",
+    "location": "老挝 沙耶武里省 沙耶武里市",
+    "lat": 16.5528,
+    "lng": 104.8822,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "色旬机场",
+    "en_name": "Sayaboury Airport",
+    "desc": "服务赛宋本省色旬市的国内民用机场。",
+    "location": "老挝 赛宋本省 色旬市",
+    "lat": 19.2467,
+    "lng": 101.4339,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "塔克瓦机场",
+    "en_name": "Thakhek Airport",
+    "desc": "服务沙拉湾省塔克瓦市的国内民用机场。",
+    "location": "老挝 沙拉湾省 塔克瓦市",
+    "lat": 17.4125,
+    "lng": 104.8167,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "丰沙里布奈机场",
+    "en_name": "Phongsaly Boun Neua Airport",
+    "desc": "服务丰沙里省布奈镇的国内民用机场。",
+    "location": "老挝 丰沙里省 布奈镇",
+    "lat": 21.7444,
+    "lng": 102.1033,
+    "status": "运营中（国内）"
   }
 ] 

@@ -4,9 +4,9 @@
       <div class="bg">
         <div class="map-btn-container">
           <button :class="{ 'selected-button': showPorts }" @click="togglePorts">主要交通节点/要道</button>
-          <button :class="{ 'selected-button': showCheckpoints }" @click="toggleCheckpoints">检查站</button>
-          <button :class="{ 'selected-button': showChinaProjects }" @click="toggleChinaProjects">中国项目</button>
+          <button :class="{ 'selected-button': showCheckpoints }" @click="toggleCheckpoints">湄公河沿岸检查站</button>
           <button :class="{ 'selected-button': showArmedGroups }" @click="toggleArmedGroups">武装组织活动区域</button>
+          <button :class="{ 'selected-button': showChinaProjects }" @click="toggleChinaProjects">中国在地关键项目</button>
         </div>
         <div id="worldMap" ref="worldMapRef"></div>
         <div v-if="popupVisible" class="map-popup" :style="{ left: popupPosition.x + 'px', top: popupPosition.y + 'px' }">
@@ -529,8 +529,9 @@ export default {
 .centerBox {
   overflow: hidden;
   .bg {
-    height: calc(100vh - 40px);
+    height: calc(100vh - 66px);
     border-radius: 30px;
+    overflow: hidden; /* 防止内容溢出 */
     #worldMap {
       width: 100%;
       height: calc(100vh - 40px);
@@ -546,6 +547,9 @@ export default {
   transform: translateX(-50%);
   display: flex;
   z-index: 10;
+  width: auto;
+  height: auto;
+  pointer-events: auto;
   button {
     border: 1px solid lightgray;
     padding: 10px 20px;
@@ -579,23 +583,28 @@ html, body {
 .map-popup {
   position: absolute;
   z-index: 9999;
-  min-width: 220px;
-  max-width: 350px;
+  display: inline-block;
+  width: auto;
+  max-width: 20vw;
+  max-height: 80vh;
   background: rgba(255,255,255,0.98);
   color: #222;
   border-radius: 10px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.18);
   padding: 16px 20px 12px 20px;
   pointer-events: auto;
+  white-space: normal;
+  overflow-y: auto;
 }
 .popup-title {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 8px;
+  text-align: center;
 }
 .popup-img {
   width: 100%;
-  max-height: 160px;
+  max-height: 200px;
   object-fit: cover;
   border-radius: 6px;
   margin-bottom: 8px;
@@ -603,6 +612,8 @@ html, body {
 .popup-desc {
   font-size: 15px;
   margin-bottom: 8px;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 .popup-close {
   position: absolute;

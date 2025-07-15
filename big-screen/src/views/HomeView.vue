@@ -62,6 +62,7 @@ export default {
     left: 0;
     z-index: 9;
     top: @topPadding;
+    height: calc(100vh - @topPadding);
   }
   .right-box {
     width: 500px;
@@ -69,6 +70,7 @@ export default {
     right: 0;
     top: @topPadding;
     z-index: 9;
+    height: calc(100vh - @topPadding);
   }
 
   .center-box {

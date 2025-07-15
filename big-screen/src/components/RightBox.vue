@@ -61,7 +61,7 @@
     <div class="ngoBox">
       <dv-border-box-12>
         <div class="titleBox">
-          <dv-decoration-7 style="width: 200px; height: 30px">
+          <dv-decoration-7 style="width: 150px; height: 30px">
             <div class="text">主要组织</div>
           </dv-decoration-7>
           <div class="line"></div>
@@ -87,47 +87,26 @@
 
 
     <TextDialog ref="textDialogRef">
-      <div class="text-dialog" @click.stop>
-        <div class="title">{{ rowData.name }}</div>
-        <div v-if="rowData.img" class="dialog-img">
-          <img :src="rowData.img.startsWith('http') ? rowData.img : (rowData.img.startsWith('/') ? rowData.img : '/' + rowData.img)" alt="图片" />
-        </div>
-        <div v-html="rowData.detail" class="dialog-content"></div>
+      <div class="region-popup" @click.stop>
+        <div class="popup-title">{{ rowData.name }}</div>
+        <img v-if="rowData.img" :src="require(`@/${rowData.img}`)" class="popup-img" alt="项目图片" />
+        <div class="popup-desc" v-html="rowData.detail"></div>
+        <span class="popup-close" @click="$refs.textDialogRef.closeDialog()">×</span>
       </div>
     </TextDialog>
     <TextDialog ref="textDialogRef2">
-      <div class="orgTableBox">
-        <table>
-          <thead>
-            <tr>
-              <th>序号</th>
-              <th>组织名称</th>
-              <th>组织宗旨</th>
-              <th>成立时间</th>
-              <th>活动地点</th>
-              <th>典型活动</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(fItem, index) in currentOrgs">
-              <td>{{ index + 1 }}</td>
-              <td>{{ fItem.orgName }}</td>
-              <td>{{ fItem.orgPurpose }}</td>
-              <td>{{ fItem.createTime }}</td>
-              <td>{{ fItem.activityArea }}</td>
-              <td>{{ fItem.activity }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="region-popup" @click.stop>
+        <div class="popup-title">{{ currentOrgTitle }}</div>
+        <div class="popup-desc" v-html="currentOrgContent"></div>
+        <span class="popup-close" @click="$refs.textDialogRef2.closeDialog()">×</span>
       </div>
     </TextDialog>
     <TextDialog ref="hostInfoDialogRef">
-      <div class="text-dialog" @click.stop>
-        <div class="title">{{ hostInfoRowData.name }}</div>
-        <div v-if="hostInfoRowData.img" class="dialog-img">
-          <img :src="require(`@/${hostInfoRowData.img}`)" alt="图片" />
-        </div>
-        <div v-html="hostInfoRowData.detail" class="dialog-content"></div>
+      <div class="region-popup" @click.stop>
+        <div class="popup-title">{{ hostInfoRowData.name }}</div>
+        <img v-if="hostInfoRowData.img" :src="require(`@/${hostInfoRowData.img}`)" class="popup-img" alt="图片" />
+        <div class="popup-desc" v-html="hostInfoRowData.detail"></div>
+        <span class="popup-close" @click="$refs.hostInfoDialogRef.closeDialog()">×</span>
       </div>
     </TextDialog>
   </div>
@@ -188,23 +167,18 @@ export default {
         { id: 6, name: "Myanmar Medical Association", src: ngo6 },
       ],
       blocks: [
-        // { id: 1, name: "生态", ngoInfo: [] },
-        // { id: 2, name: "人权", ngoInfo: [] },
         { id: 3, name: "政党", ngoInfo: [] },
         { id: 4, name: "武装", ngoInfo: [] },
         { id: 5, name: "劳工", ngoInfo: [] },
         { id: 6, name: "宗教", ngoInfo: [] },
+        { id: 7, name: "环境", ngoInfo: [] },
       ],
-      orgs: [],
       projects: [],
       currentIndustryIndex: 0,
       hostInfoList: [
-        { id: 1, name: "国家概况", src: iconSvg1, detail: "<p>这里是国家概况的详细介绍。</p>" },
-        { id: 2, name: "对外关系", src: iconSvg2, detail: "<p>这里是对外关系的详细介绍。</p>" },
-        { id: 3, name: "民族宗教", src: iconSvg3, detail: "<p>这里是民族宗教的详细介绍。</p>" },
-        { id: 4, name: "政党政治", src: iconSvg4, detail: "<p>这里是政党政治的详细介绍。</p>" },
-        { id: 5, name: "经济环境", src: iconSvg5, detail: "<p>这里是经济环境的详细介绍。</p>" },
-        { id: 6, name: "营商环境", src: iconSvg6, detail: "<p>这里是营商环境的详细介绍。</p>" },
+        { id: 1, name: "地理概览", src: iconSvg1, detail: "<p>这里是国家地理的详细介绍。</p>" },
+        { id: 5, name: "经济概览", src: iconSvg5, detail: "<p>这里是经济环境的详细介绍。</p>" },
+        { id: 2, name: "政治概览", src: iconSvg2, detail: "<p>这里是国家政治的详细介绍。</p>" },
       ],
       localEvents: [
         { id: 1, name: "电诈" },
@@ -213,9 +187,10 @@ export default {
         { id: 4, name: "缅甸旅行" },
       ],
       rowData: {},
-      currentOrgs: [],
       riskData: {},
       hostInfoRowData: {}, // 新增
+      currentOrgTitle: '主要组织',
+      currentOrgContent: '', // 新增，存储文章内容
     };
   },
   watch: {
@@ -224,11 +199,9 @@ export default {
       handler(newVal) {
         if (newVal === "myanmar") {
           this.riskData = riskMyanmar;
-          import("../json/orgs.json").then(m => { this.orgs = m.default; });
           this.projects = myanmarProvinces.map((item, idx) => ({ ...item, id: idx + 1, name: item.name_zh }));
         } else if (newVal === "laos") {
           this.riskData = riskLaos;
-          import("../json/orgs_laos.json").then(m => { this.orgs = m.default; });
           this.projects = laosProvinces.map((item, idx) => ({ ...item, id: idx + 1, name: item.name_zh }));
         }
       },
@@ -252,6 +225,7 @@ export default {
       // 组装省/邦详细信息内容
       this.rowData = {
         name: row.name_zh + (row.name_en ? ` (${row.name_en})` : ""),
+        img: row.img, // 修正：确保图片字段传递
         detail: `
           <div><b>地理位置：</b>${row.location}</div>
           <div><b>主要民族：</b>${row.ethnic_groups}</div>
@@ -263,12 +237,51 @@ export default {
       this.$refs.textDialogRef && this.$refs.textDialogRef.showDialog();
     },
     showOrgTable(row) {
-      this.currentOrgs = this.orgs.filter((i) => i.type == row.name);
-      this.$refs.textDialogRef2 && this.$refs.textDialogRef2.showDialog();
+      this.currentOrgTitle = row.name;
+      // 动态加载对应国家和类别的介绍json
+      let fileMap = {
+        '政党': 'party_intro',
+        '武装': 'armed_intro',
+        '劳工': 'labor_intro',
+        '宗教': 'religion_intro',
+        '环境': 'env_intro',
+      };
+      let file = fileMap[row.name] + '_' + this.country + '.json';
+      import(`../json/${file}`).then(m => {
+        this.currentOrgContent = m.default.content;
+        this.$refs.textDialogRef2 && this.$refs.textDialogRef2.showDialog();
+      }).catch(() => {
+        // 如果没有该国家的介绍，降级为默认（如缅甸）
+        import(`../json/${fileMap[row.name]}_myanmar.json`).then(m => {
+          this.currentOrgContent = m.default.content;
+          this.$refs.textDialogRef2 && this.$refs.textDialogRef2.showDialog();
+        });
+      });
     },
-    showHostInfoDialog(item) { // 新增
-      this.hostInfoRowData = { ...item };
-      this.$refs.hostInfoDialogRef && this.$refs.hostInfoDialogRef.showDialog();
+    showHostInfoDialog(item) {
+      // 动态加载地理/经济/政治概览json
+      let fileMap = {
+        '地理概览': 'geo_intro',
+        '经济概览': 'economy_intro',
+        '政治概览': 'polit_intro',
+      };
+      let file = fileMap[item.name] + '_' + this.country + '.json';
+      import(`../json/${file}`).then(m => {
+        this.hostInfoRowData = {
+          name: m.default.title,
+          detail: m.default.content
+        };
+        this.$refs.hostInfoDialogRef && this.$refs.hostInfoDialogRef.showDialog();
+      }).catch(() => {
+        // 降级为缅甸默认
+        import(`../json/${fileMap[item.name]}_myanmar.json`).then(m => {
+          this.hostInfoRowData = {
+            name: m.default.title,
+            detail: m.default.content
+          };
+          this.$refs.hostInfoDialogRef && this.$refs.hostInfoDialogRef.showDialog();
+        });
+      });
     },
   },
   beforeDestroy() {
@@ -360,7 +373,7 @@ export default {
       padding: 0 10px 15px 10px;
       .blockItem {
         flex: 1;
-        height: 200px;
+        height: 215px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -381,7 +394,7 @@ export default {
   }
   .profitBox {
     width: 100%;
-    height: 350px;
+    height: 415px;
     margin-top: 0px;
     .profitInnerBox {
       height: 100%;
@@ -517,17 +530,22 @@ export default {
     .contentBox {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      grid-column-gap: 10px;
-      grid-row-gap: 10px;
-      padding: 15px;
+      grid-template-rows: 1fr;
+      grid-column-gap: 30px;
+      grid-row-gap: 0px;
+      padding: 30px 15px 30px 15px;
       .item {
         display: flex;
         flex-direction: column;
         align-items: center;
         img {
-          width: 70px;
-          height: 75px;
+          width: 110px;
+          height: 110px;
+        }
+        div {
+          font-size: 22px;
+          margin-top: 18px;
+          font-weight: bold;
         }
       }
     }
@@ -583,5 +601,53 @@ export default {
       padding: 0 8px;
     }
   }
+}
+.region-popup {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  max-width: 90vw;
+  max-height: 80vh;
+  background: rgba(255,255,255,0.98);
+  color: #222;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  padding: 16px 20px 12px 20px;
+  pointer-events: auto;
+  white-space: normal;
+  overflow-y: auto;
+}
+.popup-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.popup-img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.popup-desc {
+  font-size: 15px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.popup-desc table {
+  min-width: 600px;
+  width: auto;
+  border-collapse: collapse;
+}
+.popup-close {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
 }
 </style>

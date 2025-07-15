@@ -79,5 +79,275 @@
     "lat": 20.4720,
     "lng": 100.0740,
     "status": "非正式停靠，设施简陋，仅供短暂停靠与轻量货物"
+  },
+  {
+    "name": "仰光国际机场",
+    "en_name": "Yangon International Airport",
+    "desc": "缅甸最大的国际民用机场，1947 年启用，服务仰光及周边地区。",
+    "location": "缅甸 仰光省 明加拉登",
+    "lat": 16.9073,
+    "lng": 96.1333,
+    "status": "运营中（国际）"
+  },
+  {
+    "name": "曼德勒国际机场",
+    "en_name": "Mandalay International Airport",
+    "desc": "1999 年启用，服务曼德勒及中部地区的国际民用机场。",
+    "location": "缅甸 曼德勒省 塔达乌镇",
+    "lat": 21.7020,
+    "lng": 95.9778,
+    "status": "运营中（国际）"
+  },
+  {
+    "name": "内比都国际机场",
+    "en_name": "Naypyidaw International Airport",
+    "desc": "2011 年启用，服务缅甸首都内比都的国际民用机场。",
+    "location": "缅甸 内比都联邦直辖区",
+    "lat": 19.7625,
+    "lng": 96.0786,
+    "status": "运营中（国际）"
+  },
+  {
+    "name": "巴干缅隆机场",
+    "en_name": "Bagan Nyaung-U Airport",
+    "desc": "服务蒲甘考古区及周边地区的国内民用机场。",
+    "location": "缅甸 曼德勒省 纽昂乌",
+    "lat": 21.1680,
+    "lng": 94.8660,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "希捏机场",
+    "en_name": "Heho Airport",
+    "desc": "服务掸邦陶吉市及周边地区的国内民用机场。",
+    "location": "缅甸 掸邦 陶吉",
+    "lat": 20.7297,
+    "lng": 96.7803,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "清孔机场",
+    "en_name": "Kengtung Airport",
+    "desc": "服务掸邦清孔镇的国内民用机场。",
+    "location": "缅甸 掸邦 清孔镇",
+    "lat": 20.3030,
+    "lng": 99.7960,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "腊戍机场",
+    "en_name": "Lashio Airport",
+    "desc": "服务掸邦腊戍市的国内民用机场。",
+    "location": "缅甸 掸邦 腊戍市",
+    "lat": 22.9119,
+    "lng": 97.7482,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "密支那机场",
+    "en_name": "Myitkyina Airport",
+    "desc": "服务克钦邦密支那市的国内民用机场。",
+    "location": "缅甸 克钦邦 密支那",
+    "lat": 25.3897,
+    "lng": 97.3950,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "普陶机场",
+    "en_name": "Putao Airport",
+    "desc": "服务克钦邦普陶镇的国内民用机场。",
+    "location": "缅甸 克钦邦 普陶",
+    "lat": 27.3300,
+    "lng": 97.4300,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "丹缅机场",
+    "en_name": "Thandwe Airport",
+    "desc": "服务若开邦丹缅市及海滩度假区的国内民用机场。",
+    "location": "缅甸 若开邦 丹缅",
+    "lat": 18.4706,
+    "lng": 94.3019,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "实兑机场",
+    "en_name": "Sittwe Airport",
+    "desc": "服务若开邦实兑市的国内民用机场。",
+    "location": "缅甸 若开邦 实兑",
+    "lat": 20.1500,
+    "lng": 92.9000,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "果敢机场",
+    "en_name": "Kawthaung Airport",
+    "desc": "服务十勿邦果敢镇的国内民用机场。",
+    "location": "缅甸 十勿邦 果敢",
+    "lat": 10.0667,
+    "lng": 98.5167,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "缅海机场",
+    "en_name": "Myeik Airport",
+    "desc": "服务丹老省缅海市的国内民用机场。",
+    "location": "缅甸 丹老省 缅海",
+    "lat": 12.4392,
+    "lng": 98.6169,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "丹威机场",
+    "en_name": "Dawei Airport",
+    "desc": "服务丹老省丹威市的国内民用机场。",
+    "location": "缅甸 丹老省 丹威",
+    "lat": 14.0925,
+    "lng": 98.2033,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "荷马林机场",
+    "en_name": "Homalin Airport",
+    "desc": "服务萨迦印省荷马林镇的国内民用机场。",
+    "location": "缅甸 萨迦印省 荷马林",
+    "lat": 23.1333,
+    "lng": 94.8417,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "卡勒密机场",
+    "en_name": "Kalaymyo Airport",
+    "desc": "服务钦邦卡勒密市的国内民用机场。",
+    "location": "缅甸 钦邦 卡勒密",
+    "lat": 21.9500,
+    "lng": 95.9500,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "达茉机场",
+    "en_name": "Khamti Airport",
+    "desc": "服务掸邦达茉镇的国内民用机场。",
+    "location": "缅甸 掸邦 达茉",
+    "lat": 24.3333,
+    "lng": 95.8333,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "九江机场",
+    "en_name": "Kyaukpyu Airport",
+    "desc": "服务拉塔克季邦九江镇的国内民用机场。",
+    "location": "缅甸 拉塔克季邦 九江",
+    "lat": 19.4333,
+    "lng": 93.5500,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "马圭机场",
+    "en_name": "Mawlamyine Airport",
+    "desc": "服务勃固省马圭市的国内民用机场。",
+    "location": "缅甸 勃固省 马圭",
+    "lat": 16.5086,
+    "lng": 97.7128,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "孟育机场",
+    "en_name": "Monywa Airport",
+    "desc": "服务曼德勒省孟育市的国内民用机场。",
+    "location": "缅甸 曼德勒省 孟育",
+    "lat": 22.0997,
+    "lng": 95.1311,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "帕得库机场",
+    "en_name": "Pakokku Airport",
+    "desc": "服务曼德勒省帕得库市的国内民用机场。",
+    "location": "缅甸 曼德勒省 帕得库",
+    "lat": 21.3333,
+    "lng": 95.0333,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "鲍克机场",
+    "en_name": "Pauk Airport",
+    "desc": "服务曼德勒省鲍克镇的国内民用机场。",
+    "location": "缅甸 曼德勒省 鲍克",
+    "lat": 21.6333,
+    "lng": 95.1667,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "巴莫机场",
+    "en_name": "Bhamo Airport",
+    "desc": "服务克钦邦巴莫市的国内民用机场。",
+    "location": "缅甸 克钦邦 巴莫",
+    "lat": 24.2500,
+    "lng": 97.2167,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "提林机场",
+    "en_name": "Tilin Airport",
+    "desc": "服务曼德勒省提林镇的国内民用机场。",
+    "location": "缅甸 曼德勒省 提林",
+    "lat": 20.6300,
+    "lng": 95.1600,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "耶城机场",
+    "en_name": "Ye Airport",
+    "desc": "服务勃固省耶城的国内民用机场。",
+    "location": "缅甸 勃固省 耶",
+    "lat": 17.2083,
+    "lng": 97.4900,
+    "status": "运营中（国内）"
+  },
+  {
+    "name": "勃固空军基地",
+    "en_name": "Hmawbi Air Base",
+    "desc": "隶属于缅甸空军的主要军用机场。",
+    "location": "缅甸 仰光省 勃固",
+    "lat": 16.9222,
+    "lng": 96.1417,
+    "status": "运营中（军用）"
+  },
+  {
+    "name": "敏劳空军基地",
+    "en_name": "Mingaladon Air Base",
+    "desc": "隶属于缅甸空军的军事机场，毗邻仰光国际机场。",
+    "location": "缅甸 仰光省 明加拉登",
+    "lat": 16.9073,
+    "lng": 96.1333,
+    "status": "运营中（军用）"
+  },
+  {
+    "name": "曼德勒空军基地",
+    "en_name": "Mandalay Air Base",
+    "desc": "缅甸空军主要基地之一，位于曼德勒。",
+    "location": "缅甸 曼德勒省 曼德勒",
+    "lat": 21.7020,
+    "lng": 95.9778,
+    "status": "运营中（军用）"
+  },
+  {
+    "name": "内比都空军基地",
+    "en_name": "Naypyidaw Air Base",
+    "desc": "缅甸空军在首都内比都的主要军事机场。",
+    "location": "缅甸 内比都联邦直辖区",
+    "lat": 19.7625,
+    "lng": 96.0786,
+    "status": "运营中（军用）"
+  },
+  {
+    "name": "密支那空军基地",
+    "en_name": "Myitkyina Air Base",
+    "desc": "缅甸空军在克钦邦密支那的军事机场。",
+    "location": "缅甸 克钦邦 密支那",
+    "lat": 25.3897,
+    "lng": 97.3950,
+    "status": "运营中（军用）"
   }
 ] 

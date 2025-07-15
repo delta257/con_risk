@@ -1,6 +1,6 @@
 <template>
   <div class="left-wrap">
-    <dv-border-box-7>
+    <dv-border-box-7 class="blue-border">
       <div class="title-box">
         <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
         <div>
@@ -42,7 +42,7 @@
         </div>
       </div>
     </dv-border-box-7>
-    <dv-border-box-7>
+    <dv-border-box-7 class="blue-border">
       <div class="title-box">
         <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
         <div>
@@ -57,7 +57,7 @@
         @click="(row) => handleScrollBoardClick(row, '1')"
       />
     </dv-border-box-7>
-    <dv-border-box-7>
+    <dv-border-box-7 class="blue-border">
       <div style="height: 330px">
         <div class="title-box">
           <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
@@ -159,30 +159,30 @@ import riskLaos from "../json/risk_laos.json";
 let timer1 = null;
 let timer2 = null;
 const KEY_WORDS = [
-  { name: "输出", value: 34156 },
-  { name: "测评", value: 22199 },
-  { name: "微控制器", value: 10288 },
-  { name: "线网络", value: 1206 },
-  { name: "机台", value: 274470 },
-  { name: "无线", value: 12311 },
-  { name: "输", value: 2062 },
-  { name: "开端", value: 4885 },
-  { name: "端", value: 32294 },
-  { name: "换机器", value: 18574 },
-  { name: "测评1", value: 38929 },
-  { name: "模块", value: 969 },
-  { name: "机", value: 37517 },
-  { name: "接", value: 12053 },
-  { name: "机器", value: 57299 },
-  { name: "牛逼", value: 15418 },
-  { name: "你好", value: 22905 },
-  { name: "世界", value: 5146 },
-  { name: "我", value: 49487 },
-  { name: "是", value: 33837 },
-  { name: "小世界", value: 4500 },
-  { name: "大世界", value: 5744 },
-  { name: "前端", value: 4840 },
-  { name: "后端", value: 2322 },
+  { name: "恐怖袭击", value: 34156 },
+  { name: "边境冲突", value: 22199 },
+  { name: "通货膨胀", value: 10288 },
+  { name: "汇率波动", value: 1206 },
+  { name: "武装冲突", value: 274470 },
+  { name: "洪水", value: 12311 },
+  { name: "水污染", value: 2062 },
+  { name: "地质滑坡", value: 4885 },
+  { name: "交通中断", value: 32294 },
+  { name: "机场停航", value: 18574 },
+  { name: "电力停工", value: 38929 },
+  { name: "食物中毒", value: 969 },
+  { name: "文化冲突", value: 37517 },
+  { name: "台风", value: 12053 },
+  { name: "森林", value: 57299 },
+  { name: "气象", value: 15418 },
+  { name: "疫情", value: 22905 },
+  { name: "交通", value: 5146 },
+  { name: "港口", value: 49487 },
+  { name: "人权", value: 33837 },
+  { name: "少数民族", value: 4500 },
+  { name: "金三角", value: 5744 },
+  { name: "枪击", value: 4840 },
+  { name: "毒品", value: 2322 },
 ];
 
 export default {
@@ -564,6 +564,7 @@ export default {
   flex-direction: column;
   gap: 0px;
   color: rgb(145, 167, 184);
+  height: 100%; /* 新增，确保填满父容器 */
 }
 .button-container {
   display: flex;
@@ -696,7 +697,7 @@ export default {
   display: flex;
   justify-content: center;
   .wordCloud {
-    height: 130px;
+    height: 200px;
     width: 500px;
   }
 }
@@ -715,5 +716,11 @@ export default {
     display: flex;
     justify-content: space-between;
   }
+}
+.blue-border {
+  border: 2px solid #3fa7ff;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
 }
 </style>
