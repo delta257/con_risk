@@ -35,7 +35,7 @@ class DoubaoTranslator:
             resp.raise_for_status()
             return resp.json()['choices'][0]['message']['content']
         except Exception as e:
-            print(f"API调用失败: {e}")
+            print(f"API调用失败:{e}")
             return None
 
     def translate(self, text: str) -> Optional[str]:

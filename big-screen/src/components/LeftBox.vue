@@ -62,7 +62,7 @@
         <div class="title-box">
           <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
           <div>
-            <div class="title">舆情监测</div>
+            <div class="title">情报监测</div>
             <dv-decoration-3 style="width: 150px; height: 30px" />
           </div>
           <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
@@ -144,6 +144,30 @@
           </div>
         </div>
         <div v-html="rowData.event"></div>
+      </div>
+    </TextDialog>
+    <div class="opinion-btn-group">
+      <button
+        v-for="(btn, idx) in buttons2"
+        :key="btn.id"
+        :class="{ selected: selectedButton2 === idx }"
+        @click="selectOpinionCategory(idx)"
+      >
+        {{ btn.name }}
+      </button>
+    </div>
+    <TextDialog v-model="showDailyDialog">
+      <div class="map-popup">
+        <div class="popup-title">每日报告</div>
+        <div class="popup-desc" v-html="dailyReport && dailyReport.content"></div>
+        <span class="popup-close" @click="showDailyDialog = false">×</span>
+      </div>
+    </TextDialog>
+    <TextDialog v-model="showWeeklyDialog">
+      <div class="map-popup">
+        <div class="popup-title">每周报告</div>
+        <div class="popup-desc" v-html="weeklyReport && weeklyReport.content"></div>
+        <span class="popup-close" @click="showWeeklyDialog = false">×</span>
       </div>
     </TextDialog>
   </div>
@@ -406,8 +430,14 @@ export default {
       buttons2: [
         { name: "事件追踪", id: 1 },
         { name: "七日热点", id: 2 },
+        { name: "每日报告", id: 3 },
+        { name: "每周报告", id: 4 },
       ],
       selectedButton2: 0,
+      dailyReport: null,
+      weeklyReport: null,
+      showDailyDialog: false,
+      showWeeklyDialog: false,
       rowData: {},
       riskData: {},
     };
@@ -468,6 +498,12 @@ export default {
           this.focusEvent = m.default;
           this.scrollBoardConfig2 = { data: this.focusEvent.map(item => [`${item.time},${item.title}`]) };
         });
+        import("../json/daily_report_myanmar.json").then(m => {
+          this.dailyReport = m.default;
+        });
+        import("../json/weekly_report_myanmar.json").then(m => {
+          this.weeklyReport = m.default;
+        });
       } else if (country === "laos") {
         this.riskData = riskLaos;
         import("../json/safeEvents_laos.json").then(m => {
@@ -477,6 +513,12 @@ export default {
         import("../json/focusEvent_laos.json").then(m => {
           this.focusEvent = m.default;
           this.scrollBoardConfig2 = { data: this.focusEvent.map(item => [`${item.time},${item.title}`]) };
+        });
+        import("../json/daily_report_laos.json").then(m => {
+          this.dailyReport = m.default;
+        });
+        import("../json/weekly_report_laos.json").then(m => {
+          this.weeklyReport = m.default;
         });
       }
       // 这里可以根据 riskData 更新 radarOption、barOption1/2/3、waterConfig 等
@@ -548,6 +590,11 @@ export default {
     // 新增：按钮点击切换舆情类别
     selectOpinionCategory(idx) {
       this.selectedButton2 = idx;
+      if (idx === 2) {
+        this.showDailyDialog = true;
+      } else if (idx === 3) {
+        this.showWeeklyDialog = true;
+      }
     },
   },
   beforeDestroy() {
@@ -722,5 +769,51 @@ export default {
   border-radius: 8px;
   box-sizing: border-box;
   margin-bottom: 10px;
+}
+.map-popup {
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  width: auto;
+  max-width: 90vw;
+  max-height: 80vh;
+  background: rgba(255,255,255,0.98);
+  color: #222;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  padding: 16px 20px 12px 20px;
+  pointer-events: auto;
+  white-space: normal;
+  overflow-y: auto;
+}
+.popup-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.popup-img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.popup-desc {
+  font-size: 15px;
+  margin-bottom: 8px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.popup-close {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
 }
 </style>

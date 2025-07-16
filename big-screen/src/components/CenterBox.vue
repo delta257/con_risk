@@ -7,9 +7,10 @@
           <button :class="{ 'selected-button': showCheckpoints }" @click="toggleCheckpoints">湄公河沿岸检查站</button>
           <button :class="{ 'selected-button': showArmedGroups }" @click="toggleArmedGroups">武装组织活动区域</button>
           <button :class="{ 'selected-button': showChinaProjects }" @click="toggleChinaProjects">中国在地关键项目</button>
+          <button @click="showAIDialog = true">AI对话</button>
         </div>
         <div id="worldMap" ref="worldMapRef"></div>
-        <div v-if="popupVisible" class="map-popup" :style="{ left: popupPosition.x + 'px', top: popupPosition.y + 'px' }">
+        <div v-if="popupVisible" class="map-popup">
           <div class="popup-title">{{ popupData.name }}</div>
           <img v-if="popupData.img" :src="popupData.img" class="popup-img" />
           <div class="popup-desc" v-html="popupData.desc"></div>
@@ -26,6 +27,7 @@
         ></iframe> -->
       </div>
     </dv-border-box-8>
+    <AIDialog v-model="showAIDialog" />
   </div>
 </template>
 
@@ -46,6 +48,7 @@ import mekongArmedGroupsLaos from "../lib/mekong_armed_groups_laos.json";
 // import "../lib/Myanmar.js";
 import { initMap, darkStyle } from "../utils/mapvglCommon";
 import coordtransform from 'coordtransform';
+import AIDialog from './AIDialog.vue';
 export default {
   name: "CenterBox",
   props: {
@@ -54,6 +57,9 @@ export default {
       required: false,
       default: 'myanmar',
     },
+  },
+  components: {
+    AIDialog,
   },
   data() {
     return {
@@ -72,7 +78,8 @@ export default {
       currentCountry: 'myanmar',
       popupVisible: false, // 新增
       popupData: { name: '', desc: '', img: '' }, // 新增
-      popupPosition: { x: 0, y: 0 } // 新增
+      popupPosition: { x: 0, y: 0 }, // 新增
+      showAIDialog: false,
     };
   },
   watch: {
@@ -581,11 +588,14 @@ html, body {
   padding: 0;
 }
 .map-popup {
-  position: absolute;
+  position: fixed;
   z-index: 9999;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: inline-block;
   width: auto;
-  max-width: 20vw;
+  max-width: 90vw;
   max-height: 80vh;
   background: rgba(255,255,255,0.98);
   color: #222;
@@ -604,7 +614,7 @@ html, body {
 }
 .popup-img {
   width: 100%;
-  max-height: 200px;
+  max-height: 400px;
   object-fit: cover;
   border-radius: 6px;
   margin-bottom: 8px;

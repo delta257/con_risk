@@ -1,17 +1,28 @@
 <template>
   <transition name="fade">
-    <div v-if="dialogVisible" class="textDialogWrap" @click="closeDialog">
+    <div v-if="dialogVisible || value" class="textDialogWrap" @click.self="handleClose">
       <slot />
     </div>
   </transition>
 </template>
 <script>
 export default {
+  props: {
+    value: Boolean
+  },
   data() {
     return {
       dialogVisible: false,
       // rowData: {}
     };
+  },
+  watch: {
+    value(val) {
+      this.dialogVisible = val;
+    },
+    dialogVisible(val) {
+      if (!val) this.$emit('close');
+    }
   },
   mounted() {
     document.addEventListener("keydown", this.handleKeydown);
@@ -25,27 +36,14 @@ export default {
       // 检查是否是 esc 键
       if (event.keyCode === 27 || event.key === "Escape") {
         // 执行你想要的操作，例如关闭模态框等
-        this.closeDialog();
+        this.handleClose();
       }
     },
-    closeDialog() {
+    handleClose() {
       this.dialogVisible = false;
+      this.$emit('close');
     },
-    showDialog(row, event) {
-      if (event) {
-        const { clientX, clientY } = event;
-        // 考虑到弹框大小和屏幕边缘，可能需要调整以避免超出边界
-        const windowHeight = window.innerHeight;
-        const windowWidth = window.innerWidth;
-        const dialogHeight = 100; // 假设弹框高度为100px，需要根据实际情况调整
-        const dialogWidth = 200; // 同样，假设宽度为200px
-
-        this.dialogTop = Math.min(clientY, windowHeight - dialogHeight) + "px";
-        this.dialogLeft = Math.min(clientX, windowWidth - dialogWidth) + "px";
-      }
-
-      // this.rowData = { ...row };
-      // console.log("[  this.rowData :]", this.rowData);
+    showDialog() {
       this.dialogVisible = true;
     },
   },

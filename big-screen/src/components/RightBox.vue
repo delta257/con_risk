@@ -606,7 +606,7 @@ export default {
   position: relative;
   display: inline-block;
   width: auto;
-  max-width: 90vw;
+  max-width: 700px;
   max-height: 80vh;
   background: rgba(255,255,255,0.98);
   color: #222;
