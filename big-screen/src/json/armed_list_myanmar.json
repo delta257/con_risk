@@ -1,0 +1,29 @@
+{
+  "title": "缅甸主要武装组织",
+  "armeds": [
+    {
+      "id": 1,
+      "name": "佤邦联合军",
+      "name_en": "United Wa State Army (UWSA)",
+      "leader": "鲍有祥",
+      "founded": 1989,
+      "region": "掸邦北部、佤邦",
+      "purpose": "民族自治，维护佤邦利益",
+      "current_status": "缅甸最大少数民族武装，实际控制佤邦",
+      "support_base": "佤族民众",
+      "detail_file": "armed_wa_myanmar.json"
+    },
+    {
+      "id": 2,
+      "name": "克钦独立军",
+      "name_en": "Kachin Independence Army (KIA)",
+      "leader": "南丁昂",
+      "founded": 1961,
+      "region": "克钦邦",
+      "purpose": "克钦民族自治",
+      "current_status": "与军方长期冲突，控制克钦部分地区",
+      "support_base": "克钦族民众",
+      "detail_file": "armed_kia_myanmar.json"
+    }
+  ]
+} 

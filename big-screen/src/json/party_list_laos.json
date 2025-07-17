@@ -1,0 +1,29 @@
+{
+  "title": "老挝主要政党",
+  "parties": [
+    {
+      "id": 1,
+      "name": "老挝人民革命党",
+      "name_en": "Lao People's Revolutionary Party (LPRP)",
+      "leader": "通伦·西苏里",
+      "founded": 1955,
+      "ideology": "马克思列宁主义，一党制",
+      "main_goals": "领导国家实现社会主义现代化，维护国家统一与稳定",
+      "current_status": "唯一执政党，全面掌控国家政权",
+      "support_base": "全国各阶层，尤其是党政军系统",
+      "detail_file": "party_lprp_laos.json"
+    },
+    {
+      "id": 2,
+      "name": "老挝建国阵线",
+      "name_en": "Lao Front for National Development (LFND)",
+      "leader": "辛拉冯·库帕西",
+      "founded": 1979,
+      "ideology": "统一战线，民族团结",
+      "main_goals": "团结各民族、宗教和社会团体，支持党的领导",
+      "current_status": "党领导下的群众组织，影响广泛",
+      "support_base": "各民族、宗教团体、社会组织",
+      "detail_file": "party_lfnd_laos.json"
+    }
+  ]
+} 

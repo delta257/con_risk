@@ -1,0 +1,29 @@
+{
+  "title": "老挝主要武装组织",
+  "armeds": [
+    {
+      "id": 1,
+      "name": "老挝人民军",
+      "name_en": "Lao People's Army (LPAF)",
+      "leader": "坎潘·西潘敦",
+      "founded": 1949,
+      "region": "全国",
+      "purpose": "维护国家安全与政权稳定",
+      "current_status": "国家正规军，受党绝对领导",
+      "support_base": "全国各阶层",
+      "detail_file": "armed_lpaf_laos.json"
+    },
+    {
+      "id": 2,
+      "name": "苗族抵抗力量",
+      "name_en": "Hmong Resistance",
+      "leader": "不详",
+      "founded": "20世纪70年代",
+      "region": "川圹、赛宋本等地山区",
+      "purpose": "反对中央集权，争取民族权益",
+      "current_status": "零星活动，影响有限",
+      "support_base": "部分苗族群体",
+      "detail_file": "armed_hmong_laos.json"
+    }
+  ]
+} 

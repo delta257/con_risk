@@ -501,7 +501,7 @@ export default {
             color: 'rgba(44, 195, 233, 0.9)',
             width: 12,
             blend: 'lighter',
-            dashArray: [10, 10],
+            dashArray: [1, 1],
             dashOffset: 0,
             animation: true,
             animationDuration: 1.5,
@@ -510,7 +510,7 @@ export default {
             animationType: 'flow',
             animationColor: 'rgba(0,234,255,1)',
             animationRepeatType: 'loop',
-            animationDashArray: [10, 10],
+            animationDashArray: [1, 1],
             animationDashOffset: 0,
           });
           view.addLayer(lineLayer);

@@ -109,6 +109,82 @@
         <span class="popup-close" @click="$refs.hostInfoDialogRef.closeDialog()">×</span>
       </div>
     </TextDialog>
+    <TextDialog ref="partyTableDialogRef">
+      <div class="orgTableBox popup-table-box" @click.stop>
+        <div class="popup-title popup-table-title">{{ partyTableTitle }}</div>
+        <table class="popup-table" border="1" cellspacing="0" cellpadding="4">
+          <thead>
+            <tr>
+              <th class="col-name">政党名称</th>
+              <th>英文名</th>
+              <th class="col-leader">领导人</th>
+              <th class="col-founded">成立时间</th>
+              <th>目标宗旨</th>
+              <th>当前状态</th>
+              <th>支持基础</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="party in partyList" :key="party.id">
+              <td class="col-name" @click="showPartyDetail(party)">{{ party.name }}</td>
+              <td>{{ party.name_en }}</td>
+              <td class="col-leader">{{ party.leader }}</td>
+              <td class="col-founded">{{ party.founded }}</td>
+              <td>{{ party.main_goals }}</td>
+              <td>{{ party.current_status }}</td>
+              <td>{{ party.support_base }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <span class="popup-close" @click="$refs.partyTableDialogRef.closeDialog()">×</span>
+      </div>
+    </TextDialog>
+    <TextDialog ref="partyDetailDialogRef">
+      <div class="region-popup" @click.stop>
+        <div class="popup-title">{{ partyDetailTitle }}</div>
+        <div class="popup-desc" v-html="partyDetailContent"></div>
+        <span class="popup-close" @click="$refs.partyDetailDialogRef.closeDialog()">×</span>
+      </div>
+    </TextDialog>
+    <TextDialog ref="armedTableDialogRef">
+      <div class="orgTableBox popup-table-box" @click.stop>
+        <div class="popup-title popup-table-title">{{ armedTableTitle }}</div>
+        <table class="popup-table" border="1" cellspacing="0" cellpadding="4">
+          <thead>
+            <tr>
+              <th class="col-name">组织名称</th>
+              <th>英文名</th>
+              <th class="col-leader">领导人</th>
+              <th class="col-founded">成立时间</th>
+              <th>主要活动区域</th>
+              <th>宗旨</th>
+              <th>当前状态</th>
+              <th>支持基础</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="armed in armedList" :key="armed.id">
+              <td class="col-name" @click="showArmedDetail(armed)">{{ armed.name }}</td>
+              <td>{{ armed.name_en }}</td>
+              <td class="col-leader">{{ armed.leader }}</td>
+              <td class="col-founded">{{ armed.founded }}</td>
+              <td>{{ armed.region }}</td>
+              <td>{{ armed.purpose }}</td>
+              <td>{{ armed.current_status }}</td>
+              <td>{{ armed.support_base }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <span class="popup-close" @click="$refs.armedTableDialogRef.closeDialog()">×</span>
+      </div>
+    </TextDialog>
+    <TextDialog ref="armedDetailDialogRef">
+      <div class="region-popup" @click.stop>
+        <div class="popup-title">{{ armedDetailTitle }}</div>
+        <div class="popup-desc" v-html="armedDetailContent"></div>
+        <span class="popup-close" @click="$refs.armedDetailDialogRef.closeDialog()">×</span>
+      </div>
+    </TextDialog>
   </div>
 </template>
 
@@ -191,6 +267,14 @@ export default {
       hostInfoRowData: {}, // 新增
       currentOrgTitle: '主要组织',
       currentOrgContent: '', // 新增，存储文章内容
+      partyList: [],
+      partyTableTitle: '',
+      partyDetailTitle: '',
+      partyDetailContent: '',
+      armedList: [],
+      armedTableTitle: '',
+      armedDetailTitle: '',
+      armedDetailContent: '',
     };
   },
   watch: {
@@ -237,8 +321,40 @@ export default {
       this.$refs.textDialogRef && this.$refs.textDialogRef.showDialog();
     },
     showOrgTable(row) {
+      if (row.name === '政党') {
+        // 加载政党列表
+        let file = `party_list_${this.country}.json`;
+        import(`../json/${file}`).then(m => {
+          this.partyList = m.default.parties;
+          this.partyTableTitle = m.default.title;
+          this.$refs.partyTableDialogRef && this.$refs.partyTableDialogRef.showDialog();
+        }).catch(() => {
+          // 降级为缅甸
+          import(`../json/party_list_myanmar.json`).then(m => {
+            this.partyList = m.default.parties;
+            this.partyTableTitle = m.default.title;
+            this.$refs.partyTableDialogRef && this.$refs.partyTableDialogRef.showDialog();
+          });
+        });
+        return;
+      }
+      if (row.name === '武装') {
+        // 加载武装组织列表
+        let file = `armed_list_${this.country}.json`;
+        import(`../json/${file}`).then(m => {
+          this.armedList = m.default.armeds;
+          this.armedTableTitle = m.default.title;
+          this.$refs.armedTableDialogRef && this.$refs.armedTableDialogRef.showDialog();
+        }).catch(() => {
+          import(`../json/armed_list_myanmar.json`).then(m => {
+            this.armedList = m.default.armeds;
+            this.armedTableTitle = m.default.title;
+            this.$refs.armedTableDialogRef && this.$refs.armedTableDialogRef.showDialog();
+          });
+        });
+        return;
+      }
       this.currentOrgTitle = row.name;
-      // 动态加载对应国家和类别的介绍json
       let fileMap = {
         '政党': 'party_intro',
         '武装': 'armed_intro',
@@ -251,11 +367,29 @@ export default {
         this.currentOrgContent = m.default.content;
         this.$refs.textDialogRef2 && this.$refs.textDialogRef2.showDialog();
       }).catch(() => {
-        // 如果没有该国家的介绍，降级为默认（如缅甸）
         import(`../json/${fileMap[row.name]}_myanmar.json`).then(m => {
           this.currentOrgContent = m.default.content;
           this.$refs.textDialogRef2 && this.$refs.textDialogRef2.showDialog();
         });
+      });
+    },
+    showPartyDetail(party) {
+      // 加载政党详细介绍
+      let file = party.detail_file;
+      // 判断国家
+      if (!file.endsWith(`_${this.country}.json`)) {
+        // 兼容老文件名
+        let base = file.replace(/_myanmar|_laos/, '');
+        file = `${base}_${this.country}.json`;
+      }
+      import(`../json/${file}`).then(m => {
+        this.partyDetailTitle = party.name + (party.name_en ? ` (${party.name_en})` : '');
+        this.partyDetailContent = m.default.content || m.default.detail || '';
+        this.$refs.partyDetailDialogRef && this.$refs.partyDetailDialogRef.showDialog();
+      }).catch(() => {
+        this.partyDetailTitle = party.name;
+        this.partyDetailContent = '暂无详细介绍';
+        this.$refs.partyDetailDialogRef && this.$refs.partyDetailDialogRef.showDialog();
       });
     },
     showHostInfoDialog(item) {
@@ -281,6 +415,23 @@ export default {
           };
           this.$refs.hostInfoDialogRef && this.$refs.hostInfoDialogRef.showDialog();
         });
+      });
+    },
+    showArmedDetail(armed) {
+      // 加载武装组织详细介绍
+      let file = armed.detail_file;
+      if (!file.endsWith(`_${this.country}.json`)) {
+        let base = file.replace(/_myanmar|_laos/, '');
+        file = `${base}_${this.country}.json`;
+      }
+      import(`../json/${file}`).then(m => {
+        this.armedDetailTitle = armed.name + (armed.name_en ? ` (${armed.name_en})` : '');
+        this.armedDetailContent = m.default.content || m.default.detail || '';
+        this.$refs.armedDetailDialogRef && this.$refs.armedDetailDialogRef.showDialog();
+      }).catch(() => {
+        this.armedDetailTitle = armed.name;
+        this.armedDetailContent = '暂无详细介绍';
+        this.$refs.armedDetailDialogRef && this.$refs.armedDetailDialogRef.showDialog();
       });
     },
   },
@@ -582,25 +733,73 @@ export default {
   }
 }
 
-.orgTableBox {
+.orgTableBox,
+.popup-table-box {
   min-width: 900px;
   max-width: 1200px;
   max-height: 500px;
   border: 1px solid;
-  border-radius: 20px;
-  table {
-    tr {
-      height: 40px;
-    }
-    th {
-      text-align: left;
-      padding: 0 8px;
-    }
-    td {
-      text-align: left;
-      padding: 0 8px;
-    }
-  }
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow: hidden;
+}
+.popup-table-title {
+  background: #fff;
+  color: #222;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 16px 0 8px 0;
+  margin-bottom: 0;
+}
+.popup-table {
+  width: 100%;
+  background: #fff;
+  color: #222;
+  border-collapse: collapse;
+}
+.popup-table th,
+.popup-table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 8px 6px;
+  background: #fff;
+  color: #222;
+  white-space: normal;
+}
+.popup-table th {
+  font-weight: bold;
+  background: #fff;
+  color: #222;
+  border-bottom: 2px solid #e0e0e0;
+}
+.popup-table th.col-name {
+  color: #222;
+  text-decoration: none;
+  min-width: 140px;
+  max-width: 200px;
+  cursor: default;
+}
+.popup-table td.col-name {
+  color: #1976d2;
+  text-decoration: underline;
+  min-width: 140px;
+  max-width: 200px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.col-leader {
+  min-width: 110px;
+  max-width: 160px;
+  white-space: nowrap;
+}
+.col-founded {
+  min-width: 90px;
+  max-width: 120px;
+  white-space: nowrap;
 }
 .region-popup {
   position: relative;

@@ -1,8 +1,16 @@
 <template>
   <transition name="fade">
     <div v-if="value" class="textDialogWrap" @click.self="close">
-      <div class="map-popup ai-dialog">
-        <div class="popup-title">AI智能助手</div>
+      <div
+        class="map-popup ai-dialog"
+        :style="{ left: dialogLeft + 'px', top: dialogTop + 'px', position: 'fixed' }"
+        ref="dialog"
+      >
+        <div
+          class="popup-title drag-handle"
+          @mousedown="startDrag"
+          style="cursor: move; user-select: none;"
+        >AI智能助手</div>
         <div class="ai-chat-content" ref="chatContent">
           <div v-for="(msg, idx) in messages" :key="idx" :class="['ai-msg', msg.role]">
             <div class="bubble">
@@ -33,11 +41,24 @@ export default {
       input: '',
       messages: [],
       loading: false,
+      // 拖动相关
+      dragging: false,
+      dragOffsetX: 0,
+      dragOffsetY: 0,
+      dialogLeft: window.innerWidth / 2 - 240, // 居中
+      dialogTop: window.innerHeight / 2 - 200,
     };
   },
   watch: {
     value(val) {
-      if (val) this.$nextTick(this.scrollToBottom);
+      if (val) {
+        this.$nextTick(() => {
+          this.scrollToBottom();
+          // 弹窗打开时居中
+          this.dialogLeft = window.innerWidth / 2 - 240;
+          this.dialogTop = window.innerHeight / 2 - 200;
+        });
+      }
     },
     messages() {
       this.$nextTick(this.scrollToBottom);
@@ -70,7 +91,38 @@ export default {
     scrollToBottom() {
       const el = this.$refs.chatContent;
       if (el) el.scrollTop = el.scrollHeight;
-    }
+    },
+    // 拖动相关
+    startDrag(e) {
+      this.dragging = true;
+      // 鼠标点在弹窗内的偏移
+      const dialog = this.$refs.dialog;
+      const rect = dialog.getBoundingClientRect();
+      this.dragOffsetX = e.clientX - rect.left;
+      this.dragOffsetY = e.clientY - rect.top;
+      document.addEventListener('mousemove', this.onDrag);
+      document.addEventListener('mouseup', this.stopDrag);
+    },
+    onDrag(e) {
+      if (!this.dragging) return;
+      // 限制弹窗不出屏幕
+      let left = e.clientX - this.dragOffsetX;
+      let top = e.clientY - this.dragOffsetY;
+      // 限制范围
+      left = Math.max(0, Math.min(left, window.innerWidth - 480));
+      top = Math.max(0, Math.min(top, window.innerHeight - 100));
+      this.dialogLeft = left;
+      this.dialogTop = top;
+    },
+    stopDrag() {
+      this.dragging = false;
+      document.removeEventListener('mousemove', this.onDrag);
+      document.removeEventListener('mouseup', this.stopDrag);
+    },
+  },
+  beforeDestroy() {
+    document.removeEventListener('mousemove', this.onDrag);
+    document.removeEventListener('mouseup', this.stopDrag);
   }
 };
 </script>
@@ -100,6 +152,14 @@ export default {
   border-radius: 18px;
   background: #fff;
   overflow: hidden;
+  /* 取消原有居中定位，改为js控制 */
+  left: 0;
+  top: 0;
+  margin: 0;
+}
+.drag-handle {
+  cursor: move;
+  user-select: none;
 }
 .popup-title {
   font-size: 18px;

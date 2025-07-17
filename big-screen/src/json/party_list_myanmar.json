@@ -1,0 +1,65 @@
+{
+  "title": "缅甸主要政党",
+  "parties": [
+    {
+      "id": 1,
+      "name": "全国民主联盟",
+      "name_en": "National League for Democracy (NLD)",
+      "leader": "昂山素季",
+      "founded": 1988,
+      "ideology": "自由民主",
+      "main_goals": "建立自由民主体制，推动政治改革",
+      "current_status": "2021政变后被军方取缔，领导人被逮捕",
+      "support_base": "城市中产阶级、知识分子、少数民族",
+      "detail_file": "party_nld_myanmar.json"
+    },
+    {
+      "id": 2,
+      "name": "联邦巩固与发展党",
+      "name_en": "Union Solidarity and Development Party (USDP)",
+      "leader": "军方支持",
+      "founded": 2010,
+      "ideology": "拥军立场",
+      "main_goals": "维护军方利益，支持军人执政",
+      "current_status": "与军方紧密合作，支持SAC统治",
+      "support_base": "军方、保守派、部分商业精英",
+      "detail_file": "party_usdp_myanmar.json"
+    },
+    {
+      "id": 3,
+      "name": "阿拉干民族党",
+      "name_en": "Arakan National Party (ANP)",
+      "leader": "若开族代表",
+      "founded": 2014,
+      "ideology": "民族主义",
+      "main_goals": "若开邦自治，文化保护，地方权益",
+      "current_status": "在若开邦有重要影响力",
+      "support_base": "若开族民众",
+      "detail_file": "party_anp_myanmar.json"
+    },
+    {
+      "id": 4,
+      "name": "掸族民主联盟",
+      "name_en": "Shan Nationalities League for Democracy (SNLD)",
+      "leader": "掸族代表",
+      "founded": 1988,
+      "ideology": "联邦主义",
+      "main_goals": "掸族权益，联邦制改革",
+      "current_status": "在掸邦有重要影响力",
+      "support_base": "掸族民众",
+      "detail_file": "party_snld_myanmar.json"
+    },
+    {
+      "id": 5,
+      "name": "克钦民族党",
+      "name_en": "Kachin State People's Party",
+      "leader": "克钦族代表",
+      "founded": 2010,
+      "ideology": "民族自治",
+      "main_goals": "克钦邦自治，民族权益保护",
+      "current_status": "在克钦邦有影响力",
+      "support_base": "克钦族民众",
+      "detail_file": "party_kachin_myanmar.json"
+    }
+  ]
+} 
