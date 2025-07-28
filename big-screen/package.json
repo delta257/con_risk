@@ -7,12 +7,13 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.10",
     "@jiaminghi/data-view": "^2.10.0",
     "axios": "^0.27.2",
     "coordtransform": "^2.1.2",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.11",
-    "echarts": "^5.5.0",
+    "echarts": "^5.6.0",
     "echarts-wordcloud": "^2.1.0",
     "geojson-places": "^1.0.8",
     "mapvgl": "^1.0.0-beta.194",

@@ -1,6 +1,7 @@
 <template>
   <div class="left-wrap">
-    <dv-border-box-7 class="blue-border">
+    <div class="content-wrapper">
+      <dv-border-box-7 class="blue-border">
       <div class="title-box">
         <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
         <div>
@@ -52,7 +53,7 @@
         <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
       </div>
       <dv-scroll-board
-        style="width: 500px; height: 150px; color: rgb(145, 167, 184); cursor: pointer"
+        style="width: 500px; height: 150px; color: #ffffff; cursor: pointer"
         :config="scrollBoardConfig"
         @click="(row) => handleScrollBoardClick(row, '1')"
       />
@@ -84,8 +85,8 @@
           <dv-scroll-board
             style="
               width: 500px;
-              height: 150px;
-              color: rgb(145, 167, 184);
+              height: 200px;
+              color: #ffffff;
               cursor: pointer;
             "
             :config="scrollBoardConfig2"
@@ -94,6 +95,8 @@
         </div>
       </div>
     </dv-border-box-7>
+    </div>
+    
     <TextDialog ref="textDialogRef1">
       <div class="text-dialog" @click.stop>
         <div class="title">{{ rowData.title }}</div>
@@ -112,10 +115,7 @@
             <span>安全地点：</span>
             <span>{{ rowData.address }}</span>
           </div>
-          <!-- <div>
-            <span>舆情态度：</span>
-            <span>{{ rowData.status }}</span>
-          </div> -->
+
         </div>
         <div v-html="rowData.description"></div>
       </div>
@@ -146,16 +146,7 @@
         <div v-html="rowData.event"></div>
       </div>
     </TextDialog>
-    <div class="opinion-btn-group">
-      <button
-        v-for="(btn, idx) in buttons2"
-        :key="btn.id"
-        :class="{ selected: selectedButton2 === idx }"
-        @click="selectOpinionCategory(idx)"
-      >
-        {{ btn.name }}
-      </button>
-    </div>
+
     <TextDialog v-model="showDailyDialog">
       <div class="map-popup">
         <div class="popup-title">每日报告</div>
@@ -180,8 +171,7 @@ import TextDialog from "./TextDialog.vue";
 import riskMyanmar from "../json/risk_myanmar.json";
 import riskLaos from "../json/risk_laos.json";
 
-let timer1 = null;
-let timer2 = null;
+
 const KEY_WORDS = [
   { name: "恐怖袭击", value: 34156 },
   { name: "边境冲突", value: 22199 },
@@ -230,12 +220,29 @@ export default {
       waterConfig: {
         data: [55],
         shape: "round",
+        colors: ['#1565C0', '#1976D2', '#42A5F5'], // 深蓝色系波浪
+        waveStyle: {
+          fill: '#1565C0',
+          fillOpacity: 1,
+        },
+        outlineStyle: {
+          border: {
+            width: 3,
+            color: '#1565C0',
+          },
+        },
+        textStyle: {
+          fontSize: 25,
+          color: '#ffffff',
+          fontWeight: 'bold',
+        }
       },
       radarOption: {
         radar: {
           axisLabel: {
             style: {
-              fill: "rgb(145, 167, 184)",
+              fill: "#ffffff",
+              fontSize: 13
             },
           },
           polygon: true,
@@ -246,13 +253,13 @@ export default {
           ],
           axisLine: {
             style: {
-              stroke: "rgba(251, 114, 147, .3)",
+              stroke: "rgba(200, 80, 120, .6)",
             },
           },
           splitLine: {
             style: {
-              stroke: "rgba(251, 114, 147, .5)",
-              fill: "rgba(251, 114, 147, .2)",
+              stroke: "rgba(200, 80, 120, .8)",
+              fill: "rgba(200, 80, 120, .4)",
             },
           },
         },
@@ -261,6 +268,18 @@ export default {
             type: "radar",
             data: [85, 80, 60],
             animationCurve: "easeOutBack",
+            itemStyle: {
+              color: '#C8506E', // 深粉红色数据点
+              borderColor: '#fff',
+              borderWidth: 2,
+            },
+            lineStyle: {
+              color: '#C8506E', // 深粉红色连线
+              width: 2,
+            },
+            areaStyle: {
+              color: 'rgba(200, 80, 110, 0.5)', // 深粉红色填充区域
+            }
           },
         ],
       },
@@ -268,19 +287,19 @@ export default {
         title: {
           text: "政治风险",
           style: {
-            fill: "rgb(145, 167, 184)",
+            fill: "#ffffff",
           },
         },
         xAxis: {
           // name: "风险项目",
           nameTextStyle: {
-            fill: "rgb(145, 167, 184)",
+            fill: "#ffffff",
           },
           nameLocation: "center",
           nameGap: 25,
           axisLabel: {
             style: {
-              fill: "rgb(145, 167, 184)",
+              fill: "#ffffff",
               fontSize: 8,
               fontWeight: "300",
               rotate: -20,
@@ -298,11 +317,11 @@ export default {
         yAxis: {
           name: "风险值",
           nameTextStyle: {
-            fill: "rgb(145, 167, 184)",
+            fill: "#ffffff",
           },
           axisLabel: {
             style: {
-              fill: "rgb(145, 167, 184)",
+              fill: "#ffffff",
             },
           },
           data: "value",
@@ -321,19 +340,19 @@ export default {
         title: {
           text: "经济风险",
           style: {
-            fill: "rgb(145, 167, 184)",
+            fill: "#ffffff",
           },
         },
         xAxis: {
           // name: "风险项目",
           nameTextStyle: {
-            fill: "rgb(145, 167, 184)",
+            fill: "#ffffff",
           },
           nameLocation: "center",
           nameGap: 25,
           axisLabel: {
             style: {
-              fill: "rgb(145, 167, 184)",
+              fill: "#ffffff",
               fontSize: 8,
               fontWeight: "300",
               rotate: -20,
@@ -351,11 +370,11 @@ export default {
         yAxis: {
           name: "风险值",
           nameTextStyle: {
-            fill: "rgb(145, 167, 184)",
+            fill: "#ffffff",
           },
           axisLabel: {
             style: {
-              fill: "rgb(145, 167, 184)",
+              fill: "#ffffff",
             },
           },
           data: "value",
@@ -374,19 +393,19 @@ export default {
         title: {
           text: "社会风险",
           style: {
-            fill: "rgb(145, 167, 184)",
+            fill: "#ffffff",
           },
         },
         xAxis: {
           // name: "风险项目",
           nameTextStyle: {
-            fill: "rgb(145, 167, 184)",
+            fill: "#ffffff",
           },
           nameLocation: "center",
           nameGap: 25,
           axisLabel: {
             style: {
-              fill: "rgb(145, 167, 184)",
+              fill: "#ffffff",
               fontSize: 8,
               fontWeight: "300",
               rotate: -20,
@@ -405,11 +424,11 @@ export default {
           name: "风险值",
           data: "value",
           nameTextStyle: {
-            fill: "rgb(145, 167, 184)",
+            fill: "#ffffff",
           },
           axisLabel: {
             style: {
-              fill: "rgb(145, 167, 184)",
+              fill: "#ffffff",
             },
           },
         },
@@ -442,8 +461,7 @@ export default {
       riskData: {},
     };
   },
-  computed: {
-  },
+
   watch: {
     country: {
       immediate: true,
@@ -566,23 +584,7 @@ export default {
         ],
       });
     },
-    // 删除 initTimer1 和 initTimer2
-    // initTimer1() {
-    //   timer1 = setInterval(() => {
-    //     this.selectedButton++;
-    //     if (this.selectedButton > this.buttons.length - 1) {
-    //       this.selectedButton = 0;
-    //     }
-    //   }, 3000);
-    // },
-    // initTimer2() {
-    //   timer2 = setInterval(() => {
-    //     this.selectedButton2++;
-    //     if (this.selectedButton2 > this.buttons2.length - 1) {
-    //       this.selectedButton2 = 0;
-    //     }
-    //   }, 5 * 1000);
-    // },
+
     // 新增：按钮点击切换风险类别
     selectRiskCategory(idx) {
       this.selectedButton = idx;
@@ -607,11 +609,17 @@ export default {
 
 <style lang="less" scoped>
 .left-wrap {
+  color: rgba(145, 167, 184, 0.8);
+  height: 100%; /* 新增，确保填满父容器 */
+}
+
+.content-wrapper {
   display: flex;
   flex-direction: column;
   gap: 0px;
-  color: rgb(145, 167, 184);
-  height: 100%; /* 新增，确保填满父容器 */
+  backdrop-filter: blur(10px);
+  background: rgba(145, 167, 184, 0.1); /* 半透明背景 */
+  height: 100%;
 }
 .button-container {
   display: flex;
@@ -622,61 +630,18 @@ export default {
     cursor: pointer; /* 鼠标悬停时变为手形 */
     background-color: transparent; /* 初始背景色为透明 */
     transition: background-color 0.3s ease; /* 添加背景色过渡效果 */
-    color: rgb(145, 167, 184);
+    color: #ffffff;
   }
 
   .selected-button {
     background: linear-gradient(
       to right,
-      rgba(173, 216, 230, 0.6),
+      rgba(173, 216, 230, 0.8),
       rgba(56, 126, 152, 0.8)
     ); /* 渐变的淡蓝色背景 */
   }
 }
-.country-switch-btn {
-  margin-left: 10px;
-  padding: 12px 33px;
-  border: 1px solid #3fa7ff;
-  border-radius: 0px;
-  background: rgba(30, 60, 120, 0.7);
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-  outline: none;
-}
-.country-switch-btn:hover,
-.country-switch-btn:focus {
-  background:rgba(30, 60, 120, 0.7);
-  color: #fff;
-  border: 1.5px solid #fff;
-}
-.country-list {
-  position: absolute;
-  z-index: 100;
-  background: #1a233a;
-  color: #fff;
-  border-radius: 0px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-  margin-top: 6px;
-  min-width: 90px;
-  overflow: hidden;
-}
-.country-list-item {
-  padding: 8px 18px;
-  cursor: pointer;
-  font-size: 15px;
-  transition: background 0.2s, color 0.2s;
-}
-.country-list-item:hover {
-  background: #3fa7ff;
-  color: #fff;
-}
-.country-list-item.selected {
-  background: #174a7a;
-  color: #fff;
-  font-weight: bold;
-}
+
 .button-content {
   height: 300px;
   display: flex;
@@ -714,29 +679,7 @@ export default {
     font-size: 16px;
     color: rgb(246, 248, 250);
   }
-  .title-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    position: relative;
-  }
-  .country-btn-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    min-width: 120px;
-  }
-  .country-list {
-    position: absolute;
-    right: 0;
-    top: 110%;
-    // 保证弹窗紧贴按钮下方并右对齐
-    min-width: 100px;
-    max-width: 180px;
-    width: max-content;
-  }
+
 }
 .wordCloudBox {
   height: 300px;

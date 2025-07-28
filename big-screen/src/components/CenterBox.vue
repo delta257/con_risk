@@ -2,29 +2,60 @@
   <div class="centerBox">
     <dv-border-box-8>
       <div class="bg">
-        <div class="map-btn-container">
-          <button :class="{ 'selected-button': showPorts }" @click="togglePorts">主要交通节点/要道</button>
-          <button :class="{ 'selected-button': showCheckpoints }" @click="toggleCheckpoints">湄公河沿岸检查站</button>
-          <button :class="{ 'selected-button': showArmedGroups }" @click="toggleArmedGroups">武装组织活动区域</button>
-          <button :class="{ 'selected-button': showChinaProjects }" @click="toggleChinaProjects">中国在地关键项目</button>
-          <button @click="showAIDialog = true">AI对话</button>
+        <!-- 功能按钮容器 - 中上部 -->
+        <div class="function-btn-container">
+          <div class="btn-row">
+            <button :class="{ 'selected-button': showPorts }" @click="togglePorts">主要交通节点/要道</button>
+            <button :class="{ 'selected-button': showCheckpoints }" @click="toggleCheckpoints">湄公河沿岸检查站</button>
+            <button :class="{ 'selected-button': showArmedGroups }" @click="toggleArmedGroups">武装组织活动区域</button>
+            <button :class="{ 'selected-button': showChinaProjects }" @click="toggleChinaProjects">中国在地关键项目</button>
+          </div>
+        </div>
+        
+        <!-- 地图样式切换按钮容器 - 底部 -->
+        <div class="map-style-btn-container">
+          <div class="btn-row">
+            <button :class="{ 'selected-button': currentMapType === 'roadmap' }" @click="changeMapType('roadmap')">路线图</button>
+            <button :class="{ 'selected-button': currentMapType === 'satellite' }" @click="changeMapType('satellite')">卫星图</button>
+            <button :class="{ 'selected-button': currentMapType === 'terrain' }" @click="changeMapType('terrain')">地形图</button>
+            <button :class="{ 'selected-button': currentMapType === 'hybrid' }" @click="changeMapType('hybrid')">混合图</button>
+          </div>
         </div>
         <div id="worldMap" ref="worldMapRef"></div>
-        <div v-if="popupVisible" class="map-popup">
-          <div class="popup-title">{{ popupData.name }}</div>
-          <img v-if="popupData.img" :src="popupData.img" class="popup-img" />
-          <div class="popup-desc" v-html="popupData.desc"></div>
-          <span class="popup-close" @click="popupVisible = false">×</span>
+        
+        <!-- AI助手悬浮窗图标 -->
+        <div 
+          class="ai-float-button" 
+          :class="{ 'active': showAIDialog, 'dragging': isDragging }"
+          :style="{ right: aiFloatPosition.x + 'px', top: aiFloatPosition.y + 'px' }"
+          @mousedown="startDrag"
+          @click="handleClick"
+        >
+          <div class="ai-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 机器人头部 -->
+              <rect x="6" y="6" width="12" height="10" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+              <!-- 机器人眼睛 -->
+              <circle cx="9" cy="9" r="1" fill="currentColor"/>
+              <circle cx="15" cy="9" r="1" fill="currentColor"/>
+              <!-- 机器人嘴巴 -->
+              <path d="M10 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <!-- 机器人天线 -->
+              <path d="M12 6V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="12" cy="3" r="1" fill="currentColor"/>
+              <!-- 机器人身体 -->
+              <rect x="8" y="16" width="8" height="4" rx="1" stroke="currentColor" stroke-width="2" fill="none"/>
+              <!-- 机器人手臂 -->
+              <path d="M6 10H4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M20 10H18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <!-- 机器人腿 -->
+              <path d="M10 20V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M14 20V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ai-tooltip">{{ isDragging ? '拖拽移动' : 'AI智能助手' }}</div>
         </div>
-        <!-- <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6468124.418314829!2d95.19933275325296!3d19.71986596598296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x305652a7714e2907%3A0xba7b0ee41c622b11!2z57yF55S4!5e0!3m2!1szh-CN!2shk!4v1716371745872!5m2!1szh-CN!2shk"
-          width="100%"
-          height="1000"
-          style="border: 0"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe> -->
+
       </div>
     </dv-border-box-8>
     <AIDialog v-model="showAIDialog" />
@@ -32,12 +63,9 @@
 </template>
 
 <script>
-import * as echarts from "echarts";
+import { Loader } from '@googlemaps/js-api-loader';
 import worldJson from "../lib/world.json";
-// import myanmarJson from "../lib/sss.json";
-// import myanmarJson from "../lib/MM.json";
 import myanmarJson from "../lib/myanmar.json";
-import mekongJson from "../lib/mekong.json";
 import laosPorts from "../lib/laos_ports.json";
 import myanmarPorts from "../lib/myanmar_ports.json";
 import mekongCheckpoints from "../lib/mekong_checkpoints.json";
@@ -45,9 +73,6 @@ import chinaMyanmarProjects from "../lib/china_myanmar_projects.json";
 import chinaLaosProjects from "../lib/china_laos_projects.json";
 import mekongArmedGroups from "../lib/mekong_armed_groups.json";
 import mekongArmedGroupsLaos from "../lib/mekong_armed_groups_laos.json";
-// import "../lib/Myanmar.js";
-import { initMap, darkStyle } from "../utils/mapvglCommon";
-import coordtransform from 'coordtransform';
 import AIDialog from './AIDialog.vue';
 export default {
   name: "CenterBox",
@@ -63,8 +88,8 @@ export default {
   },
   data() {
     return {
-      // chart: null,
       map: null,
+      google: null,
       overlays: {
         ports: [],
         checkpoints: [],
@@ -76,10 +101,19 @@ export default {
       showChinaProjects: false,
       showArmedGroups: false,
       currentCountry: 'myanmar',
-      popupVisible: false, // 新增
-      popupData: { name: '', desc: '', img: '' }, // 新增
-      popupPosition: { x: 0, y: 0 }, // 新增
+
       showAIDialog: false,
+      currentMapType: 'terrain',
+      // AI悬浮窗拖拽相关
+      aiFloatPosition: { x: 30, y: 30 }, // 悬浮窗位置
+      isDragging: false,
+      dragOffset: { x: 0, y: 0 },
+      dragStartTime: 0,
+      // 国界高亮相关
+      countryPolygons: {
+        myanmar: null,
+        laos: null,
+      },
     };
   },
   watch: {
@@ -90,16 +124,29 @@ export default {
       this.showCheckpoints = false;
       this.showChinaProjects = false;
       this.showArmedGroups = false;
+      // 只有在oldVal存在时才更新高亮（避免初始化时高亮）
+      if (oldVal !== undefined) {
+        this.updateCountryHighlight(newVal);
+      }
     }
   },
   mounted() {
-    // this.initWorldMap();
-    this.initBaiduMap();
+    this.initGoogleMap();
   },
   methods: {
     clearAllOverlays() {
       Object.values(this.overlays).forEach(arr => {
-        arr.forEach(o => this.map && this.map.removeOverlay(o));
+        arr.forEach(item => {
+          if (item.marker && item.marker.setMap) {
+            item.marker.setMap(null);
+          }
+          if (item.circle && item.circle.setMap) {
+            item.circle.setMap(null);
+          }
+          if (item.infoWindow) {
+            item.infoWindow.close();
+          }
+        });
       });
       this.overlays.ports = [];
       this.overlays.checkpoints = [];
@@ -127,8 +174,104 @@ export default {
       if (this.showArmedGroups) this.renderArmedGroups();
     },
     clearOverlays(type) {
-      this.overlays[type].forEach(o => this.map && this.map.removeOverlay(o));
+      this.overlays[type].forEach(item => {
+        if (item.marker && item.marker.setMap) {
+          item.marker.setMap(null);
+        }
+        if (item.circle && item.circle.setMap) {
+          item.circle.setMap(null);
+        }
+        if (item.infoWindow) {
+          item.infoWindow.close();
+        }
+      });
       this.overlays[type] = [];
+    },
+    changeMapType(type) {
+      if (this.map && this.google) {
+        this.currentMapType = type;
+        let mapTypeId;
+        switch (type) {
+          case 'roadmap':
+            mapTypeId = this.google.maps.MapTypeId.ROADMAP;
+            break;
+          case 'satellite':
+            mapTypeId = this.google.maps.MapTypeId.SATELLITE;
+            break;
+          case 'terrain':
+            mapTypeId = this.google.maps.MapTypeId.TERRAIN;
+            break;
+          case 'hybrid':
+            mapTypeId = this.google.maps.MapTypeId.HYBRID;
+            break;
+          default:
+            mapTypeId = this.google.maps.MapTypeId.TERRAIN;
+        }
+        this.map.setMapTypeId(mapTypeId);
+      }
+    },
+    
+    // AI对话相关方法
+    toggleAIDialog() {
+      this.showAIDialog = !this.showAIDialog;
+    },
+    
+    // AI悬浮窗拖拽相关方法
+    startDrag(e) {
+      this.dragStartTime = Date.now();
+      this.isDragging = false;
+      
+      const rect = e.currentTarget.getBoundingClientRect();
+      this.dragOffset = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+      
+      document.addEventListener('mousemove', this.onDrag);
+      document.addEventListener('mouseup', this.stopDrag);
+      e.preventDefault();
+    },
+    
+    onDrag(e) {
+      // 如果移动距离超过5px或时间超过200ms，认为是拖拽
+      if (!this.isDragging && (Date.now() - this.dragStartTime > 200)) {
+        this.isDragging = true;
+      }
+      
+      if (this.isDragging) {
+        const containerRect = this.$el.getBoundingClientRect();
+        
+        // 计算新位置（相对于容器右边和顶部的距离）
+        const newX = containerRect.right - e.clientX - this.dragOffset.x;
+        const newY = e.clientY - containerRect.top - this.dragOffset.y;
+        
+        // 限制在容器范围内
+        const buttonSize = 35;
+        const maxX = containerRect.width - buttonSize;
+        const maxY = containerRect.height - buttonSize;
+        
+        this.aiFloatPosition = {
+          x: Math.max(0, Math.min(newX, maxX)),
+          y: Math.max(0, Math.min(newY, maxY))
+        };
+      }
+    },
+    
+    stopDrag() {
+      document.removeEventListener('mousemove', this.onDrag);
+      document.removeEventListener('mouseup', this.stopDrag);
+      
+      // 延迟重置拖拽状态，避免影响点击事件
+      setTimeout(() => {
+        this.isDragging = false;
+      }, 100);
+    },
+    
+    handleClick(e) {
+      // 只有在非拖拽状态下才处理点击
+      if (!this.isDragging && Date.now() - this.dragStartTime < 200) {
+        this.toggleAIDialog();
+      }
     },
     renderPorts() {
       const arr = [];
@@ -138,317 +281,394 @@ export default {
       } else if (this.currentCountry === 'laos') {
         portData = laosPorts;
       }
+
       portData.forEach(port => {
-        const gcj = coordtransform.wgs84togcj02(port.lng, port.lat);
-        const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
-        const point = new BMapGL.Point(bd09[0], bd09[1]);
-        const marker = new BMapGL.Marker(point);
-        arr.push(marker);
-        this.map.addOverlay(marker);
-        const label = new BMapGL.Label(port.name, {
-          position: point,
-          offset: new BMapGL.Size(10, -24)
+        // Google Maps 直接使用 WGS84 坐标，无需转换
+        const position = { lat: port.lat, lng: port.lng };
+        
+        // 创建标记
+        const marker = new this.google.maps.Marker({
+          position: position,
+          map: this.map,
+          title: port.name
         });
-        label.setStyle({
-          color: '#fff',
-          background: this.currentCountry === 'myanmar' ? 'rgba(14, 71, 177, 0.9)' : 'rgba(0, 153, 102, 0.9)',
-          border: this.currentCountry === 'myanmar' ? '1px solid rgb(14, 71, 177)' : '1px solid #009966',
-          borderRadius: '6px',
-          padding: '2px 8px',
-          fontSize: '14px',
-          fontWeight: 'bold',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+
+        // 创建信息窗口
+        const infoWindow = new this.google.maps.InfoWindow({
+          content: `
+            <div style="padding: 8px; max-width: 200px;">
+              <h4 style="margin: 0 0 8px 0; color: ${this.currentCountry === 'myanmar' ? '#0e47b1' : '#009966'};">
+                ${port.name}
+              </h4>
+              ${port.img ? `<img src="${port.img}" style="width: 100%; max-height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;" />` : ''}
+              <p style="margin: 0; font-size: 14px; line-height: 1.4;">${port.desc || ''}</p>
+            </div>
+          `
         });
-        // 移除label.setTitle
-        marker.addEventListener('click', (e) => {
-          this.showPopup({ name: port.name, desc: port.desc, img: port.img }, e);
+
+        // 点击标记显示信息窗口
+        marker.addListener('click', () => {
+          // 关闭其他打开的信息窗口
+          arr.forEach(item => {
+            if (item.infoWindow) {
+              item.infoWindow.close();
+            }
+          });
+          infoWindow.open(this.map, marker);
         });
-        label.addEventListener('click', (e) => {
-          this.showPopup({ name: port.name, desc: port.desc, img: port.img }, e);
-        });
-        arr.push(label);
-        this.map.addOverlay(label);
+
+        arr.push({ marker, infoWindow });
       });
+
       this.overlays.ports = arr;
     },
     renderCheckpoints() {
       const arr = [];
+      
       mekongCheckpoints.forEach(pointData => {
-        const gcj = coordtransform.wgs84togcj02(pointData.lng, pointData.lat);
-        const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
-        const point = new BMapGL.Point(bd09[0], bd09[1]);
-        const marker = new BMapGL.Marker(point);
-        arr.push(marker);
-        this.map.addOverlay(marker);
-        const label = new BMapGL.Label(`${pointData.name}（${pointData.type}）`, {
-          position: point,
-          offset: new BMapGL.Size(10, -24)
+        const position = { lat: pointData.lat, lng: pointData.lng };
+        
+        // 创建自定义图标标记
+        const marker = new this.google.maps.Marker({
+          position: position,
+          map: this.map,
+          title: `${pointData.name}（${pointData.type}）`,
+          icon: {
+            path: this.google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: '#2196f3',
+            fillOpacity: 0.9,
+            strokeColor: '#1976d2',
+            strokeWeight: 2
+          }
         });
-        label.setStyle({
-          color: '#fff',
-          background: 'rgba(33,150,243,0.95)',
-          border: '1px solid #2196f3',
-          borderRadius: '6px',
-          padding: '2px 8px',
-          fontSize: '14px',
-          fontWeight: 'bold',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+
+        // 创建信息窗口
+        const infoWindow = new this.google.maps.InfoWindow({
+          content: `
+            <div style="padding: 8px; max-width: 200px;">
+              <h4 style="margin: 0 0 8px 0; color: #2196f3;">
+                ${pointData.name}
+              </h4>
+              <p style="margin: 0 0 8px 0; font-size: 12px; color: #666;">类型：${pointData.type}</p>
+              ${pointData.img ? `<img src="${pointData.img}" style="width: 100%; max-height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;" />` : ''}
+              <p style="margin: 0; font-size: 14px; line-height: 1.4;">${pointData.desc || ''}</p>
+            </div>
+          `
         });
-        // 移除label.setTitle
-        marker.addEventListener('click', (e) => {
-          this.showPopup({ name: pointData.name, desc: pointData.desc, img: pointData.img }, e);
+
+        marker.addListener('click', () => {
+          // 关闭其他打开的信息窗口
+          arr.forEach(item => {
+            if (item.infoWindow) {
+              item.infoWindow.close();
+            }
+          });
+          infoWindow.open(this.map, marker);
         });
-        label.addEventListener('click', (e) => {
-          this.showPopup({ name: pointData.name, desc: pointData.desc, img: pointData.img }, e);
-        });
-        arr.push(label);
-        this.map.addOverlay(label);
+
+        arr.push({ marker, infoWindow });
       });
+
       this.overlays.checkpoints = arr;
     },
     renderChinaProjects() {
       const arr = [];
+      
       if (this.currentCountry === 'myanmar') {
         chinaMyanmarProjects.forEach(proj => {
-          const gcj = coordtransform.wgs84togcj02(proj.lng, proj.lat);
-          const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
-          const point = new BMapGL.Point(bd09[0], bd09[1]);
-          const marker = new BMapGL.Marker(point);
-          arr.push(marker);
-          this.map.addOverlay(marker);
-          const label = new BMapGL.Label(proj.name, {
-            position: point,
-            offset: new BMapGL.Size(10, -24)
+          const position = { lat: proj.lat, lng: proj.lng };
+          
+          const marker = new this.google.maps.Marker({
+            position: position,
+            map: this.map,
+            title: proj.name,
+            icon: {
+              path: this.google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+              scale: 6,
+              fillColor: '#ff5722',
+              fillOpacity: 0.9,
+              strokeColor: '#d84315',
+              strokeWeight: 2
+            }
           });
-          label.setStyle({
-            color: '#fff',
-            background: 'rgba(255,87,34,0.9)',
-            border: '1px solid #ff5722',
-            borderRadius: '6px',
-            padding: '2px 8px',
-            fontSize: '14px',
-            fontWeight: 'bold',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+
+          const infoWindow = new this.google.maps.InfoWindow({
+            content: `
+              <div style="padding: 8px; max-width: 250px;">
+                <h4 style="margin: 0 0 8px 0; color: #ff5722;">
+                  ${proj.name}
+                </h4>
+                ${proj.img ? `<img src="${proj.img}" style="width: 100%; max-height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;" />` : ''}
+                <p style="margin: 0; font-size: 14px; line-height: 1.4;">${proj.desc || ''}</p>
+              </div>
+            `
           });
-          // 移除label.setTitle
-          marker.addEventListener('click', (e) => {
-            this.showPopup({ name: proj.name, desc: proj.desc, img: proj.img }, e);
+
+          marker.addListener('click', () => {
+            arr.forEach(item => {
+              if (item.infoWindow) {
+                item.infoWindow.close();
+              }
+            });
+            infoWindow.open(this.map, marker);
           });
-          label.addEventListener('click', (e) => {
-            this.showPopup({ name: proj.name, desc: proj.desc, img: proj.img }, e);
-          });
-          arr.push(label);
-          this.map.addOverlay(label);
+
+          arr.push({ marker, infoWindow });
         });
       } else if (this.currentCountry === 'laos') {
         chinaLaosProjects.forEach(proj => {
           if (proj.lat && proj.lng) {
-            const gcj = coordtransform.wgs84togcj02(proj.lng, proj.lat);
-            const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
-            const point = new BMapGL.Point(bd09[0], bd09[1]);
-            const marker = new BMapGL.Marker(point);
-            arr.push(marker);
-            this.map.addOverlay(marker);
-            const label = new BMapGL.Label(proj.name, {
-              position: point,
-              offset: new BMapGL.Size(10, -24)
+            const position = { lat: proj.lat, lng: proj.lng };
+            
+            const marker = new this.google.maps.Marker({
+              position: position,
+              map: this.map,
+              title: proj.name,
+              icon: {
+                path: this.google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                scale: 6,
+                fillColor: '#4caf50',
+                fillOpacity: 0.9,
+                strokeColor: '#388e3c',
+                strokeWeight: 2
+              }
             });
-            label.setStyle({
-              color: '#fff',
-              background: 'rgba(76,175,80,0.9)',
-              border: '1px solid #4caf50',
-              borderRadius: '6px',
-              padding: '2px 8px',
-              fontSize: '14px',
-              fontWeight: 'bold',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+
+            const infoWindow = new this.google.maps.InfoWindow({
+              content: `
+                <div style="padding: 8px; max-width: 250px;">
+                  <h4 style="margin: 0 0 8px 0; color: #4caf50;">
+                    ${proj.name}
+                  </h4>
+                  ${proj.img ? `<img src="${proj.img}" style="width: 100%; max-height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;" />` : ''}
+                  <p style="margin: 0; font-size: 14px; line-height: 1.4;">${proj.desc || ''}</p>
+                </div>
+              `
             });
-            // 移除label.setTitle
-            marker.addEventListener('click', (e) => {
-              this.showPopup({ name: proj.name, desc: proj.desc, img: proj.img }, e);
+
+            marker.addListener('click', () => {
+              arr.forEach(item => {
+                if (item.infoWindow) {
+                  item.infoWindow.close();
+                }
+              });
+              infoWindow.open(this.map, marker);
             });
-            label.addEventListener('click', (e) => {
-              this.showPopup({ name: proj.name, desc: proj.desc, img: proj.img }, e);
-            });
-            arr.push(label);
-            this.map.addOverlay(label);
+
+            arr.push({ marker, infoWindow });
           }
         });
       }
+
       this.overlays.chinaProjects = arr;
     },
     renderArmedGroups() {
       const arr = [];
+      
       if (this.currentCountry === 'myanmar') {
         mekongArmedGroups.forEach(group => {
-          const gcj = coordtransform.wgs84togcj02(group.lng, group.lat);
-          const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
-          const point = new BMapGL.Point(bd09[0], bd09[1]);
-          const circle = new BMapGL.Circle(point, 20000, {
+          const position = { lat: group.lat, lng: group.lng };
+          
+          // 创建圆形区域
+          const circle = new this.google.maps.Circle({
             strokeColor: 'rgba(218,29,139,0.8)',
-            strokeWeight: 2,
             strokeOpacity: 0.8,
+            strokeWeight: 2,
             fillColor: 'rgba(218,29,139,0.3)',
-            fillOpacity: 0.3
+            fillOpacity: 0.3,
+            map: this.map,
+            center: position,
+            radius: 20000 // 20公里
           });
-          arr.push(circle);
-          this.map.addOverlay(circle);
-          const label = new BMapGL.Label(group.name, {
-            position: point,
-            offset: new BMapGL.Size(10, -24)
+
+          // 创建中心标记
+          const marker = new this.google.maps.Marker({
+            position: position,
+            map: this.map,
+            title: group.name,
+            icon: {
+              path: this.google.maps.SymbolPath.CIRCLE,
+              scale: 6,
+              fillColor: 'rgba(218,29,139,0.9)',
+              fillOpacity: 1,
+              strokeColor: '#fff',
+              strokeWeight: 2
+            }
           });
-          label.setStyle({
-            color: '#fff',
-            background: 'rgba(218,29,139,0.9)',
-            border: '1px solid rgba(218,29,139,0.9)',
-            borderRadius: '6px',
-            padding: '2px 8px',
-            fontSize: '14px',
-            fontWeight: 'bold',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+
+          const infoWindow = new this.google.maps.InfoWindow({
+            content: `
+              <div style="padding: 8px; max-width: 250px;">
+                <h4 style="margin: 0 0 8px 0; color: rgba(218,29,139,0.9);">
+                  ${group.name}
+                </h4>
+                ${group.img ? `<img src="${group.img}" style="width: 100%; max-height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;" />` : ''}
+                <p style="margin: 0; font-size: 14px; line-height: 1.4;">${group.goal || ''}</p>
+              </div>
+            `
           });
-          // 移除label.setTitle
-          const marker = new BMapGL.Marker(point);
-          marker.addEventListener('click', (e) => {
-            this.showPopup({ name: group.name, desc: group.goal, img: group.img }, e);
+
+          marker.addListener('click', () => {
+            arr.forEach(item => {
+              if (item.infoWindow) {
+                item.infoWindow.close();
+              }
+            });
+            infoWindow.open(this.map, marker);
           });
-          label.addEventListener('click', (e) => {
-            this.showPopup({ name: group.name, desc: group.goal, img: group.img }, e);
-          });
-          arr.push(label);
-          this.map.addOverlay(label);
+
+          arr.push({ marker, infoWindow, circle });
         });
       } else if (this.currentCountry === 'laos') {
         mekongArmedGroupsLaos.forEach(group => {
-          const gcj = coordtransform.wgs84togcj02(group.lng, group.lat);
-          const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
-          const point = new BMapGL.Point(bd09[0], bd09[1]);
-          const circle = new BMapGL.Circle(point, 20000, {
+          const position = { lat: group.lat, lng: group.lng };
+          
+          const circle = new this.google.maps.Circle({
             strokeColor: 'rgba(120,29,218,0.8)',
-            strokeWeight: 2,
             strokeOpacity: 0.8,
+            strokeWeight: 2,
             fillColor: 'rgba(120,29,218,0.3)',
-            fillOpacity: 0.3
+            fillOpacity: 0.3,
+            map: this.map,
+            center: position,
+            radius: 20000
           });
-          arr.push(circle);
-          this.map.addOverlay(circle);
-          const label = new BMapGL.Label(group.name, {
-            position: point,
-            offset: new BMapGL.Size(10, -24)
+
+          const marker = new this.google.maps.Marker({
+            position: position,
+            map: this.map,
+            title: group.name,
+            icon: {
+              path: this.google.maps.SymbolPath.CIRCLE,
+              scale: 6,
+              fillColor: 'rgba(120,29,218,0.9)',
+              fillOpacity: 1,
+              strokeColor: '#fff',
+              strokeWeight: 2
+            }
           });
-          label.setStyle({
-            color: '#fff',
-            background: 'rgba(120,29,218,0.9)',
-            border: '1px solid rgba(120,29,218,0.9)',
-            borderRadius: '6px',
-            padding: '2px 8px',
-            fontSize: '14px',
-            fontWeight: 'bold',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+
+          const infoWindow = new this.google.maps.InfoWindow({
+            content: `
+              <div style="padding: 8px; max-width: 250px;">
+                <h4 style="margin: 0 0 8px 0; color: rgba(120,29,218,0.9);">
+                  ${group.name}
+                </h4>
+                ${group.img ? `<img src="${group.img}" style="width: 100%; max-height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;" />` : ''}
+                <p style="margin: 0; font-size: 14px; line-height: 1.4;">${group.goal || ''}</p>
+              </div>
+            `
           });
-          // 移除label.setTitle
-          const marker = new BMapGL.Marker(point);
-          marker.addEventListener('click', (e) => {
-            this.showPopup({ name: group.name, desc: group.goal, img: group.img }, e);
+
+          marker.addListener('click', () => {
+            arr.forEach(item => {
+              if (item.infoWindow) {
+                item.infoWindow.close();
+              }
+            });
+            infoWindow.open(this.map, marker);
           });
-          label.addEventListener('click', (e) => {
-            this.showPopup({ name: group.name, desc: group.goal, img: group.img }, e);
-          });
-          arr.push(label);
-          this.map.addOverlay(label);
+
+          arr.push({ marker, infoWindow, circle });
         });
       }
+
       this.overlays.armedGroups = arr;
     },
-    showPopup(data, e) {
-      this.popupData = data;
-      let x = e.domEvent ? e.domEvent.clientX : 0;
-      let y = e.domEvent ? e.domEvent.clientY : 0;
-      this.popupPosition = { x, y };
-      this.popupVisible = true;
+
+    async initGoogleMap() {
+      const loader = new Loader({
+        apiKey: 'AIzaSyCEsS_LOjaVXZwT2GmvJWMBNY1N5kiQPHs',
+        version: 'weekly',
+        libraries: ['geometry']
+      });
+
+      try {
+        const google = await loader.load();
+        this.google = google;
+        
+        // 初始化地图
+        this.map = new google.maps.Map(document.getElementById('worldMap'), {
+          center: { lat: 19.7361, lng: 96.2067 }, // 缅甸中心点
+          zoom: 7,
+          mapTypeId: google.maps.MapTypeId.TERRAIN, // 使用地形图更好地显示河流
+          tilt: 0,
+          gestureHandling: 'greedy',
+          // 隐藏所有默认控件
+          mapTypeControl: false, // 隐藏左上角的地图/卫星切换按钮
+          streetViewControl: false, // 隐藏右下角的街景小人
+          fullscreenControl: false, // 隐藏右上角的全屏按钮
+          zoomControl: false, // 完全隐藏缩放控件
+          scaleControl: false, // 隐藏比例尺
+          rotateControl: false, // 隐藏旋转控件
+          panControl: false, // 隐藏平移控件
+          overviewMapControl: false, // 隐藏概览地图控件
+          keyboardShortcuts: false, // 禁用键盘快捷键
+          disableDoubleClickZoom: false, // 保留双击缩放
+          scrollwheel: true, // 保留滚轮缩放
+          draggable: true, // 保留拖拽
+          // 隐藏右下角的所有控件和信息
+          mapTypeControlOptions: {
+            mapTypeIds: []
+          },
+          styles: [
+            {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{ color: '#193341' }]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.fill',
+              stylers: [{ color: '#4e6d70' }]
+            }
+          ]
+        });
+
+        // 添加国家边界多边形
+        this.addCountryPolygons();
+        
+        // 初始化时不高亮任何国家
+        this.updateCountryHighlight(null);
+        
+        console.log('Google Maps 初始化成功');
+      } catch (error) {
+        console.error('Google Maps 加载失败:', error);
+      }
     },
-    initBaiduMap() {
-      const map = initMap("worldMap", {
-        tilt: 30,
-        heading: 0,
-        center: [96.2067, 19.7361],
-        zoom: 7,
-        style: darkStyle,
-      });
-      this.map = map;
-      const colorBand = ["rgba(90, 90, 102, 0.27)", "cadetblue", "orange", "red", "tan"];
-      const gParse = new BMapGL.GeoJSONParse({
-        reference: "GCJ02",
-      });
-      // 去除缅甸区域颜色填充，不再添加Prism覆盖物
-      // gParse.readFeaturesFromObject(myanmarJson, { isPoints: true }, function (overlay) {
-      //   const index = overlay.properties.join || 0;
-      //   const prism = new BMapGL.Prism(overlay.points, 3000, {
-      //     topFillColor: colorBand[index],
-      //     topFillOpacity: 0.9,
-      //     sideFillColor: colorBand[index],
-      //     sideFillOpacity: 0.9,
-      //   });
-      //   prism.properties = overlay.properties;
-      //   prism.setZIndex(-1);
-      //   // 监听点击事件
-      //   prism.addEventListener("click", function (e) {
-      //     // 这里可以自定义后续逻辑，比如弹窗、状态更新等
-      //     // 示例：弹窗显示国家名
-      //     const countryName = prism.properties.Name || "缅甸";
-      //     alert(`点击了国家：${countryName}`);
-      //     // TODO: 可以在这里派发事件或调用父组件方法
-      //   });
-      //   map.addOverlay(prism);
-      // });
-      const view = new mapvgl.View({
-        map: map,
-      });
-      const textLayer = new mapvgl.TextLayer({
-        // fontFamily: 'Songti SC',
-        enablePicked: true,
-        autoSelect: true,
-        selectedColor: "#f00", // 选中项颜色
-        color: "#fff",
-        lineWidth: 3, // 文字粗细，在设置描边时才有效
-        textMaxWidth: 80, // 文字最大宽度，超过则换行
-        textMaxHeight: 50,
-        textAlign: "center", // 文字对齐方式，支持'center'、'left'
-        lineHeight: 24,
-        // shadow: {
-        //     color: 'rgba(0, 250, 0, 1)',
-        //     blur: 6,
-        //     offsetX: 3,
-        //     offsetY: 3
-        // },
-        stroke: {
-          color: "#000",
-        },
-        // collides: false
-        // flat: true
-      });
-      view.addLayer(textLayer);
-      textLayer.setData([]);
 
-      // 1. 缅甸Polygon
+
+
+    addCountryPolygons() {
+      // 1. 缅甸多边形
       const myanmarCoords = myanmarJson.features[0].geometry.coordinates[0];
-      const myanmarPoints = myanmarCoords.map(coord => new BMapGL.Point(coord[0], coord[1]));
-      const myanmarPolygon = new BMapGL.Polygon(myanmarPoints, {
-        strokeColor: "transparent",
-        fillColor: "transparent",
-        strokeWeight: 0,
-        fillOpacity: 0
-      });
-      myanmarPolygon.setZIndex(1);
-      myanmarPolygon.addEventListener('click', (e) => {
-        this.$emit('country-changed', 'myanmar');
-        if (this.map) {
-          this.map.centerAndZoom(new BMapGL.Point(96.2067, 19.7361), 7);
-        }
-      });
-      map.addOverlay(myanmarPolygon);
+      const myanmarPath = myanmarCoords.map(coord => ({
+        lat: coord[1],
+        lng: coord[0]
+      }));
 
-      // 2. 老挝Polygon
+      const myanmarPolygon = new this.google.maps.Polygon({
+        paths: myanmarPath,
+        strokeColor: 'transparent',
+        strokeOpacity: 0,
+        fillColor: 'transparent',
+        fillOpacity: 0,
+        clickable: true
+      });
+
+      myanmarPolygon.setMap(this.map);
+      this.countryPolygons.myanmar = myanmarPolygon;
+      
+      myanmarPolygon.addListener('click', () => {
+        this.$emit('country-changed', 'myanmar');
+        this.map.setCenter({ lat: 19.7361, lng: 96.2067 });
+        this.map.setZoom(7);
+        // 立即更新高亮
+        this.updateCountryHighlight('myanmar');
+      });
+
+      // 2. 老挝多边形
       const laosFeature = worldJson.features.find(f =>
         f.properties && (
           f.properties.name === 'Laos' ||
@@ -459,76 +679,108 @@ export default {
           f.properties.NAME === 'Lao PDR'
         )
       );
+
       if (laosFeature) {
         const coordsArr = laosFeature.geometry.coordinates;
         const polygons = (laosFeature.geometry.type === 'Polygon')
           ? [coordsArr]
           : coordsArr;
+        
+        // 存储老挝的所有多边形部分
+        const laosPolygonParts = [];
+        
         polygons.forEach(ringArr => {
           ringArr.forEach(ring => {
-            const laosPoints = ring.map(coord => new BMapGL.Point(coord[0], coord[1]));
-            const laosPolygon = new BMapGL.Polygon(laosPoints, {
-              strokeColor: "transparent",
-              fillColor: "transparent",
-              strokeWeight: 0,
-              fillOpacity: 0
+            const laosPath = ring.map(coord => ({
+              lat: coord[1],
+              lng: coord[0]
+            }));
+
+            const laosPolygon = new this.google.maps.Polygon({
+              paths: laosPath,
+              strokeColor: 'transparent',
+              strokeOpacity: 0,
+              fillColor: 'transparent',
+              fillOpacity: 0,
+              clickable: true
             });
-            laosPolygon.setZIndex(1);
-            laosPolygon.addEventListener('click', (e) => {
+
+            laosPolygon.setMap(this.map);
+            laosPolygonParts.push(laosPolygon);
+            
+            laosPolygon.addListener('click', () => {
               this.$emit('country-changed', 'laos');
-              if (this.map) {
-                this.map.centerAndZoom(new BMapGL.Point(102.6341, 17.9757), 7);
-              }
+              this.map.setCenter({ lat: 17.9757, lng: 102.6341 });
+              this.map.setZoom(7);
+              // 立即更新高亮
+              this.updateCountryHighlight('laos');
             });
-            map.addOverlay(laosPolygon);
           });
         });
+        
+        this.countryPolygons.laos = laosPolygonParts;
       }
-      // 湄公河动画河流
-      try {
-        const mekongFeature = mekongJson.features.find(f => f.properties && (f.properties.name === 'Mekong' || f.properties.name_zh === '湄公河'));
-        if (mekongFeature && mekongFeature.geometry && mekongFeature.geometry.type === 'LineString') {
-          const coords = mekongFeature.geometry.coordinates;
-          // WGS84 -> GCJ02 -> BD09（百度坐标）
-          const points = coords.map(coord => {
-            const gcj = coordtransform.wgs84togcj02(coord[0], coord[1]);
-            const bd09 = coordtransform.gcj02tobd09(gcj[0], gcj[1]);
-            return [bd09[0], bd09[1]];
+
+      // 初始化完成后会在 initGoogleMap 中设置高亮
+    },
+
+    // 更新国家边界高亮
+    updateCountryHighlight(selectedCountry) {
+      // 重置所有国家边界样式
+      if (this.countryPolygons.myanmar) {
+        this.countryPolygons.myanmar.setOptions({
+          strokeColor: 'transparent',
+          strokeOpacity: 0,
+          fillColor: 'transparent',
+          fillOpacity: 0
+        });
+      }
+
+      if (this.countryPolygons.laos) {
+        if (Array.isArray(this.countryPolygons.laos)) {
+          this.countryPolygons.laos.forEach(polygon => {
+            polygon.setOptions({
+              strokeColor: 'transparent',
+              strokeOpacity: 0,
+              fillColor: 'transparent',
+              fillOpacity: 0
+            });
           });
-          // 使用 mapvgl.LineLayer 实现动画河流
-          const view = new mapvgl.View({ map });
-          const lineLayer = new mapvgl.LineLayer({
-            color: 'rgba(44, 195, 233, 0.9)',
-            width: 12,
-            blend: 'lighter',
-            dashArray: [1, 1],
-            dashOffset: 0,
-            animation: true,
-            animationDuration: 1.5,
-            animationRepeat: true,
-            animationInterval: 0.5,
-            animationType: 'flow',
-            animationColor: 'rgba(0,234,255,1)',
-            animationRepeatType: 'loop',
-            animationDashArray: [1, 1],
-            animationDashOffset: 0,
-          });
-          view.addLayer(lineLayer);
-          lineLayer.setData([
-            {
-              geometry: {
-                type: 'LineString',
-                coordinates: points
-              }
-            }
-          ]);
         }
-      } catch (e) {
-        console.error('湄公河动画河流渲染失败', e);
       }
-      // 不自动渲染任何覆盖物，全部通过按钮控制
+
+      // 根据选中的国家设置高亮样式
+      if (selectedCountry === 'myanmar' && this.countryPolygons.myanmar) {
+        this.countryPolygons.myanmar.setOptions({
+          strokeColor: '#FF5722',
+          strokeOpacity: 0.8,
+          strokeWeight: 3,
+          fillColor: '#FF5722',
+          fillOpacity: 0.2
+        });
+      } else if (selectedCountry === 'laos' && this.countryPolygons.laos) {
+        if (Array.isArray(this.countryPolygons.laos)) {
+          this.countryPolygons.laos.forEach(polygon => {
+            polygon.setOptions({
+              strokeColor: '#2196F3',
+              strokeOpacity: 0.8,
+              strokeWeight: 3,
+              fillColor: '#2196F3',
+              fillOpacity: 0.2
+            });
+          });
+        }
+      }
     },
   },
+  beforeDestroy() {
+    // 清理拖拽事件监听器
+    document.removeEventListener('mousemove', this.onDrag);
+    document.removeEventListener('mouseup', this.stopDrag);
+    
+    // 清理所有覆盖物
+    this.clearAllOverlays();
+  }
 };
 </script>
 
@@ -544,40 +796,173 @@ export default {
       height: calc(100vh - 40px);
       border-radius: 30px;
       overflow: hidden;
+      
+      /* 隐藏Google Maps的默认UI元素 */
+      :deep(.gm-style-cc) {
+        display: none !important; /* 隐藏版权信息 */
+      }
+      
+      :deep(.gm-bundled-control) {
+        display: none !important; /* 隐藏右下角控件组 */
+      }
+      
+      :deep(.gm-style-mtc) {
+        display: none !important; /* 隐藏地图类型控件 */
+      }
+      
+      :deep(.gmnoprint) {
+        display: none !important; /* 隐藏不可打印元素 */
+      }
+      
+      :deep(.gm-svpc) {
+        display: none !important; /* 隐藏街景控件 */
+      }
+      
+      :deep(.gm-fullscreen-control) {
+        display: none !important; /* 隐藏全屏控件 */
+      }
+      
+      :deep(.gm-style .gm-style-iw-c) {
+        /* 保留信息窗口样式 */
+      }
     }
   }
 }
-.map-btn-container {
+/* 功能按钮容器 - 中上部 */
+.function-btn-container {
   position: absolute;
   left: 50%;
   top: 30px;
   transform: translateX(-50%);
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   z-index: 10;
   width: auto;
+  max-width: 95%;
   height: auto;
   pointer-events: auto;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  
   button {
-    border: 1px solid lightgray;
-    padding: 10px 20px;
-    margin: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 16px;
     cursor: pointer;
-    background-color: transparent;
-    transition: background-color 0.3s ease;
-    color: rgb(145, 167, 184);
-    font-size: 16px;
-    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    border-radius: 8px;
     outline: none;
     box-sizing: border-box;
+    backdrop-filter: blur(5px);
+    white-space: nowrap;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-1px);
+    }
   }
+  
   .selected-button {
     background: linear-gradient(
-      to right,
-      rgba(173, 216, 230, 0.6),
-      rgba(56, 126, 152, 0.8)
+      135deg,
+      rgba(255, 87, 34, 0.8),
+      rgba(255, 152, 0, 0.9)
     );
     color: #fff;
-    border: 1px solid #3fa7ff;
+    border: 1px solid rgba(255, 87, 34, 0.8);
+    box-shadow: 0 2px 8px rgba(255, 87, 34, 0.3);
+    
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(255, 87, 34, 0.9),
+        rgba(255, 152, 0, 1)
+      );
+      transform: translateY(-1px);
+    }
+  }
+}
+
+/* 地图样式切换按钮容器 - 底部 */
+.map-style-btn-container {
+  position: absolute;
+  left: 50%;
+  bottom: 15px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+  width: auto;
+  max-width: 95%;
+  height: auto;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 12px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  button {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 14px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    backdrop-filter: blur(5px);
+    white-space: nowrap;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-1px);
+    }
+  }
+  
+  .selected-button {
+    background: linear-gradient(
+      135deg,
+      rgba(64, 158, 255, 0.8),
+      rgba(30, 144, 255, 0.9)
+    );
+    color: #fff;
+    border: 1px solid rgba(64, 158, 255, 0.8);
+    box-shadow: 0 2px 8px rgba(64, 158, 255, 0.3);
+    
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(64, 158, 255, 0.9),
+        rgba(30, 144, 255, 1)
+      );
+      transform: translateY(-1px);
+    }
   }
 }
 html, body {
@@ -587,50 +972,183 @@ html, body {
   margin: 0;
   padding: 0;
 }
-.map-popup {
-  position: fixed;
-  z-index: 9999;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: inline-block;
-  width: auto;
-  max-width: 90vw;
-  max-height: 80vh;
-  background: rgba(255,255,255,0.98);
-  color: #222;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  padding: 16px 20px 12px 20px;
-  pointer-events: auto;
-  white-space: normal;
-  overflow-y: auto;
-}
-.popup-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 8px;
-  text-align: center;
-}
-.popup-img {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 8px;
-}
-.popup-desc {
-  font-size: 15px;
-  margin-bottom: 8px;
-  max-height: 60vh;
-  overflow-y: auto;
-}
-.popup-close {
+
+/* AI助手悬浮按钮 */
+.ai-float-button {
   position: absolute;
-  right: 10px;
-  top: 6px;
-  font-size: 20px;
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  color: #888;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  color: white;
+  user-select: none;
 }
+
+.ai-float-button::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 0.3;
+  animation: pulse 2s infinite;
+}
+
+.ai-float-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+}
+
+.ai-float-button:hover .ai-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.ai-float-button.dragging {
+  cursor: grabbing;
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+}
+
+.ai-float-button.dragging::before {
+  animation: none;
+}
+
+.ai-float-button.dragging .ai-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.ai-float-button.active {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4);
+}
+
+.ai-float-button.active::before {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+}
+
+.ai-float-button.active:hover {
+  box-shadow: 0 6px 25px rgba(255, 107, 107, 0.6);
+}
+
+.ai-float-button.active.dragging {
+  box-shadow: 0 6px 30px rgba(255, 107, 107, 0.6);
+}
+
+.ai-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.ai-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.ai-tooltip {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+.ai-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid rgba(0, 0, 0, 0.8);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* 全局隐藏Google Maps默认UI元素 */
+.gm-style-cc {
+  display: none !important; /* 隐藏版权信息 */
+}
+
+.gm-bundled-control {
+  display: none !important; /* 隐藏右下角控件组 */
+}
+
+.gm-style-mtc {
+  display: none !important; /* 隐藏地图类型控件 */
+}
+
+.gmnoprint {
+  display: none !important; /* 隐藏不可打印元素 */
+}
+
+.gm-svpc {
+  display: none !important; /* 隐藏街景控件 */
+}
+
+.gm-fullscreen-control {
+  display: none !important; /* 隐藏全屏控件 */
+}
+
+.gm-control-active {
+  display: none !important; /* 隐藏激活的控件 */
+}
+
+/* 隐藏右下角的"报告地图错误"链接 */
+.gm-style a[href*="maps.google.com/maps"] {
+  display: none !important;
+}
+
+/* 隐藏键盘快捷键信息 */
+.gm-style .gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+/* 隐藏Terms of Use等链接 */
+.gm-style a[href*="google.com/help/terms_maps"] {
+  display: none !important;
+}
+
 </style>

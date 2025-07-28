@@ -1,6 +1,7 @@
 <template>
   <div class="rightBox">
-    <div class="timeBox">
+    <div class="content-wrapper">
+      <div class="timeBox">
       <dv-border-box-9>
         <div class="timeline">
           <dv-decoration-1 style="width: 200px; height: 50px" />
@@ -84,8 +85,8 @@
         </div>
       </dv-border-box-12>
     </div>
-
-
+    </div>
+    
     <TextDialog ref="textDialogRef">
       <div class="region-popup" @click.stop>
         <div class="popup-title">{{ rowData.name }}</div>
@@ -444,7 +445,13 @@ export default {
 
 <style lang="less" scoped>
 .rightBox {
-  color: rgb(145, 167, 184);
+  color: #fff;
+}
+
+.content-wrapper {
+  backdrop-filter: blur(10px);
+  background: rgba(145, 167, 184, 0.1); /* 半透明背景 */
+  height: 100%;
   & > div {
     margin-bottom: 0px;
   }
@@ -486,7 +493,7 @@ export default {
     }
     .line {
       height: 1px;
-      background-color: rgb(145, 167, 184);
+      background-color: #fff;
     }
   }
   .ngoBox {
@@ -658,14 +665,14 @@ export default {
         text-align: center;
         .eventBox {
           .title {
-            color: rgb(35, 113, 176);
+            color: #fff;
             margin-bottom: 10px;
             font-size: 20px;
           }
           .itemName {
             margin-bottom: 5px;
             position: relative;
-            color: rgb(145, 167, 184);
+            color: #fff;
             font-size: 14px;
             // background-image: linear-gradient(
             //   180deg,
@@ -689,6 +696,11 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
         img {
           width: 110px;
           height: 110px;
