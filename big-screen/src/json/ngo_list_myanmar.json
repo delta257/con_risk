@@ -1,0 +1,65 @@
+{
+  "title": "缅甸主要NGO组织",
+  "ngos": [
+    {
+      "id": 1,
+      "name": "缅甸森林资源环境发展与保护协会",
+      "name_en": "Myanmar Forest Resources Environment Development and Protection Association",
+      "leader": "待补充",
+      "founded": "待补充",
+      "region": "全国",
+      "purpose": "森林资源保护与环境发展",
+      "current_status": "活跃",
+      "support_base": "环保人士、当地社区",
+      "detail_file": "ngo_forest_myanmar.json"
+    },
+    {
+      "id": 2,
+      "name": "生物多样性与自然保护协会",
+      "name_en": "Biodiversity and Nature Conservation Association",
+      "leader": "待补充",
+      "founded": "待补充",
+      "region": "全国",
+      "purpose": "生物多样性保护与自然环境维护",
+      "current_status": "活跃",
+      "support_base": "科研机构、环保组织",
+      "detail_file": "ngo_biodiversity_myanmar.json"
+    },
+    {
+      "id": 3,
+      "name": "红树林服务网络",
+      "name_en": "Mangrove Service Network",
+      "leader": "待补充",
+      "founded": "待补充",
+      "region": "沿海地区",
+      "purpose": "红树林生态系统保护与恢复",
+      "current_status": "活跃",
+      "support_base": "沿海社区、渔民",
+      "detail_file": "ngo_mangrove_myanmar.json"
+    },
+    {
+      "id": 4,
+      "name": "缅甸宗教和平协会",
+      "name_en": "Myanmar Religious Peace Association",
+      "leader": "待补充",
+      "founded": "待补充",
+      "region": "全国",
+      "purpose": "促进宗教和谐与社会和平",
+      "current_status": "活跃",
+      "support_base": "各宗教团体、和平人士",
+      "detail_file": "ngo_religious_peace_myanmar.json"
+    },
+    {
+      "id": 5,
+      "name": "缅甸希望基督教会",
+      "name_en": "Myanmar Hope Christian Church",
+      "leader": "待补充",
+      "founded": "待补充",
+      "region": "全国",
+      "purpose": "基督教传播与社会服务",
+      "current_status": "活跃",
+      "support_base": "基督教徒、社区民众",
+      "detail_file": "ngo_hope_church_myanmar.json"
+    }
+  ]
+}

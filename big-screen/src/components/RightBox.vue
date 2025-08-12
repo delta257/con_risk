@@ -186,6 +186,45 @@
         <span class="popup-close" @click="$refs.armedDetailDialogRef.closeDialog()">×</span>
       </div>
     </TextDialog>
+    <TextDialog ref="ngoTableDialogRef">
+      <div class="orgTableBox popup-table-box" @click.stop>
+        <div class="popup-title popup-table-title">{{ ngoTableTitle }}</div>
+        <table class="popup-table" border="1" cellspacing="0" cellpadding="4">
+          <thead>
+            <tr>
+              <th class="col-name">组织名称</th>
+              <th>英文名</th>
+              <th class="col-leader">负责人</th>
+              <th class="col-founded">成立时间</th>
+              <th>主要活动区域</th>
+              <th>宗旨</th>
+              <th>当前状态</th>
+              <th>支持基础</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="ngo in ngoList" :key="ngo.id">
+              <td class="col-name" @click="showNgoDetail(ngo)">{{ ngo.name }}</td>
+              <td>{{ ngo.name_en }}</td>
+              <td class="col-leader">{{ ngo.leader }}</td>
+              <td class="col-founded">{{ ngo.founded }}</td>
+              <td>{{ ngo.region }}</td>
+              <td>{{ ngo.purpose }}</td>
+              <td>{{ ngo.current_status }}</td>
+              <td>{{ ngo.support_base }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <span class="popup-close" @click="$refs.ngoTableDialogRef.closeDialog()">×</span>
+      </div>
+    </TextDialog>
+    <TextDialog ref="ngoDetailDialogRef">
+      <div class="region-popup" @click.stop>
+        <div class="popup-title">{{ ngoDetailTitle }}</div>
+        <div class="popup-desc" v-html="ngoDetailContent"></div>
+        <span class="popup-close" @click="$refs.ngoDetailDialogRef.closeDialog()">×</span>
+      </div>
+    </TextDialog>
   </div>
 </template>
 
@@ -246,9 +285,9 @@ export default {
       blocks: [
         { id: 3, name: "政党", ngoInfo: [] },
         { id: 4, name: "武装", ngoInfo: [] },
-        { id: 5, name: "劳工", ngoInfo: [] },
-        { id: 6, name: "宗教", ngoInfo: [] },
-        { id: 7, name: "环境", ngoInfo: [] },
+        { id: 5, name: "NGO", ngoInfo: [] },
+        // { id: 6, name: "宗教", ngoInfo: [] },
+        // { id: 7, name: "环境", ngoInfo: [] },
       ],
       projects: [],
       currentIndustryIndex: 0,
@@ -256,12 +295,6 @@ export default {
         { id: 1, name: "地理概览", src: iconSvg1, detail: "<p>这里是国家地理的详细介绍。</p>" },
         { id: 5, name: "经济概览", src: iconSvg5, detail: "<p>这里是经济环境的详细介绍。</p>" },
         { id: 2, name: "政治概览", src: iconSvg2, detail: "<p>这里是国家政治的详细介绍。</p>" },
-      ],
-      localEvents: [
-        { id: 1, name: "电诈" },
-        { id: 2, name: "缅北冲突" },
-        { id: 3, name: "华人区" },
-        { id: 4, name: "缅甸旅行" },
       ],
       rowData: {},
       riskData: {},
@@ -276,6 +309,10 @@ export default {
       armedTableTitle: '',
       armedDetailTitle: '',
       armedDetailContent: '',
+      ngoList: [],
+      ngoTableTitle: '',
+      ngoDetailTitle: '',
+      ngoDetailContent: '',
     };
   },
   watch: {
@@ -355,11 +392,26 @@ export default {
         });
         return;
       }
+      if (row.name === 'NGO') {
+        // 加载NGO组织列表
+        let file = `ngo_list_${this.country}.json`;
+        import(`../json/${file}`).then(m => {
+          this.ngoList = m.default.ngos;
+          this.ngoTableTitle = m.default.title;
+          this.$refs.ngoTableDialogRef && this.$refs.ngoTableDialogRef.showDialog();
+        }).catch(() => {
+          import(`../json/ngo_list_myanmar.json`).then(m => {
+            this.ngoList = m.default.ngos;
+            this.ngoTableTitle = m.default.title;
+            this.$refs.ngoTableDialogRef && this.$refs.ngoTableDialogRef.showDialog();
+          });
+        });
+        return;
+      }
       this.currentOrgTitle = row.name;
       let fileMap = {
         '政党': 'party_intro',
         '武装': 'armed_intro',
-        '劳工': 'labor_intro',
         '宗教': 'religion_intro',
         '环境': 'env_intro',
       };
@@ -433,6 +485,23 @@ export default {
         this.armedDetailTitle = armed.name;
         this.armedDetailContent = '暂无详细介绍';
         this.$refs.armedDetailDialogRef && this.$refs.armedDetailDialogRef.showDialog();
+      });
+    },
+    showNgoDetail(ngo) {
+      // 加载NGO组织详细介绍
+      let file = ngo.detail_file;
+      if (!file.endsWith(`_${this.country}.json`)) {
+        let base = file.replace(/_myanmar|_laos/, '');
+        file = `${base}_${this.country}.json`;
+      }
+      import(`../json/${file}`).then(m => {
+        this.ngoDetailTitle = ngo.name + (ngo.name_en ? ` (${ngo.name_en})` : '');
+        this.ngoDetailContent = m.default.content || m.default.detail || '';
+        this.$refs.ngoDetailDialogRef && this.$refs.ngoDetailDialogRef.showDialog();
+      }).catch(() => {
+        this.ngoDetailTitle = ngo.name;
+        this.ngoDetailContent = '暂无详细介绍';
+        this.$refs.ngoDetailDialogRef && this.$refs.ngoDetailDialogRef.showDialog();
       });
     },
   },

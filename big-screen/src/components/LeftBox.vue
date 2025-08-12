@@ -3,12 +3,12 @@
     <div class="content-wrapper">
       <dv-border-box-7 class="blue-border">
       <div class="title-box">
-        <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
+        <dv-decoration-4 :reverse="true" :style="{ width: 'calc(100% - 20px)', height: '5px' }" />
         <div>
           <div class="title">国别风险评估</div>
           <dv-decoration-3 style="width: 150px; height: 30px" />
         </div>
-        <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
+        <dv-decoration-4 :reverse="true" :style="{ width: 'calc(100% - 20px)', height: '5px' }" />
       </div>
       <div class="button-container">
         <button
@@ -45,15 +45,15 @@
     </dv-border-box-7>
     <dv-border-box-7 class="blue-border">
       <div class="title-box">
-        <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
+        <dv-decoration-4 :reverse="true" :style="{ width: 'calc(100% - 20px)', height: '5px' }" />
         <div>
           <div class="title">安全/恐怖袭击事件</div>
           <dv-decoration-3 style="width: 150px; height: 30px" />
         </div>
-        <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
+        <dv-decoration-4 :reverse="true" :style="{ width: 'calc(100% - 20px)', height: '5px' }" />
       </div>
       <dv-scroll-board
-        style="width: 500px; height: 150px; color: #ffffff; cursor: pointer"
+        style="width: 460px; height: 150px; color: #ffffff; cursor: pointer"
         :config="scrollBoardConfig"
         @click="(row) => handleScrollBoardClick(row, '1')"
       />

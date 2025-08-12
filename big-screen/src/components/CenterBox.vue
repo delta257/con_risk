@@ -19,8 +19,12 @@
             <button :class="{ 'selected-button': currentMapType === 'satellite' }" @click="changeMapType('satellite')">卫星图</button>
             <button :class="{ 'selected-button': currentMapType === 'terrain' }" @click="changeMapType('terrain')">地形图</button>
             <button :class="{ 'selected-button': currentMapType === 'hybrid' }" @click="changeMapType('hybrid')">混合图</button>
+            <button :class="{ 'selected-button': showTrafficLayer }" @click="toggleTrafficLayer" :title="'实时交通数据在发达地区更完整'">实时交通</button>
+            <button :class="{ 'selected-button': showTransitLayer }" @click="toggleTransitLayer" :title="'公共交通数据主要覆盖发达国家大城市'">公共交通</button>
           </div>
         </div>
+
+
         <div id="worldMap" ref="worldMapRef"></div>
         
         <!-- AI助手悬浮窗图标 -->
@@ -53,7 +57,7 @@
               <path d="M14 20V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </div>
-          <div class="ai-tooltip">{{ isDragging ? '拖拽移动' : 'AI智能助手' }}</div>
+          <div class="ai-tooltip">{{'AI智能助手'}}</div>
         </div>
 
       </div>
@@ -104,6 +108,10 @@ export default {
 
       showAIDialog: false,
       currentMapType: 'terrain',
+      showTrafficLayer: false,
+      trafficLayer: null,
+      showTransitLayer: false,
+      transitLayer: null,
       // AI悬浮窗拖拽相关
       aiFloatPosition: { x: 30, y: 30 }, // 悬浮窗位置
       isDragging: false,
@@ -118,12 +126,19 @@ export default {
   },
   watch: {
     country(newVal, oldVal) {
+      console.log(`国家切换: ${oldVal} -> ${newVal}`);
+      
       this.currentCountry = newVal;
+      
+      // 清理所有覆盖物
       this.clearAllOverlays();
+      
+      // 重置所有按钮状态
       this.showPorts = false;
       this.showCheckpoints = false;
       this.showChinaProjects = false;
       this.showArmedGroups = false;
+      
       // 只有在oldVal存在时才更新高亮（避免初始化时高亮）
       if (oldVal !== undefined) {
         this.updateCountryHighlight(newVal);
@@ -142,6 +157,9 @@ export default {
           }
           if (item.circle && item.circle.setMap) {
             item.circle.setMap(null);
+          }
+          if (item.polyline && item.polyline.setMap) {
+            item.polyline.setMap(null);
           }
           if (item.infoWindow) {
             item.infoWindow.close();
@@ -173,6 +191,7 @@ export default {
       this.clearOverlays('armedGroups');
       if (this.showArmedGroups) this.renderArmedGroups();
     },
+
     clearOverlays(type) {
       this.overlays[type].forEach(item => {
         if (item.marker && item.marker.setMap) {
@@ -211,6 +230,44 @@ export default {
       }
     },
     
+    toggleTrafficLayer() {
+      if (this.map && this.google) {
+        this.showTrafficLayer = !this.showTrafficLayer;
+        
+        if (this.showTrafficLayer) {
+          // 创建并显示实时交通图层
+          if (!this.trafficLayer) {
+            this.trafficLayer = new this.google.maps.TrafficLayer();
+          }
+          this.trafficLayer.setMap(this.map);
+        } else {
+          // 隐藏实时交通图层
+          if (this.trafficLayer) {
+            this.trafficLayer.setMap(null);
+          }
+        }
+      }
+    },
+    
+    toggleTransitLayer() {
+      if (this.map && this.google) {
+        this.showTransitLayer = !this.showTransitLayer;
+        
+        if (this.showTransitLayer) {
+          // 创建并显示公共交通图层
+          if (!this.transitLayer) {
+            this.transitLayer = new this.google.maps.TransitLayer();
+          }
+          this.transitLayer.setMap(this.map);
+        } else {
+          // 隐藏公共交通图层
+          if (this.transitLayer) {
+            this.transitLayer.setMap(null);
+          }
+        }
+      }
+    },
+    
     // AI对话相关方法
     toggleAIDialog() {
       this.showAIDialog = !this.showAIDialog;
@@ -233,8 +290,8 @@ export default {
     },
     
     onDrag(e) {
-      // 如果移动距离超过5px或时间超过200ms，认为是拖拽
-      if (!this.isDragging && (Date.now() - this.dragStartTime > 200)) {
+      // 如果移动距离超过5px或时间超过1ms，认为是拖拽
+      if (!this.isDragging && (Date.now() - this.dragStartTime > 1)) {
         this.isDragging = true;
       }
       
@@ -577,6 +634,8 @@ export default {
       this.overlays.armedGroups = arr;
     },
 
+
+
     async initGoogleMap() {
       const loader = new Loader({
         apiKey: 'AIzaSyCEsS_LOjaVXZwT2GmvJWMBNY1N5kiQPHs',
@@ -753,20 +812,20 @@ export default {
       if (selectedCountry === 'myanmar' && this.countryPolygons.myanmar) {
         this.countryPolygons.myanmar.setOptions({
           strokeColor: '#FF5722',
-          strokeOpacity: 0.8,
-          strokeWeight: 3,
-          fillColor: '#FF5722',
-          fillOpacity: 0.2
+          strokeOpacity: 1,
+          strokeWeight: 10,
+          fillColor: 'transparent',
+          fillOpacity: 0
         });
       } else if (selectedCountry === 'laos' && this.countryPolygons.laos) {
         if (Array.isArray(this.countryPolygons.laos)) {
           this.countryPolygons.laos.forEach(polygon => {
             polygon.setOptions({
               strokeColor: '#2196F3',
-              strokeOpacity: 0.8,
-              strokeWeight: 3,
-              fillColor: '#2196F3',
-              fillOpacity: 0.2
+              strokeOpacity: 1,
+              strokeWeight: 10,
+              fillColor: 'transparent',
+              fillOpacity: 0
             });
           });
         }
