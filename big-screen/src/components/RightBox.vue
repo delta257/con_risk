@@ -4,7 +4,7 @@
       <div class="timeBox">
       <dv-border-box-9>
         <div class="timeline">
-          <dv-decoration-1 style="width: 200px; height: 50px" />
+          <dv-decoration-1 :style="{ width: '10.42vw', height: '4.63vh' }" />
           <div class="time">
             <div class="timeText">{{ currentTime }}</div>
             <div class="dateBox">
@@ -19,7 +19,7 @@
       <dv-border-box-12>
         <div class="profitInnerBox">
           <div class="titleBox">
-            <dv-decoration-7 style="width: 150px; height: 30px">
+            <dv-decoration-7 :style="{ width: '7.81vw', height: '2.78vh' }">
               <div class="text">国家概况</div>
             </dv-decoration-7>
             <div class="line"></div>
@@ -37,7 +37,7 @@
       <dv-border-box-12>
         <div class="profitInnerBox">
           <div class="titleBox">
-            <dv-decoration-7 style="width: 150px; height: 30px">
+            <dv-decoration-7 :style="{ width: '7.81vw', height: '2.78vh' }">
               <div class="text">主要地区</div>
             </dv-decoration-7>
             <div class="line"></div>
@@ -62,7 +62,7 @@
     <div class="ngoBox">
       <dv-border-box-12>
         <div class="titleBox">
-          <dv-decoration-7 style="width: 150px; height: 30px">
+          <dv-decoration-7 :style="{ width: '7.81vw', height: '2.78vh' }">
             <div class="text">主要组织</div>
           </dv-decoration-7>
           <div class="line"></div>
@@ -519,7 +519,7 @@ export default {
 
 .content-wrapper {
   backdrop-filter: blur(10px);
-  background: rgba(145, 167, 184, 0.1); /* 半透明背景 */
+  background: rgba(22, 36, 53, 0.65); /* 半透明背景 */
   height: 100%;
   & > div {
     margin-bottom: 0px;
@@ -534,34 +534,34 @@ export default {
       .time {
         display: flex;
         align-items: center;
-        height: 50px;
-        width: 200px;
+        height: 4.63vh; // 50px/1080*100
+        width: 10.42vw; // 200px/1920*100
         & > div {
           flex: 1;
         }
         .timeText {
-          font-size: 20px;
+          font-size: 1.04vw; // 20px/1920*100
           font-weight: 600;
-          border-right: 1px solid #fff;
+          border-right: 0.05vw solid #fff; // 1px/1920*100
         }
         .dateBox {
-          font-size: 13px;
+          font-size: 0.68vw; // 13px/1920*100
           text-align: right;
         }
       }
     }
   }
   .titleBox {
-    height: 50px;
-    padding: 10px;
+    height: 4.63vh; // 50px/1080*100
+    padding: 0.93vh; // 10px/1080*100
     box-sizing: border-box;
     .text {
-      padding: 0 10px;
-      font-size: 18px;
+      padding: 0 0.52vw; // 10px/1920*100
+      font-size: 0.94vw; // 18px/1920*100
       color: rgb(255, 255, 255);
     }
     .line {
-      height: 1px;
+      height: 0.09vh; // 1px/1080*100
       background-color: #fff;
     }
   }
@@ -597,46 +597,46 @@ export default {
     .blockList {
       display: flex;
       box-sizing: border-box;
-      padding: 0 10px 15px 10px;
+      padding: 0 0.52vw 1.39vh 0.52vw; // 0 10px 15px 10px
       .blockItem {
         flex: 1;
-        height: 215px;
+        height: 19.91vh; // 215px/1080*100
         display: flex;
         justify-content: center;
         align-items: center;
         writing-mode: vertical-lr;
         transition: all 0.3s ease;
         cursor: pointer;
-        font-size: 24px;
-        letter-spacing: 24px;
+        font-size: 1.25vw; // 24px/1920*100
+        letter-spacing: 1.25vw; // 24px/1920*100
         &:nth-child(odd) {
           background-color: rgba(0, 0, 0, 0.5);
         }
         &:hover {
           flex: 2;
-          font-size: 32px;
+          font-size: 1.67vw; // 32px/1920*100
         }
       }
     }
   }
   .profitBox {
     width: 100%;
-    height: 415px;
+    height: 38.43vh; // 415px/1080*100
     margin-top: 0px;
     .profitInnerBox {
       height: 100%;
-      padding: 0px 8px;
+      padding: 0px 0.42vw; // 8px/1920*100
       box-sizing: border-box;
     }
     .titleBox{
       margin-top: 0px;
     }
     .innerBox {
-      height: 280px;
+      height: 25.93vh; // 280px/1080*100
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 20px;
+      gap: 1.85vh; // 20px/1080*100
     }
     .contentBox {
       display: flex;
@@ -647,32 +647,32 @@ export default {
         flex: 2;
       }
       .industryName {
-        height: 50px;
+        height: 4.63vh; // 50px/1080*100
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 24px;
+        font-size: 1.25vw; // 24px/1920*100
       }
       .industryLits {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: repeat(3, 1fr);
-        grid-column-gap: 5px;
-        grid-row-gap: 20px;
+        grid-column-gap: 0.26vw; // 5px/1920*100
+        grid-row-gap: 1.85vh; // 20px/1080*100
         box-sizing: border-box;
-        padding-left: 12px;
+        padding-left: 0.63vw; // 12px/1920*100
 
         .item {
           cursor: pointer;
-          width: 140px;
-          height: 30px;
-          line-height: 30px;
-          padding-left: 10px;
+          width: 7.29vw; // 140px/1920*100
+          height: 2.78vh; // 30px/1080*100
+          line-height: 2.78vh; // 30px/1080*100
+          padding-left: 0.52vw; // 10px/1920*100
           box-sizing: border-box;
-          border-left: 2px solid;
+          border-left: 0.1vw solid; // 2px/1920*100
           background-color: rgba(22, 36, 53, 0.5);
           position: relative;
-          font-size: 14px;
+          font-size: 0.73vw; // 14px/1920*100
           &::before {
             content: "";
             position: absolute;
@@ -689,11 +689,11 @@ export default {
         }
         .active1 {
           border-left-color: aqua;
-          border-left-width: 2px;
+          border-left-width: 0.1vw; // 2px/1920*100
         }
         .active2 {
           border-left-color: rgb(133, 113, 97);
-          border-left-width: 2px;
+          border-left-width: 0.1vw; // 2px/1920*100
         }
       }
       .right {
@@ -702,25 +702,25 @@ export default {
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
-        gap: 20px;
+        gap: 1.85vh; // 20px/1080*100
         & > div {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 0.52vw; // 10px/1920*100
           .icon1 {
-            width: 50px;
-            height: 50px;
+            width: 2.6vw; // 50px/1920*100
+            height: 4.63vh; // 50px/1080*100
           }
           .icon2 {
-            width: 50px;
-            height: 50px;
+            width: 2.6vw; // 50px/1920*100
+            height: 4.63vh; // 50px/1080*100
           }
           .itemName {
-            width: 150px;
+            width: 7.81vw; // 150px/1920*100
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            font-size: 12px;
+            font-size: 0.63vw; // 12px/1920*100
             font-weight: 400;
           }
         }
@@ -730,24 +730,19 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        column-gap: 10px;
+        column-gap: 0.52vw; // 10px/1920*100
         text-align: center;
         .eventBox {
           .title {
             color: #fff;
-            margin-bottom: 10px;
-            font-size: 20px;
+            margin-bottom: 0.93vh; // 10px/1080*100
+            font-size: 1.04vw; // 20px/1920*100
           }
           .itemName {
-            margin-bottom: 5px;
+            margin-bottom: 0.46vh; // 5px/1080*100
             position: relative;
             color: #fff;
-            font-size: 14px;
-            // background-image: linear-gradient(
-            //   180deg,
-            //   rgba(47, 61, 82, 0.1) 40%,
-            //   rgb(132, 132, 132, 0.6) 100%
-            // );
+            font-size: 0.73vw; // 14px/1920*100
           }
         }
       }
@@ -758,9 +753,9 @@ export default {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: 1fr;
-      grid-column-gap: 30px;
+      grid-column-gap: 1.56vw; // 30px/1920*100
       grid-row-gap: 0px;
-      padding: 30px 15px 30px 15px;
+      padding: 2.78vh 0.78vw 2.78vh 0.78vw; // 30px 15px 30px 15px
       .item {
         display: flex;
         flex-direction: column;
@@ -771,12 +766,12 @@ export default {
           background-color: rgba(255, 255, 255, 0.1);
         }
         img {
-          width: 110px;
-          height: 110px;
+          width: 5.73vw; // 110px/1920*100
+          height: 10.19vh; // 110px/1080*100
         }
         div {
-          font-size: 22px;
-          margin-top: 18px;
+          font-size: 1.15vw; // 22px/1920*100
+          margin-top: 1.67vh; // 18px/1080*100
           font-weight: bold;
         }
       }
@@ -816,24 +811,24 @@ export default {
 
 .orgTableBox,
 .popup-table-box {
-  min-width: 900px;
-  max-width: 1200px;
-  max-height: 500px;
-  border: 1px solid;
+  min-width: 46.88vw; // 900px/1920*100
+  max-width: 62.5vw; // 1200px/1920*100
+  max-height: 46.3vh; // 500px/1080*100
+  border: 0.05vw solid; // 1px/1920*100
   background: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  box-shadow: 0 0.19vh 1.11vh rgba(0,0,0,0.18); // 0 2px 12px
+  padding-bottom: 0.93vh; // 10px/1080*100
+  padding-left: 0.52vw; // 10px/1920*100
+  padding-right: 0.52vw; // 10px/1920*100
   overflow: hidden;
 }
 .popup-table-title {
   background: #fff;
   color: #222;
-  font-size: 20px;
+  font-size: 1.04vw; // 20px/1920*100
   font-weight: bold;
   text-align: center;
-  padding: 16px 0 8px 0;
+  padding: 1.48vh 0 0.74vh 0; // 16px 0 8px 0
   margin-bottom: 0;
 }
 .popup-table {
@@ -846,7 +841,7 @@ export default {
 .popup-table td {
   text-align: center;
   vertical-align: middle;
-  padding: 8px 6px;
+  padding: 0.74vh 0.31vw; // 8px 6px
   background: #fff;
   color: #222;
   white-space: normal;
@@ -855,64 +850,64 @@ export default {
   font-weight: bold;
   background: #fff;
   color: #222;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 0.19vh solid #e0e0e0; // 2px/1080*100
 }
 .popup-table th.col-name {
   color: #222;
   text-decoration: none;
-  min-width: 140px;
-  max-width: 200px;
+  min-width: 7.29vw; // 140px/1920*100
+  max-width: 10.42vw; // 200px/1920*100
   cursor: default;
 }
 .popup-table td.col-name {
   color: #1976d2;
   text-decoration: underline;
-  min-width: 140px;
-  max-width: 200px;
-  text-underline-offset: 3px;
+  min-width: 7.29vw; // 140px/1920*100
+  max-width: 10.42vw; // 200px/1920*100
+  text-underline-offset: 0.28vh; // 3px/1080*100
   cursor: pointer;
 }
 .col-leader {
-  min-width: 110px;
-  max-width: 160px;
+  min-width: 5.73vw; // 110px/1920*100
+  max-width: 8.33vw; // 160px/1920*100
   white-space: nowrap;
 }
 .col-founded {
-  min-width: 90px;
-  max-width: 120px;
+  min-width: 4.69vw; // 90px/1920*100
+  max-width: 6.25vw; // 120px/1920*100
   white-space: nowrap;
 }
 .region-popup {
   position: relative;
   display: inline-block;
   width: auto;
-  max-width: 700px;
+  max-width: 36.46vw; // 700px/1920*100
   max-height: 80vh;
   background: rgba(255,255,255,0.98);
   color: #222;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-  padding: 16px 20px 12px 20px;
+  border-radius: 0.52vw; // 10px/1920*100
+  box-shadow: 0 0.19vh 1.11vh rgba(0,0,0,0.18); // 0 2px 12px
+  padding: 1.48vh 1.04vw 1.11vh 1.04vw; // 16px 20px 12px 20px
   pointer-events: auto;
   white-space: normal;
   overflow-y: auto;
 }
 .popup-title {
-  font-size: 18px;
+  font-size: 0.94vw; // 18px/1920*100
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 0.74vh; // 8px/1080*100
   text-align: center;
 }
 .popup-img {
   width: 100%;
-  max-height: 400px;
+  max-height: 37.04vh; // 400px/1080*100
   object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 8px;
+  border-radius: 0.31vw; // 6px/1920*100
+  margin-bottom: 0.74vh; // 8px/1080*100
 }
 .popup-desc {
-  font-size: 15px;
-  margin-bottom: 8px;
+  font-size: 0.78vw; // 15px/1920*100
+  margin-bottom: 0.74vh; // 8px/1080*100
   overflow-x: auto;
   max-height: 60vh;
   overflow-y: auto;
@@ -924,9 +919,9 @@ export default {
 }
 .popup-close {
   position: absolute;
-  right: 10px;
-  top: 6px;
-  font-size: 20px;
+  right: 0.52vw; // 10px/1920*100
+  top: 0.56vh; // 6px/1080*100
+  font-size: 1.04vw; // 20px/1920*100
   cursor: pointer;
   color: #888;
 }

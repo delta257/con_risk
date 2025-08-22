@@ -902,7 +902,7 @@ export default {
   max-width: 95%;
   height: auto;
   pointer-events: auto;
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(22, 36, 53, 0.5);
   padding: 15px;
   border-radius: 12px;
   backdrop-filter: blur(10px);
@@ -971,7 +971,7 @@ export default {
   max-width: 95%;
   height: auto;
   pointer-events: auto;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(22, 36, 53, 0.5);
   padding: 12px 20px;
   border-radius: 12px;
   backdrop-filter: blur(10px);

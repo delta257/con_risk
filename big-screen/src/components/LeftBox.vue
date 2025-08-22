@@ -24,7 +24,7 @@
         <div class="water-box">
           <dv-water-level-pond
             :config="waterConfig"
-            style="width: 150px; height: 150px"
+            :style="{ width: '150px', height: '150px' }"
           />
         </div>
         <div class="bar-content">
@@ -53,7 +53,7 @@
         <dv-decoration-4 :reverse="true" :style="{ width: 'calc(100% - 20px)', height: '5px' }" />
       </div>
       <dv-scroll-board
-        style="width: 460px; height: 150px; color: #ffffff; cursor: pointer"
+        :style="{ width: '26.01vw', height: '13.89vh', color: '#ffffff', cursor: 'pointer' }"
         :config="scrollBoardConfig"
         @click="(row) => handleScrollBoardClick(row, '1')"
       />
@@ -61,12 +61,12 @@
     <dv-border-box-7 class="blue-border">
       <div style="height: 330px">
         <div class="title-box">
-          <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
+          <dv-decoration-4 :reverse="true" :style="{ width: '26.01vw', height: '0.46vh' }" />
           <div>
             <div class="title">情报监测</div>
-            <dv-decoration-3 style="width: 150px; height: 30px" />
+            <dv-decoration-3 :style="{ width: '7.81vw', height: '2.78vh' }" />
           </div>
-          <dv-decoration-4 :reverse="true" style="width: 500px; height: 5px" />
+          <dv-decoration-4 :reverse="true" :style="{ width: '26.04vw', height: '0.46vh' }" />
         </div>
         <div class="button-container">
           <button
@@ -83,12 +83,12 @@
         </div>
         <div v-show="selectedButton2 === 0" class="wordCloudBox">
           <dv-scroll-board
-            style="
-              width: 500px;
-              height: 200px;
-              color: #ffffff;
-              cursor: pointer;
-            "
+            :style="{
+              width: '26.04vw',
+              height: '18.52vh',
+              color: '#ffffff',
+              cursor: 'pointer'
+            }"
             :config="scrollBoardConfig2"
             @click="(row) => handleScrollBoardClick(row, '2')"
           />
@@ -220,7 +220,7 @@ export default {
       waterConfig: {
         data: [55],
         shape: "round",
-        colors: ['#1565C0', '#1976D2', '#42A5F5'], // 深蓝色系波浪
+        fill: ['#1565C0', '#1976D2', '#42A5F5'], // 深蓝色系波浪
         waveStyle: {
           fill: '#1565C0',
           fillOpacity: 1,
@@ -618,19 +618,20 @@ export default {
   flex-direction: column;
   gap: 0px;
   backdrop-filter: blur(10px);
-  background: rgba(145, 167, 184, 0.1); /* 半透明背景 */
+  background: rgba(22, 36, 53, 0.65); /* 半透明背景 */
   height: 100%;
 }
 .button-container {
   display: flex;
   button {
-    border: 1px solid lightgray; /* 浅灰色外边框 */
-    padding: 10px 20px; /* 根据需要调整内边距 */
-    margin: 5px; /* 添加一些外边距，使按钮不紧贴在一起 */
-    cursor: pointer; /* 鼠标悬停时变为手形 */
-    background-color: transparent; /* 初始背景色为透明 */
-    transition: background-color 0.3s ease; /* 添加背景色过渡效果 */
+    border: 1px solid lightgray;
+    padding: 0.52vw 1.04vw; // 10px 20px -> vw
+    margin: 0.26vw; // 5px -> vw
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
     color: #ffffff;
+    font-size: 0.83vw; // 16px/1920*100
   }
 
   .selected-button {
@@ -638,67 +639,65 @@ export default {
       to right,
       rgba(173, 216, 230, 0.8),
       rgba(56, 126, 152, 0.8)
-    ); /* 渐变的淡蓝色背景 */
+    );
   }
 }
 
 .button-content {
-  height: 300px;
+  height: 27.78vh; // 300px/1080*100
   display: flex;
   align-items: center;
   .water-box {
-    width: 200px;
+    width: 10.42vw; // 200px/1920*100
+    height: 18.52vh; // 200px/1080*100 - 与水位图使用相同的vh基准
     display: flex;
     justify-content: center;
+    align-items: center; // 垂直居中对齐
   }
   .bar-content {
-    height: 300px;
+    height: 27.78vh; // 300px/1080*100
     display: flex;
     justify-content: center;
-    width: 300px;
+    width: 17.63vw; // 300px/1920*100
     & > div {
-      height: 300px;
-      width: 400px;
+      height: 27.78vh; // 300px/1080*100
+      width: 20.83vw; // 400px/1920*100
     }
-    // .b0 {
-    //   width: 400px;
-    //   height: 300px;
-    // }
   }
 }
 .title-box {
-  margin: 10px 0;
+  margin: 0.93vh 0; // 10px/1080*100
   & > div {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   .title {
-    margin: 10px 0;
-    padding-left: 10px;
-    font-size: 16px;
+    margin: 0.93vh 0; // 10px/1080*100
+    padding-left: 0.52vw; // 10px/1920*100
+    font-size: 0.83vw; // 16px/1920*100
     color: rgb(246, 248, 250);
   }
-
 }
 .wordCloudBox {
-  height: 300px;
-  width: 500px;
+  height: 27.78vh; // 300px/1080*100
+  width: 26.04vw; // 500px/1920*100
   display: flex;
   justify-content: center;
   .wordCloud {
-    height: 200px;
-    width: 500px;
+    height: 18.52vh; // 200px/1080*100
+    width: 26.04vw; // 500px/1920*100
   }
 }
 
 .text-dialog {
-  width: 1200px;
-  max-height: 1000px;
+  width: 62.5vw; // 1200px/1920*100
+  max-width: 90vw; // 防止在小屏幕上过宽
+  max-height: 80vh; // 防止超出屏幕高度
   overflow: auto;
-  padding: 10px;
+  padding: 0.52vw; // 10px/1920*100
   border: 1px solid;
-  border-radius: 20px;
+  border-radius: 1.04vw; // 20px/1920*100
   .title {
     text-align: center;
   }
@@ -708,10 +707,10 @@ export default {
   }
 }
 .blue-border {
-  border: 2px solid #3fa7ff;
-  border-radius: 8px;
+  border: 0.1vw solid #3fa7ff; // 2px/1920*100
+  border-radius: 0.42vw; // 8px/1920*100
   box-sizing: border-box;
-  margin-bottom: 10px;
+  margin-bottom: 0.93vh; // 10px/1080*100
 }
 .map-popup {
   position: fixed;

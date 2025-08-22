@@ -49,15 +49,16 @@ export default {
   // justify-content: space-between;
   // padding-top: 30px;
   height: 100vh;
+  width: 100vw;
   position: relative;
   .box {
-    padding: 10px;
+    padding: 0.52vw; // 10px/1920*100
     box-sizing: border-box;
     // flex-shrink: 0;
   }
-  @topPadding: 46px;
+  @topPadding: 4.26vh; // 46px/1080*100
   .left-box {
-    width: 520px;
+    width: 27.08vw; // 520px/1920*100
     position: absolute;
     left: 0;
     z-index: 9;
@@ -65,7 +66,7 @@ export default {
     height: calc(100vh - @topPadding);
   }
   .right-box {
-    width: 500px;
+    width: 26.04vw; // 500px/1920*100
     position: absolute;
     right: 0;
     top: @topPadding;
@@ -75,7 +76,7 @@ export default {
 
   .center-box {
     // flex: 1;
-    width: 1920px;
+    width: 100vw; // 1920px/1920*100
     position: absolute;
     top: @topPadding;
     height: 100vh;
@@ -83,7 +84,7 @@ export default {
 }
 .dv-home-title {
   /deep/.dv-border-box-11-title {
-    font-size: 24px;
+    font-size: 1.25vw; // 24px/1920*100
   }
 }
 </style>
