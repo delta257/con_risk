@@ -78,8 +78,11 @@ import chinaLaosProjects from "../lib/china_laos_projects.json";
 import mekongArmedGroups from "../lib/mekong_armed_groups.json";
 import mekongArmedGroupsLaos from "../lib/mekong_armed_groups_laos.json";
 import AIDialog from './AIDialog.vue';
+
 export default {
   name: "CenterBox",
+
+  // 对外接口
   props: {
     country: {
       type: String,
@@ -87,47 +90,64 @@ export default {
       default: 'myanmar',
     },
   },
+
+  // 子组件注册
   components: {
     AIDialog,
   },
+
+  // 数据初始状态
   data() {
     return {
+      // 地图核心对象区
       map: null,
       google: null,
+
+      // 初始当前国家
+      currentCountry: 'myanmar',
+
+      // 初始地图类型
+      currentMapType: 'terrain',
+
+      // 覆盖物管理区
       overlays: {
         ports: [],
         checkpoints: [],
         chinaProjects: [],
         armedGroups: [],
       },
+
+      // 上方按钮区
       showPorts: false,
       showCheckpoints: false,
       showChinaProjects: false,
       showArmedGroups: false,
-      currentCountry: 'myanmar',
 
-      showAIDialog: false,
-      currentMapType: 'terrain',
+      // 下方交通按钮区
       showTrafficLayer: false,
       trafficLayer: null,
       showTransitLayer: false,
       transitLayer: null,
-      // AI悬浮窗拖拽相关
-      aiFloatPosition: { x: 30, y: 30 }, // 悬浮窗位置
+
+      // AI悬浮球区
+      showAIDialog: false,
+      aiFloatPosition: { x: 530, y: 30 }, // 悬浮窗位置
       isDragging: false,
       dragOffset: { x: 0, y: 0 },
       dragStartTime: 0,
-      // 国界高亮相关
+
+      // 国界高亮
       countryPolygons: {
         myanmar: null,
         laos: null,
       },
     };
   },
+
+  // 监听器层
   watch: {
     country(newVal, oldVal) {
       console.log(`国家切换: ${oldVal} -> ${newVal}`);
-      
       this.currentCountry = newVal;
       
       // 清理所有覆盖物
@@ -145,9 +165,18 @@ export default {
       }
     }
   },
+
+  // 生命周期层初始化，最后有生命周期结束
   mounted() {
     this.initGoogleMap();
   },
+
+  // 方法层
+  // 地图初始化模块
+  // 地图覆盖物管理模块（上方按钮控制toggle、项目标记方法render、清理方法clear）
+  // 下方地图样式控制（地图类型控制、交通图层控制）
+  // 国家边界多边形管理（添加多边形、更新边界高亮）
+  // AI助手交互方法（对话框控制；拖拽控制：区分点击和拖拽、限制拖拽范围、坐标系统、事件管理）
   methods: {
     clearAllOverlays() {
       Object.values(this.overlays).forEach(arr => {
@@ -832,6 +861,8 @@ export default {
       }
     },
   },
+
+  // 生命周期结束
   beforeDestroy() {
     // 清理拖拽事件监听器
     document.removeEventListener('mousemove', this.onDrag);
